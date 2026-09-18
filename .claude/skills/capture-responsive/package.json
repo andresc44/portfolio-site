@@ -1,0 +1,18 @@
+{
+  "name": "capture-responsive-screenshots",
+  "version": "1.0.0",
+  "description": "Capture full-page responsive screenshots at desktop, tablet, and mobile sizes",
+  "main": "capture-responsive.js",
+  "scripts": {
+    "capture": "node capture-responsive.js",
+    "install-browsers": "playwright install chromium"
+  },
+  "dependencies": {
+    "playwright": "^1.63.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "author": "Andres Cervera Rozo",
+  "license": "MIT"
+}

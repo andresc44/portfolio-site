@@ -1,0 +1,11 @@
+/* Fix for gradient text span in footer/headers - inherit parent gradient */
+h2.elementor-heading-title span[style*="background"],
+h1 span[style*="background"],
+h4 span[style*="background"],
+h6 span[style*="background"] {
+  background: -webkit-linear-gradient(#AB83FE, #AB83FE, #4FCF9C, #4FCF9C) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  display: inline-block;
+}
