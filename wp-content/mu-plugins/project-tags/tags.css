@@ -1,0 +1,308 @@
+/* Tag pills on project detail pages */
+.project-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin: 0;
+	padding: 0;
+}
+
+.project-tags__pill {
+	all: revert;
+	box-sizing: border-box;
+	background: #162131 !important;
+	background-image: none !important;
+	border: 1px solid #5b5b5b !important;
+	color: #fff !important;
+	font-size: 13px !important;
+	line-height: 1.2;
+	padding: 7px 14px !important;
+	border-radius: 999px !important;
+	cursor: pointer !important;
+	font: inherit;
+	box-shadow: none !important;
+	transition: border-color 0.15s ease, color 0.15s ease;
+}
+.project-tags__pill:hover,
+.project-tags__pill:focus-visible {
+	border-color: #34d399 !important;
+	color: #34d399 !important;
+	outline: none;
+}
+
+/* Popup */
+.pt-modal {
+	position: fixed;
+	inset: 0;
+	z-index: 10001;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(6, 9, 14, 0.7);
+	padding: 20px;
+}
+.pt-modal[hidden] {
+	display: none;
+}
+.pt-modal__panel {
+	all: revert;
+	box-sizing: border-box;
+	width: 100%;
+	max-width: 440px;
+	max-height: min(72vh, 560px);
+	background: #162131;
+	border: 1px solid #5b5b5b;
+	border-radius: 14px;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+	font-family: inherit;
+}
+.pt-modal__header {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 12px;
+	padding: 18px 20px 12px;
+	border-bottom: 1px solid #2a3444;
+}
+.pt-modal__title {
+	all: revert;
+	box-sizing: border-box;
+	color: #fff !important;
+	font-size: 17px !important;
+	font-weight: 600 !important;
+	line-height: 1.35 !important;
+	margin: 0 !important;
+	font-family: inherit !important;
+}
+.pt-modal__subtitle {
+	all: revert;
+	box-sizing: border-box;
+	color: rgba(255, 255, 255, 0.55) !important;
+	font-size: 13px !important;
+	line-height: 1.4 !important;
+	margin: 4px 0 0 !important;
+	font-family: inherit !important;
+}
+.pt-modal__close {
+	all: revert;
+	box-sizing: border-box;
+	background: none !important;
+	background-image: none !important;
+	border: 0 !important;
+	color: #fff !important;
+	cursor: pointer !important;
+	padding: 4px !important;
+	line-height: 0;
+	flex: 0 0 auto;
+	opacity: 0.7;
+}
+.pt-modal__close:hover {
+	opacity: 1;
+}
+.pt-modal__close svg {
+	width: 20px;
+	height: 20px;
+}
+.pt-modal__list {
+	overflow-y: auto;
+	padding: 6px 10px 14px;
+}
+.pt-modal__item {
+	all: revert;
+	box-sizing: border-box;
+	display: block !important;
+	width: 100% !important;
+	text-align: left !important;
+	background: none !important;
+	background-image: none !important;
+	border: 0 !important;
+	border-radius: 8px !important;
+	color: inherit !important;
+	cursor: pointer !important;
+	padding: 10px !important;
+	margin: 2px 0 !important;
+	font: inherit;
+	box-shadow: none !important;
+	white-space: normal !important;
+}
+.pt-modal__item:hover,
+.pt-modal__item:focus-visible {
+	background: #1e293b !important;
+	outline: none;
+}
+.pt-modal__item-title {
+	color: #fff;
+	font-size: 14px;
+	font-weight: 500;
+	display: block;
+}
+.pt-modal__item-meta {
+	display: block;
+	margin-top: 3px;
+	font-size: 12px;
+	color: rgba(255, 255, 255, 0.5);
+}
+.pt-modal__item-meta .cat {
+	color: #34d399;
+}
+.pt-modal__empty,
+.pt-modal__loading {
+	padding: 24px 20px;
+	text-align: center;
+	color: rgba(255, 255, 255, 0.6);
+	font-size: 14px;
+}
+
+@media (max-width: 600px) {
+	.pt-modal {
+		align-items: flex-end;
+		padding: 0;
+	}
+	.pt-modal__panel {
+		max-width: none;
+		max-height: 78vh;
+		border-radius: 16px 16px 0 0;
+		border-bottom: 0;
+	}
+}
+
+/* Tag archive / search results page */
+.project-archive {
+	background: #1e2736;
+	min-height: 60vh;
+	padding: 60px 5% 80px;
+}
+@media (max-width: 767px) {
+	/* Clears the site's mobile header bar, which pulls following content up
+	   underneath itself by 75px (see project-breadcrumb-mobile-fix.php for
+	   the full explanation). Pages with the "back" link above the header
+	   already clear it via that link's own height; this covers pages
+	   (like search results) that don't have one. */
+	.project-archive {
+		padding-top: 100px;
+	}
+}
+.project-archive__header {
+	text-align: center;
+	margin: 0 auto 40px;
+	max-width: 700px;
+}
+.project-archive__title {
+	all: revert;
+	box-sizing: border-box;
+	color: #fff !important;
+	font-size: 34px !important;
+	font-weight: 600 !important;
+	line-height: 1.2 !important;
+	margin: 0 0 10px !important;
+	font-family: inherit !important;
+}
+.project-archive__count {
+	color: rgba(255, 255, 255, 0.6);
+	font-size: 15px;
+}
+.project-archive__list {
+	display: flex;
+	flex-direction: column;
+	gap: 28px;
+	max-width: 880px;
+	margin: 0 auto;
+}
+.project-archive__card {
+	all: revert;
+	box-sizing: border-box;
+	display: flex !important;
+	flex-direction: row;
+	align-items: stretch;
+	gap: 0;
+	background: #162232 !important;
+	border: 1px solid #5b5b5b !important;
+	border-radius: 12px !important;
+	overflow: hidden;
+	text-decoration: none !important;
+	color: inherit !important;
+	transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.project-archive__card:hover,
+.project-archive__card:focus-visible {
+	border-color: #34d399 !important;
+	transform: translateY(-2px);
+	outline: none;
+}
+.project-archive__card-media {
+	flex: 0 0 42%;
+	min-height: 220px;
+	background: #0f141c;
+}
+.project-archive__card-media img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+.project-archive__card-body {
+	flex: 1 1 auto;
+	padding: 28px 30px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	justify-content: center;
+	min-width: 0;
+}
+.project-archive__card-cat {
+	color: #34d399;
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+}
+.project-archive__card-title {
+	all: revert;
+	box-sizing: border-box;
+	color: #fff !important;
+	font-size: 22px !important;
+	font-weight: 600 !important;
+	line-height: 1.3 !important;
+	margin: 0 !important;
+	font-family: inherit !important;
+}
+.project-archive__card-excerpt {
+	color: rgba(255, 255, 255, 0.8);
+	font-size: 15px;
+	line-height: 1.6;
+	margin: 0;
+}
+
+@media (max-width: 700px) {
+	.project-archive__card {
+		flex-direction: column;
+	}
+	.project-archive__card-media {
+		flex-basis: auto;
+		min-height: 0;
+		aspect-ratio: 16 / 9;
+	}
+	.project-archive__card-body {
+		padding: 20px;
+	}
+	.project-archive__card-title {
+		font-size: 19px !important;
+	}
+}
+.project-archive__empty {
+	text-align: center;
+	color: rgba(255, 255, 255, 0.6);
+	padding: 40px 0;
+}
+.project-archive__back {
+	display: inline-block;
+	margin: 0 auto 30px;
+	color: #34d399;
+	text-decoration: none;
+	font-size: 14px;
+}
+.project-archive__back:hover {
+	text-decoration: underline;
+}
