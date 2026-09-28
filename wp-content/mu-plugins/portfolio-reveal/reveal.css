@@ -1,0 +1,44 @@
+/* Homepage scroll reveal. The .pr class is added ONLY by JS (never present
+   in the server-rendered HTML), so if JS fails to run, nothing is ever
+   hidden — this file alone has zero effect on the page.
+
+   Only opacity/transform are touched, both compositor-only properties:
+   no width/height/clip-path/margin, so there is no layout shift and no way
+   for this to clip or cut off content at any viewport size or aspect
+   ratio — the box always occupies its normal document-flow space, just
+   translated a little and faded, from frame one. */
+
+.pr {
+	opacity: 0;
+	transform: translate3d(0, 30px, 0);
+	transition: opacity 0.7s cubic-bezier(0.16, 0.84, 0.44, 1),
+		transform 0.7s cubic-bezier(0.16, 0.84, 0.44, 1);
+	transition-delay: calc(var(--pr-d, 0) * 100ms);
+	will-change: opacity, transform;
+}
+.pr.pr-in {
+	opacity: 1;
+	transform: none;
+}
+.pr.pr-done {
+	will-change: auto;
+}
+
+@media (max-width: 767px) {
+	.pr {
+		/* Shorter throw and quicker settle — on a phone the next section is
+		   only a swipe away, so a big slow drift reads as sluggish rather
+		   than elegant. */
+		transform: translate3d(0, 18px, 0);
+		transition-duration: 0.55s;
+		transition-delay: calc(var(--pr-d, 0) * 70ms);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.pr {
+		opacity: 1 !important;
+		transform: none !important;
+		transition: none !important;
+	}
+}

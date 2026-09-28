@@ -1,0 +1,479 @@
+/* Home hero — circuit board. Every animation here is transform/opacity only
+   (compositor-friendly) or a tiny SVG motion path; nothing animates layout,
+   box-shadow, filters or background-position. */
+
+.hx {
+	--hx-green: #34d399;
+	--hx-violet: #ab83fe;
+	--hx-cyan: #4cc6f5;
+	--hx-ink: #0d131d;
+
+	position: relative;
+	isolation: isolate;
+	overflow: hidden;
+	overflow: clip;
+	display: grid;
+	place-items: center;
+	/* Elementor sizes the shortcode widget to its content, so the hero is
+	   broken out to the viewport edges. Browsers with :has() get the tidier
+	   fix below instead (the wrapper itself is widened, no breakout needed). */
+	width: 100vw;
+	margin-left: calc(50% - 50vw);
+	margin-right: calc(50% - 50vw);
+	min-height: 640px;
+	min-height: clamp(620px, 92svh, 1000px);
+	padding: clamp(84px, 11vh, 132px) clamp(20px, 5vw, 56px) clamp(72px, 10vh, 120px);
+	background:
+		radial-gradient(130% 100% at 50% -10%, #1d2939 0%, #151d2b 42%, #0c121b 100%);
+	color: #fff;
+	text-align: center;
+	font-family: inherit;
+}
+
+@supports selector(:has(*)) {
+	.elementor-widget:has(.hx) {
+		width: 100% !important;
+		max-width: 100% !important;
+	}
+	.hx {
+		width: 100%;
+		margin-left: 0;
+		margin-right: 0;
+	}
+}
+
+.hx__layer {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+}
+
+/* ---------- circuit board ---------- */
+
+.hx__board {
+	z-index: 0;
+	opacity: 1;
+}
+/* The theme sets a global `svg { width: 1em }` for inline icons, which
+   otherwise collapses this board to 16px wide. */
+.hx__pcb {
+	width: 100% !important;
+	height: 100% !important;
+	max-width: none !important;
+	display: block;
+}
+.hx__halo {
+	opacity: 0.2;
+}
+.hx__wire {
+	stroke: #6fd9bd;
+	stroke-width: 1.5;
+	opacity: 0.5;
+}
+/* Deliberately static: animating opacity on SVG children isn't composited,
+   so pulsing these forced a full repaint of every trace, every frame. */
+.hx__via {
+	fill: #0f1724;
+	stroke: var(--hx-green);
+	stroke-width: 1.7;
+	opacity: 0.7;
+}
+
+/* Isolated compositing layer so pulse repaints stay off the board. */
+.hx__sparklayer {
+	z-index: 0;
+	will-change: transform;
+	transform: translateZ(0);
+}
+
+/* ---------- atmosphere ---------- */
+
+.hx__grid {
+	z-index: 0;
+	background-image:
+		linear-gradient(to right, rgba(140, 180, 230, 0.075) 1px, transparent 1px),
+		linear-gradient(to bottom, rgba(140, 180, 230, 0.075) 1px, transparent 1px);
+	background-size: 64px 64px;
+	-webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 42%, #000 15%, transparent 76%);
+	mask-image: radial-gradient(ellipse 80% 70% at 50% 42%, #000 15%, transparent 76%);
+}
+
+/* Static on purpose. Animating this full-bleed gradient meant re-compositing
+   ~1.2M pixels every frame and measured at a straight 37fps -> 60fps cost,
+   in exchange for a ±2% drift over 34s that nobody can actually perceive.
+   The colour depth is what matters here; the motion comes from the board. */
+.hx__aurora {
+	z-index: 0;
+	background:
+		radial-gradient(38% 42% at 24% 30%, rgba(171, 131, 254, 0.26), transparent 70%),
+		radial-gradient(40% 44% at 78% 68%, rgba(52, 211, 153, 0.22), transparent 70%),
+		radial-gradient(30% 34% at 62% 14%, rgba(76, 198, 245, 0.12), transparent 72%);
+}
+
+/* Keeps the headline readable over the board without masking the SVG. */
+.hx__spot {
+	z-index: 1;
+	background: radial-gradient(ellipse 50% 44% at 50% 45%, rgba(10, 15, 23, 0.84) 0%, rgba(10, 15, 23, 0.46) 45%, transparent 72%);
+}
+
+/* Corner registration marks — one element, all eight strokes as gradients. */
+.hx__frame {
+	position: absolute;
+	inset: clamp(14px, 2.2vw, 30px);
+	z-index: 1;
+	pointer-events: none;
+	opacity: 0.45;
+	background:
+		linear-gradient(var(--hx-green), var(--hx-green)) left top / 1px 26px no-repeat,
+		linear-gradient(var(--hx-green), var(--hx-green)) left top / 26px 1px no-repeat,
+		linear-gradient(var(--hx-green), var(--hx-green)) right top / 1px 26px no-repeat,
+		linear-gradient(var(--hx-green), var(--hx-green)) right top / 26px 1px no-repeat,
+		linear-gradient(var(--hx-green), var(--hx-green)) left bottom / 1px 26px no-repeat,
+		linear-gradient(var(--hx-green), var(--hx-green)) left bottom / 26px 1px no-repeat,
+		linear-gradient(var(--hx-green), var(--hx-green)) right bottom / 1px 26px no-repeat,
+		linear-gradient(var(--hx-green), var(--hx-green)) right bottom / 26px 1px no-repeat;
+}
+
+/* Fades the hero into the section below it. */
+.hx::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 140px;
+	z-index: 1;
+	pointer-events: none;
+	background: linear-gradient(180deg, transparent, #1e2736);
+}
+
+/* ---------- content ---------- */
+
+.hx__inner {
+	position: relative;
+	z-index: 2;
+	width: min(1080px, 100%);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.hx__fx {
+	animation: hxIn 0.85s cubic-bezier(0.2, 0.75, 0.25, 1) both;
+	animation-delay: calc(var(--s) * 90ms + 100ms);
+}
+@keyframes hxIn {
+	from { opacity: 0; transform: translate3d(0, 22px, 0); }
+	to { opacity: 1; transform: none; }
+}
+
+.hx__chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 9px;
+	margin: 0 0 clamp(18px, 3vh, 30px) !important;
+	padding: 7px 16px;
+	border: 1px solid rgba(255, 255, 255, 0.14);
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.045);
+	-webkit-backdrop-filter: blur(6px);
+	backdrop-filter: blur(6px);
+	font-size: 13px !important;
+	line-height: 1.2 !important;
+	letter-spacing: 0.02em;
+	color: rgba(255, 255, 255, 0.72) !important;
+}
+.hx__dot {
+	position: relative;
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: var(--hx-green);
+	flex: 0 0 auto;
+}
+.hx__dot::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: 50%;
+	background: var(--hx-green);
+	animation: hxPing 2.6s cubic-bezier(0.2, 0.7, 0.3, 1) infinite;
+}
+@keyframes hxPing {
+	0% { transform: scale(1); opacity: 0.55; }
+	75%, 100% { transform: scale(3.4); opacity: 0; }
+}
+
+.hx__eyebrow {
+	margin: 0 !important;
+	font-size: clamp(1rem, 1.8vw, 1.25rem) !important;
+	font-weight: 400 !important;
+	line-height: 1.3 !important;
+	letter-spacing: 0.01em;
+	color: rgba(255, 255, 255, 0.66) !important;
+}
+
+.hx__name {
+	all: revert;
+	box-sizing: border-box;
+	margin: 6px 0 0 !important;
+	font-family: inherit !important;
+	font-size: clamp(2.5rem, 7.2vw, 5.4rem) !important;
+	font-weight: 800 !important;
+	line-height: 1.03 !important;
+	letter-spacing: -0.025em !important;
+	background: linear-gradient(96deg, #ffffff 0%, #ded6ff 26%, var(--hx-violet) 50%, #6fdcb6 76%, var(--hx-green) 100%);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent !important;
+	-webkit-text-fill-color: transparent;
+	text-wrap: balance;
+}
+
+.hx__roles {
+	margin: clamp(10px, 1.6vh, 18px) 0 0 !important;
+	font-size: clamp(1.05rem, 2.5vw, 1.65rem) !important;
+	line-height: 1.5 !important;
+	font-weight: 500 !important;
+	color: #fff !important;
+	display: flex;
+	align-items: baseline;
+	justify-content: center;
+	gap: 8px;
+}
+.hx__bracket {
+	color: var(--hx-green);
+	font-weight: 300;
+}
+.hx__rotator {
+	display: inline-block;
+	height: 1.5em;
+	overflow: hidden;
+	vertical-align: bottom;
+}
+.hx__roll {
+	display: block;
+	animation: hxRoll 18s cubic-bezier(0.72, 0, 0.22, 1) infinite;
+}
+.hx__roll > span {
+	display: block;
+	height: 1.5em;
+	line-height: 1.5em;
+	text-align: center;
+	white-space: nowrap;
+	color: var(--hx-green);
+	font-weight: 600;
+}
+@keyframes hxRoll {
+	0%, 13.3%   { transform: translate3d(0, 0, 0); }
+	16.67%, 30% { transform: translate3d(0, -1.5em, 0); }
+	33.33%, 46.6% { transform: translate3d(0, -3em, 0); }
+	50%, 63.3%  { transform: translate3d(0, -4.5em, 0); }
+	66.67%, 80% { transform: translate3d(0, -6em, 0); }
+	83.33%, 96.6% { transform: translate3d(0, -7.5em, 0); }
+	100%        { transform: translate3d(0, -9em, 0); }
+}
+
+.hx__tagline {
+	max-width: 46ch;
+	margin: clamp(14px, 2.2vh, 24px) auto 0 !important;
+	font-size: clamp(0.95rem, 1.7vw, 1.12rem) !important;
+	line-height: 1.65 !important;
+	color: rgba(255, 255, 255, 0.72) !important;
+	text-wrap: balance;
+}
+
+/* ---------- buttons ---------- */
+
+.hx__actions {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 14px;
+	margin-top: clamp(26px, 4vh, 40px);
+}
+.hx__btn {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	padding: 14px 26px;
+	border-radius: 12px;
+	overflow: hidden;
+	font-size: 15px !important;
+	font-weight: 600 !important;
+	line-height: 1 !important;
+	text-decoration: none !important;
+	white-space: nowrap;
+	transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+.hx__btn svg {
+	width: 17px;
+	height: 17px;
+	flex: 0 0 auto;
+}
+.hx__btn:hover,
+.hx__btn:focus-visible {
+	transform: translate3d(0, -2px, 0);
+	outline: none;
+}
+.hx__btn--primary {
+	background: linear-gradient(94deg, var(--hx-violet), #4fcf9c) !important;
+	color: var(--hx-ink) !important;
+	border: 0 !important;
+	box-shadow: 0 8px 24px -10px rgba(120, 190, 220, 0.55);
+}
+.hx__btn--primary:hover {
+	box-shadow: 0 14px 34px -12px rgba(120, 200, 200, 0.75);
+}
+.hx__btn--primary::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: 40%;
+	background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+	transform: translate3d(-180%, 0, 0) skewX(-18deg);
+}
+.hx__btn--primary:hover::after,
+.hx__btn--primary:focus-visible::after {
+	animation: hxSheen 0.85s ease;
+}
+@keyframes hxSheen {
+	from { transform: translate3d(-180%, 0, 0) skewX(-18deg); }
+	to { transform: translate3d(340%, 0, 0) skewX(-18deg); }
+}
+.hx__btn--ghost {
+	border: 1px solid rgba(255, 255, 255, 0.22) !important;
+	background: rgba(255, 255, 255, 0.035) !important;
+	color: #fff !important;
+	-webkit-backdrop-filter: blur(6px);
+	backdrop-filter: blur(6px);
+}
+.hx__btn--ghost:hover,
+.hx__btn--ghost:focus-visible {
+	border-color: var(--hx-green) !important;
+	color: var(--hx-green) !important;
+}
+
+/* ---------- stats ---------- */
+
+.hx__stats {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: stretch;
+	gap: clamp(22px, 5vw, 56px);
+	list-style: none !important;
+	margin: clamp(30px, 5vh, 52px) 0 0 !important;
+	padding: 0 !important;
+}
+.hx__stats li {
+	position: relative;
+	margin: 0 !important;
+	padding: 0 !important;
+	list-style: none !important;
+	min-width: 84px;
+}
+.hx__stats li + li::before {
+	content: "";
+	position: absolute;
+	left: calc(clamp(22px, 5vw, 56px) / -2);
+	top: 6px;
+	bottom: 6px;
+	width: 1px;
+	background: linear-gradient(transparent, rgba(255, 255, 255, 0.18), transparent);
+}
+.hx__stats b {
+	display: block;
+	font-size: clamp(1.5rem, 3vw, 2.1rem);
+	font-weight: 700;
+	line-height: 1.1;
+	color: #fff;
+	font-variant-numeric: tabular-nums;
+}
+.hx__stats span {
+	display: block;
+	margin-top: 4px;
+	font-size: 11px;
+	letter-spacing: 0.15em;
+	text-transform: uppercase;
+	color: rgba(255, 255, 255, 0.48);
+}
+
+/* ---------- scroll cue ---------- */
+
+.hx__scroll {
+	position: absolute;
+	left: 50%;
+	bottom: clamp(16px, 3vh, 30px);
+	z-index: 2;
+	transform: translateX(-50%);
+	text-decoration: none !important;
+	opacity: 0.55;
+	transition: opacity 0.2s ease;
+}
+.hx__scroll:hover {
+	opacity: 1;
+}
+.hx__mouse {
+	display: block;
+	width: 24px;
+	height: 38px;
+	border: 1px solid rgba(255, 255, 255, 0.45);
+	border-radius: 13px;
+	position: relative;
+}
+.hx__mouse i {
+	position: absolute;
+	left: 50%;
+	top: 8px;
+	width: 3px;
+	height: 7px;
+	margin-left: -1.5px;
+	border-radius: 2px;
+	background: var(--hx-green);
+	animation: hxWheel 1.9s cubic-bezier(0.3, 0.7, 0.3, 1) infinite;
+}
+@keyframes hxWheel {
+	0% { transform: translate3d(0, 0, 0); opacity: 0; }
+	22% { opacity: 1; }
+	70% { transform: translate3d(0, 13px, 0); opacity: 0; }
+	100% { transform: translate3d(0, 13px, 0); opacity: 0; }
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 1024px) {
+	.hx__board { opacity: 0.7; }
+}
+
+@media (max-width: 767px) {
+	.hx {
+		/* Clears the site's mobile header bar, which pulls the following
+		   content up underneath itself by 75px. */
+		padding-top: 118px;
+		min-height: clamp(580px, 90svh, 860px);
+	}
+	.hx__board { opacity: 0.55; }
+	/* Fewer moving parts on phones. */
+	.hx__spark:nth-child(n + 5) { display: none; }
+	.hx__frame { display: none; }
+	.hx__actions { width: 100%; }
+	.hx__btn { flex: 1 1 200px; justify-content: center; }
+	.hx__stats { gap: 26px; }
+	.hx__stats li + li::before { left: -13px; }
+	.hx__scroll { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.hx *,
+	.hx *::before,
+	.hx *::after {
+		animation: none !important;
+		transition: none !important;
+	}
+	.hx__sparklayer { display: none; }
+	.hx__fx { opacity: 1; transform: none; }
+}

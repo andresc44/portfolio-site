@@ -1,0 +1,84 @@
+/* Blurred letterbox padding for media whose aspect ratio doesn't match its
+   frame.
+
+   The problem: project gallery images range from 0.58 (tall portrait) to
+   3.32 (ultra-wide) across the site. Cropping those to a fixed tile shape
+   with object-fit:cover threw away up to ~60% of the picture. These rules
+   switch every preview frame to object-fit:contain so the whole image is
+   always visible, and media-fill.js paints a blurred, dimmed copy of the
+   same image behind it to fill the leftover space.
+
+   The CSS alone is already a complete fix for the cropping — if the JS
+   never runs, images simply letterbox against a dark panel instead of a
+   blurred one. The blur is enhancement, not load-bearing. */
+
+.project-gallery__item,
+.project-archive__card-media,
+.elementor-post__thumbnail {
+	position: relative;
+	overflow: hidden;
+	background-color: #121a26;
+}
+
+/* Never crop the subject. */
+.project-gallery__item > img,
+.project-gallery__item > video,
+.project-archive__card-media img,
+.elementor-post__thumbnail img {
+	object-fit: contain !important;
+	position: relative;
+	z-index: 1;
+}
+
+/* Elementor centres its thumbnail with a translate + 1.01 scale and lets
+   overflow:hidden do the cropping, so that has to be unwound before
+   object-fit can take over. */
+.elementor-post__thumbnail img {
+	position: absolute !important;
+	top: 0 !important;
+	left: 0 !important;
+	width: 100% !important;
+	height: 100% !important;
+	transform: none !important;
+}
+
+/* The blurred fill. Inset is negative so the blur kernel never samples past
+   the edge of the element (which would leave a translucent fringe). */
+.mf-bg {
+	position: absolute;
+	inset: -8%;
+	z-index: 0;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	/* Heavily dimmed: a lot of this site's media is light UI screenshots and
+	   diagrams, and at a gentler brightness those blur into a pale slab that
+	   competes with the sharp image in front of it. */
+	filter: blur(26px) saturate(1.1) brightness(0.4);
+	pointer-events: none;
+}
+
+/* Scrim over the blur so the fill lands in a consistent dark range whether
+   the source image is mostly white or mostly black. */
+.mf-bg::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: rgba(16, 23, 35, 0.45);
+}
+
+/* Overlays (play button, "+N" badge, mobile counter) must stay on top of
+   both the blur and the image. */
+.project-gallery__play,
+.project-gallery__more,
+.project-gallery__counter {
+	z-index: 2;
+}
+
+@media (max-width: 767px) {
+	/* Smaller frames need a proportionally smaller blur or it turns into a
+	   flat wash of colour. */
+	.mf-bg {
+		filter: blur(16px) saturate(1.25) brightness(0.6);
+	}
+}

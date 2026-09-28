@@ -1,0 +1,161 @@
+<?php
+
+  // Namespace
+  namespace BMI\Plugin\Dashboard;
+
+  // Exit on direct access
+  if (!defined('ABSPATH')) exit;
+
+  // Tooltips
+  $ctl = __("Your account on Wordpress.org (where you open a new support thread) is different to the one you login to your WordPress dashboard (where you are now). If you don’t have a WordPress.org account yet, please sign up at the top right on the Support Forum page, and then scroll down on that page . It only takes a minute :) Thank you!", 'backup-backup');
+  $reviewedBefore = get_option('bmi_review_clicked', false);
+
+  $backupStreamed = apply_filters('bmip_streaming_backup_is_enabled', false);
+  $providerLabel = apply_filters('bmip_streaming_backup_get_provider_label', false);
+?>
+
+<div class="bmi-modal" id="backup-success-modal">
+
+  <div class="bmi-modal-wrapper no-hpad" style="max-width: 900px; max-width: min(900px, 80vw)">
+    <div class="bmi-modal-content">
+
+      <div class="mms mm60 f30 bold center black bck-suc-title"><?php esc_html_e('Backup successful!', 'backup-backup') ?></div>
+
+      <div class="center mm60 mbl mtl">
+        <img src="<?php echo esc_url( $this->get_asset('images', 'happy-smile.png') ); ?>" alt="happy-img">
+      </div>
+
+        <div class="mm60 pb30 bmi-encryption-warning-wrapper" style="display: none;">
+          <div class="bmi-encryption-warning mbl mtl f20">
+            <svg class="warning-icon" viewBox="0 0 24 24" fill="#D47F02" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" />
+            </svg>
+            <div class="warning-text">
+              <strong><?php esc_html_e('Important:', 'backup-backup') ?></strong> <?php esc_html_e('This backup is encrypted. It must be restored using plugin version 2.1.7 or higher. Restoring on older versions will cause site failure.', 'backup-backup') ?>
+            </div>
+          </div>
+        </div>
+
+      <div id="accessible-at-section" class="mm60">
+        <?php if ( $backupStreamed ) : ?>
+
+          <input type="text" autocomplete="off" id="text-input-copy" readonly style="display:none;" aria-hidden="true">
+
+          <div class="mms mbl">
+            <div class="f18 lh30">
+              <?php
+                echo wp_kses_post( sprintf(
+                  __( 'Your backup has been securely stored in <strong>%s</strong>.', 'backup-backup' ),
+                  esc_html( $providerLabel ?: '' )
+                ) );
+              ?>
+            </div>
+
+            <div class="f18 lh30 mtl">
+              <?php esc_html_e( 'Backup name:', 'backup-backup' ); ?>
+              <strong class="mls"><span id="bmi-streamed-backup-name">&#8230;</span></strong>
+            </div>
+          </div>
+
+          <div class="mms f18 mtl lh30">
+            <?php
+              echo wp_kses_post( sprintf(
+                __( 'To restore this backup on another site, install %1$sour plugin%2$s, connect %3$s, then go to %4$s and click “Restore”.', 'backup-backup' ),
+                '<a class="hoverable secondary" href="https://wordpress.org/plugins/backup-backup" target="_blank">',
+                '</a>',
+                '<strong>' . esc_html( $providerLabel ?: '' ) . '</strong>',
+                '<a href="#" class="hoverable secondary go-to-marbs">' . esc_html__( 'Manage & Restore Backups', 'backup-backup' ) . '</a>'
+              ) );
+            ?>
+          </div>
+
+        <?php else : ?>
+
+          <div class="mms mbl">
+            <div class="f18 mbll">
+              <?php esc_html_e('Your backup is now accessible at:', 'backup-backup') ?>
+            </div>
+            <div class="cf success-copy-input">
+              <input type="text" autocomplete="off" id="text-input-copy" readonly class="left f18">
+              <a href="#" class="btn inline btn-with-img btn-img-low-pad btn-pad left bmi-copper" data-copy="text-input-copy">
+                <div class="text">
+                  <img src="<?php echo esc_url( $this->get_asset('images', 'copy-icon.png') ); ?>" alt="copy-img">
+                  <div class="f18 semibold"><?php esc_html_e('Copy', 'backup-backup') ?></div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <div class="mms f18 mtl lh30">
+            <?php $st1l = __('To migrate your site, just copy above link, install %a1our plugin%a2 on the target site, go to the', 'backup-backup'); ?>
+            <?php echo wp_kses_post( str_replace('%a2', '</a>', str_replace('%a1', '<a class="hoverable secondary" href="https://wordpress.org/plugins/backup-backup" target="_blank">', $st1l)) ); ?>
+            "<a href="#" class="hoverable secondary go-to-marbs"><?php esc_html_e('Manage & Restore Backups', 'backup-backup') ?></a>"
+            <?php esc_html_e('- tab, and paste the link there.', 'backup-backup') ?>
+          </div>
+
+        <?php endif; ?>
+      </div>
+        <div class="bmi-ask-for-review" style="<?php echo $reviewedBefore ? 'display: none;' : ''; ?>">
+          <div class="cf mm60">
+            <div class="left bmi-positive-wrapper">
+              <img src="<?php echo esc_url( $this->get_asset('images', 'big-thumb-up.svg') ); ?>" alt="positive-thumb-up" class="bmi-positive-thumb">
+            </div>
+            <div class="left bmi-thumb-info">
+              <div class="f16 lh30 mm30 mtll mbll">
+                <?php echo wp_kses_post( __( "Like how easy it was? Then <b>PLEASE</b> give us a nice rating so that others discover out plugin & benefit from it too. Thank you!!", 'backup-backup' ) ); ?>
+              </div>
+              <div class="cf lh60 mm30">
+                <div class="left">
+                  <a href="https://wordpress.org/support/plugin/backup-backup/reviews/#new-post" target="_blank" class="btn inline btn-pad mm30 bmi-review-btn">
+                    <div class="text">
+                      <div class="f14 semibold"><?php esc_html_e('Sounds fair, let me give a rating', 'backup-backup'); ?></div>
+                    </div>
+                  </a>
+                </div>
+                <div class="right relative">
+                  <a href="#!" class="nodec secondary semibold">
+                    <span class="tooltip hoverable info-cursor f14" tooltip="<?php echo esc_attr( $ctl ); ?>">
+                      <?php esc_html_e("Trouble logging in?", 'backup-backup'); ?>
+                      <span class="bmi-info-icon"></span>
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mms">
+          <div class="f18 mtl mbl mms lh14 mm60">
+            <?php esc_html_e('You can manage the backup on the', 'backup-backup') ?>
+            "<a href="#" class="hoverable secondary go-to-marbs"><?php esc_html_e('Manage & Restore Backups', 'backup-backup') ?></a>"
+            <?php esc_html_e('- tab.', 'backup-backup') ?>
+          </div>
+        </div>
+
+
+      <div class="mms mtl flex-here lh50 mm60">
+        <div class="f18 align-left">
+          <?php if ( ! $backupStreamed ) : ?>
+            <a href="#" class="nlink hoverable" id="download-backup-url" download><?php esc_html_e('Download backup', 'backup-backup') ?></a>
+          <?php endif; ?>
+        </div>
+
+        <div class="center">
+          <a href="#" class="btn inline btn-pad bmi-modal-closer grey-btn nplr" data-close="backup-success-modal">
+            <div class="text">
+              <div class="f18 semibold"><?php esc_html_e('Close window', 'backup-backup') ?></div>
+            </div>
+          </a>
+        </div>
+
+        <div class="f18 inline align-right">
+          <a href="#" class="nlink hoverable download-backup-log-url" download="backup_logs.txt">
+            <?php esc_html_e('Download logs', 'backup-backup') ?>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
