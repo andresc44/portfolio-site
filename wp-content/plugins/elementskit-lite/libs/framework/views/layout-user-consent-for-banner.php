@@ -37,6 +37,6 @@
 <div class="ekit-user-consent-for-banner notice notice-error">
 	<p>
 		<label for="ekit-admin-switch__ekit-user-consent-for-banner"><?php esc_html_e( 'Show update & fix related important messages, essential tutorials and promotional images on WP Dashboard', 'elementskit-lite' ); ?></label>
-		<input type="checkbox" <?php echo ( $this->utils->get_settings( 'ekit_user_consent_for_banner', 'yes' ) == 'yes' ? 'checked' : '' ); ?> value="yes" class="ekit-admin-control-input" name="ekit-user-consent-for-banner" id="ekit-admin-switch__ekit-user-consent-for-banner">
+		<input type="checkbox" <?php echo ( $this->utils->get_settings( 'ekit_user_consent_for_banner', 'no' ) == 'yes' ? 'checked' : '' ); ?> value="yes" class="ekit-admin-control-input" name="ekit-user-consent-for-banner" id="ekit-admin-switch__ekit-user-consent-for-banner">
 	</p>
 </div>

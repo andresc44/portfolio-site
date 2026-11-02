@@ -7,7 +7,7 @@
  * @wordpress-plugin
  * Plugin Name:       WPvivid Backup Plugin
  * Description:       Clone or copy WP sites then move or migrate them to new host (new domain), schedule backups, transfer backups to leading remote storage. All in one.
- * Version:           0.9.135
+ * Version:           0.9.136
  * Author:            WPvivid Backup & Migration
  * Author URI:        https://wpvivid.com
  * License:           GPL-3.0+
@@ -21,7 +21,7 @@ if ( ! defined( 'WPINC' ) ) {
     die;
 }
 
-define( 'WPVIVID_PLUGIN_VERSION', '0.9.135' );
+define( 'WPVIVID_PLUGIN_VERSION', '0.9.136' );
 //
 define('WPVIVID_RESTORE_INIT','init');
 define('WPVIVID_RESTORE_READY','ready');
@@ -91,6 +91,19 @@ define('WPVIVID_PACK_SIZE',1 << 20);
 
 define('WPVIVID_SUCCESS','success');
 define('WPVIVID_FAILED','failed');
+
+if (!defined('WPVIVID_FREE_PHPSECLIB_MAJOR'))
+{
+    define('WPVIVID_FREE_PHPSECLIB_MAJOR', 3);
+}
+
+if (!defined('WPVIVID_FREE_PHPSECLIB_VERSION'))
+{
+    define('WPVIVID_FREE_PHPSECLIB_VERSION', '3.0.57');
+}
+
+define('WPVIVID_PHPSECLIB3_MIN_PRO_VERSION', '2.2.53');
+
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.

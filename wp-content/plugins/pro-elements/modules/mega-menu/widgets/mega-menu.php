@@ -2,12 +2,12 @@
 namespace ElementorPro\Modules\MegaMenu\Widgets;
 
 use ElementorPro\Base\Base_Widget_Trait;
+use ElementorPro\Base\Widget_Nested_Base_Pro;
 use ElementorPro\Modules\MegaMenu\Controls\Control_Menu_Dropdown_Animation;
 use ElementorPro\Plugin;
 use Elementor\Controls_Manager;
-use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
-use Elementor\Modules\NestedElements\Base\Widget_Nested_Base;
+use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Modules\NestedElements\Controls\Control_Nested_Repeater;
 use Elementor\Icons_Manager;
 use Elementor\Repeater;
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-class Mega_Menu extends Widget_Nested_Base {
+class Mega_Menu extends Widget_Nested_Base_Pro {
 	use Base_Widget_Trait;
 	use Url_Helper_Trait;
 
@@ -116,6 +116,7 @@ class Mega_Menu extends Widget_Nested_Base {
 	}
 
 	protected function get_default_children_title() {
+		/* translators: %d: Item number. */
 		return esc_html__( 'Item #%d', 'elementor-pro' );
 	}
 
@@ -742,7 +743,7 @@ class Mega_Menu extends Widget_Nested_Base {
 			}
 
 			$dropdown_options[ $breakpoint_key ] = sprintf(
-			/* translators: 1: Breakpoint label, 2: `>` character, 3: Breakpoint value. */
+				/* translators: 1: Breakpoint label, 2: Comparison operator, 3: Breakpoint value in pixels. */
 				esc_html__( '%1$s (%2$s %3$dpx)', 'elementor-pro' ),
 				$breakpoint_instance->get_label(),
 				'>',
@@ -2189,11 +2190,17 @@ class Mega_Menu extends Widget_Nested_Base {
 						<button <?php $this->print_render_attribute_string( $key . '_link' ); ?> >
 							<span class="e-n-menu-dropdown-icon-opened">
 								<?php echo $icon_active_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-								<span class="elementor-screen-only"><?php echo sprintf( esc_html__( 'Close %s', 'elementor-pro' ), $item['item_title'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+								<span class="elementor-screen-only"><?php
+								/* translators: %s: Menu item title. */
+								echo sprintf( esc_html__( 'Close %s', 'elementor-pro' ), $item['item_title'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+								?></span>
 							</span>
 							<span class="e-n-menu-dropdown-icon-closed">
 								<?php echo $icon_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-								<span class="elementor-screen-only"><?php echo sprintf( esc_html__( 'Open %s', 'elementor-pro' ), $item['item_title'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+								<span class="elementor-screen-only"><?php
+								/* translators: %s: Menu item title. */
+								echo sprintf( esc_html__( 'Open %s', 'elementor-pro' ), $item['item_title'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+								?></span>
 							</span>
 						</button>
 					<?php } ?>

@@ -535,7 +535,6 @@ class ElementsKit_Widget_Image_Box extends Widget_Base {
 			]
 		);
 
-
         $this->add_responsive_control(
 			'ekit_image_box_image_floating_box_margin_top',
 			[
@@ -1390,6 +1389,47 @@ class ElementsKit_Widget_Image_Box extends Widget_Base {
 				),
 			)
 		);
+
+        $this->add_control(
+            'ekit_image_box_image_icon_right_space',
+            [
+                'label' => esc_html__( 'Icon Space', 'elementskit-lite' ),
+                'type' => Controls_Manager::SLIDER,
+                'default' => [
+                    'size' => 5,
+                    'unit' => 'px',
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .elementskit-info-image-box .elementskit-btn  i' => 'margin-left: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .elementskit-info-image-box .elementskit-btn svg' => 'margin-left: {{SIZE}}{{UNIT}};',
+                ],
+                'condition' => [
+                    'ekit_image_box_icons__switch'   => 'yes',
+                    'ekit_image_box_icon_align'      => 'right',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'ekit_image_box_image_icon_left_space',
+            [
+                'label' => esc_html__( 'Icon Space', 'elementskit-lite' ),
+                'type' => Controls_Manager::SLIDER,
+                'default' => [
+                    'size' => 5,
+                    'unit' => 'px',
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .elementskit-info-image-box .elementskit-btn  i' => 'margin-right: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .elementskit-info-image-box .elementskit-btn svg' => 'margin-right: {{SIZE}}{{UNIT}};',
+                ],
+                'condition' => [
+                    'ekit_image_box_icons__switch'   => 'yes',
+                    'ekit_image_box_icon_align'      => 'left',
+                ],
+            ]
+        );
+
         $this->start_controls_tabs( 'tabs_button_style' );
 
         $this->start_controls_tab(

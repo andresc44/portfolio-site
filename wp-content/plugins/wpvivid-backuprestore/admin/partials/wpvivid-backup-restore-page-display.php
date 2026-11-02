@@ -2314,13 +2314,14 @@ function wpvivid_backuppage_add_progress_module(){
         <div style="clear: both;"></div>
     </div>
     <script>
-        jQuery('#wpvivid_postbox_backup_percent').on("click", "input", function(){
-            if(jQuery(this).attr('id') === 'wpvivid_backup_cancel_btn'){
-                wpvivid_cancel_backup();
-            }
-            if(jQuery(this).attr('id') === 'wpvivid_backup_log_btn'){
-                wpvivid_read_log('wpvivid_view_backup_task_log');
-            }
+        jQuery(document).on('click', '#wpvivid_postbox_backup_percent #wpvivid_backup_cancel_btn, #wpvivid_upload_backup_percent #wpvivid_backup_cancel_btn', function(event) {
+            event.preventDefault();
+            wpvivid_cancel_backup();
+        });
+
+        jQuery(document).on('click', '#wpvivid_postbox_backup_percent #wpvivid_backup_log_btn', function(event) {
+            event.preventDefault();
+            wpvivid_read_log('wpvivid_view_backup_task_log');
         });
             
         function wpvivid_cancel_backup()

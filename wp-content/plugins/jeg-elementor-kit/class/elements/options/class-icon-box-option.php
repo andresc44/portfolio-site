@@ -875,8 +875,7 @@ class Icon_Box_Option extends Option_Abstract {
 			),
 			'selectors'  => array(
 				'custom' => array(
-					'{{WRAPPER}} .jeg-elementor-kit.jkit-icon-box .hover-watermark i'   => 'font-size: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}} .jeg-elementor-kit.jkit-icon-box .hover-watermark svg' => 'width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .jeg-elementor-kit.jkit-icon-box .hover-watermark' => 'font-size: {{SIZE}}{{UNIT}};',
 				),
 			),
 			'responsive' => true,
@@ -1099,8 +1098,7 @@ class Icon_Box_Option extends Option_Abstract {
 			),
 			'selectors'  => array(
 				'custom' => array(
-					'{{WRAPPER}} .jeg-elementor-kit.jkit-icon-box .icon-box > .icon i'   => 'font-size: {{SIZE}}{{UNIT}}',
-					'{{WRAPPER}} .jeg-elementor-kit.jkit-icon-box .icon-box > .icon svg' => 'width: {{SIZE}}{{UNIT}}',
+					'{{WRAPPER}} .jeg-elementor-kit.jkit-icon-box .icon-box > .icon' => 'font-size: {{SIZE}}{{UNIT}};',
 				),
 			),
 			'responsive' => true,
@@ -1224,8 +1222,7 @@ class Icon_Box_Option extends Option_Abstract {
 			),
 			'selectors'  => array(
 				'custom' => array(
-					'{{WRAPPER}} .jeg-elementor-kit.jkit-icon-box .icon-box-button a.icon-box-link i'   => 'font-size: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}} .jeg-elementor-kit.jkit-icon-box .icon-box-button a.icon-box-link svg' => 'width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .jeg-elementor-kit.jkit-icon-box .icon-box-button a.icon-box-link' => 'font-size: {{SIZE}}{{UNIT}};',
 				),
 			),
 			'responsive' => true,

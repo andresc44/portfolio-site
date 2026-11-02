@@ -59,7 +59,15 @@ add_action( 'wp_enqueue_scripts', function () {
 	}
 	$dir = WPMU_PLUGIN_DIR . '/project-tags';
 	$url = WPMU_PLUGIN_URL . '/project-tags';
-	wp_enqueue_style( 'project-tags', $url . '/tags.css', array(), filemtime( $dir . '/tags.css' ) );
+	// Elementor only loads Font Awesome when it scans _elementor_data and finds
+	// an icon widget already in the page - true on most project posts because
+	// of the Github/Report buttons, but not guaranteed on every one (9 posts
+	// have no Github button at all). Tag pill icons are added as raw <i> markup
+	// in the shortcode below rather than real Elementor icon widgets, so
+	// Elementor's scan never sees them - enqueueing the same library directly
+	// here is what makes it load regardless of what else is on the page.
+	wp_enqueue_style( 'project-tags-fontawesome', ELEMENTOR_ASSETS_URL . 'lib/font-awesome/css/all.min.css', array(), ELEMENTOR_VERSION );
+	wp_enqueue_style( 'project-tags', $url . '/tags.css', array( 'project-tags-fontawesome' ), filemtime( $dir . '/tags.css' ) );
 	if ( is_singular( 'post' ) ) {
 		wp_enqueue_script( 'project-tags', $url . '/tags.js', array(), filemtime( $dir . '/tags.js' ), true );
 		wp_localize_script( 'project-tags', 'ProjectTags', array(
@@ -68,6 +76,63 @@ add_action( 'wp_enqueue_scripts', function () {
 		) );
 	}
 } );
+
+/**
+ * Font Awesome 5 Free class for each tag, keyed by slug. Brand icons (fab)
+ * where FA actually ships the real logo (Python, Raspberry Pi, Linux/Ubuntu,
+ * Google, Microsoft, JS); a solid-icon (fas) stand-in everywhere else, since
+ * most of these tags are tools/concepts FA has no brand mark for (MATLAB,
+ * Arduino, ROS, OpenCV, PyTorch...) or aren't brands at all (Optimization,
+ * SLAM, Controls...). Several tags share an icon where no closer match
+ * exists in the free set - a curated best-effort, not a 1:1 logo lookup.
+ */
+function portfolio_tag_icon_class( $slug ) {
+	static $icons = array(
+		'3d-printing'                          => 'fas fa-cube',
+		'ansys'                                 => 'fas fa-shapes',
+		'arduino'                                => 'fas fa-microchip',
+		'autonomous-planning-navigation'         => 'fas fa-route',
+		'battery-management-systems'             => 'fas fa-car-battery',
+		'c'                                       => 'fas fa-code',
+		'cad'                                     => 'fas fa-drafting-compass',
+		'claude-code'                             => 'fas fa-terminal',
+		'controls'                                => 'fas fa-sliders-h',
+		'deep-learning'                           => 'fas fa-brain',
+		'drones'                                  => 'fas fa-helicopter',
+		'eagle-pcb-design'                        => 'fas fa-microchip',
+		'embedded-communication-protocols'        => 'fas fa-network-wired',
+		'energy3d'                                => 'fas fa-solar-panel',
+		'finite-element-analysis-fea'             => 'fas fa-shapes',
+		'gazebo'                                  => 'fas fa-cubes',
+		'google-apps-script-javascript-based'     => 'fab fa-js',
+		'google-cloud-platform'                   => 'fab fa-google',
+		'html'                                    => 'fab fa-html5',
+		'matlab'                                   => 'fas fa-calculator',
+		'microsoft-azure'                          => 'fab fa-microsoft',
+		'motor-control'                            => 'fas fa-cog',
+		'natural-language-processing'              => 'fas fa-comments',
+		'opencv'                                    => 'fas fa-eye',
+		'optimization'                              => 'fas fa-chart-line',
+		'point-cloud-processing'                    => 'fas fa-cubes',
+		'pspice'                                     => 'fas fa-bolt',
+		'pybullet'                                    => 'fas fa-cube',
+		'python'                                       => 'fab fa-python',
+		'pytorch'                                       => 'fas fa-fire',
+		'raspberry-pi'                                   => 'fab fa-raspberry-pi',
+		'reinforcement-learning'                          => 'fas fa-gamepad',
+		'ros-ros2'                                         => 'fas fa-robot',
+		'rviz'                                              => 'fas fa-eye',
+		'scikit-learn'                                       => 'fas fa-project-diagram',
+		'sensor-fusion'                                       => 'fas fa-satellite-dish',
+		'simulink'                                             => 'fas fa-project-diagram',
+		'slam'                                                  => 'fas fa-map',
+		'soldering'                                              => 'fas fa-fire',
+		'sql'                                                     => 'fas fa-database',
+		'ubuntu'                                                   => 'fab fa-linux',
+		'yolo'                                                      => 'fas fa-crosshairs',
+	);
+	return isset( $icons[ $slug ] ) ? $icons[ $slug ] : 'fas fa-tag';
+}
 
 add_shortcode( 'project_tags', function ( $atts ) {
 	$atts    = shortcode_atts( array( 'id' => 0 ), $atts );
@@ -82,6 +147,7 @@ add_shortcode( 'project_tags', function ( $atts ) {
 	<div class="project-tags">
 		<?php foreach ( $tags as $tag ) : ?>
 			<button type="button" class="project-tags__pill" data-tag-slug="<?php echo esc_attr( $tag->slug ); ?>" data-tag-name="<?php echo esc_attr( html_entity_decode( $tag->name, ENT_QUOTES ) ); ?>">
+				<i class="<?php echo esc_attr( portfolio_tag_icon_class( $tag->slug ) ); ?>" aria-hidden="true"></i>
 				<?php echo esc_html( html_entity_decode( $tag->name, ENT_QUOTES ) ); ?>
 			</button>
 		<?php endforeach; ?>

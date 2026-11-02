@@ -19,6 +19,7 @@ class Init {
 		add_action( 'elementor/frontend/after_enqueue_styles', array( $this, 'load_styles' ) );
 		add_action( 'elementor/frontend/before_enqueue_scripts', array( $this, 'load_scripts' ) );
 		add_action( 'elementor/frontend/before_enqueue_scripts', array( $this, 'editor_scripts' ) );
+		add_action( 'elementor/editor/after_enqueue_scripts', array( $this, 'enqueue_editor_shortcut' ) );
 
 		// include all necessary files
 		$this->include_files();
@@ -26,14 +27,10 @@ class Init {
 		// calling the sticky controls
 		new \Elementor\ElementsKit_Extend_Onepage_Scroll();
 
-		if ( \ElementsKit_Lite::package_type() === 'pro' ) :
-			new \Elementor\ElementsKit_Pro_Extend_Onepage_Scroll();
-		endif;
 	}
 	
 	public function include_files() {
 		include $this->dir . 'extend-controls.php';
-		include $this->dir . 'extend-controls-pro.php';
 	}
 
 	public function load_styles() {
@@ -51,6 +48,30 @@ class Init {
 	public function editor_scripts() {
 		// todo: has some conflicts with dependency.
 		// wp_enqueue_script( 'ekit-onepage-scroll-editor', $this->url . 'assets/js/editor.js', ['jquery', 'elementor-editor', 'elementor-frontend'], \ElementsKit_Lite::version(), true );
+	}
+
+	/**
+	 * Add an Elementor top-bar shortcut to the Onepage Scroll document section.
+	 */
+	public function enqueue_editor_shortcut() {
+		$handle = 'ekit-onepage-scroll-editor-shortcut';
+
+		wp_enqueue_script(
+			$handle,
+			$this->url . 'assets/js/editor-shortcut.js',
+			array( 'elementor-editor' ),
+			\ElementsKit_Lite::version(),
+			true
+		);
+
+		wp_localize_script(
+			$handle,
+			'elementskitOnepageScrollEditor',
+			array(
+				'title' => esc_html__( 'Onepage Scroll Settings', 'elementskit-lite' ),
+				'icon'  => \ElementsKit_Lite\Utils::get_promo_icon( 'currentColor', 20, 20 ),
+			)
+		);
 	}
 
 	public static function get_settings_model() {

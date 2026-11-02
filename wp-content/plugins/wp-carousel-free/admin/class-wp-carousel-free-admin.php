@@ -76,6 +76,9 @@ class WP_Carousel_Free_Admin {
 
 		// Get required inputs.
 		$attachment_id = isset( $_POST['attachment_id'] ) ? absint( wp_unslash( $_POST['attachment_id'] ) ) : false;
+		if ( ! $this->can_edit_attachment( $attachment_id ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'You are not allowed to edit this image.', 'wp-carousel-free' ) ) );
+		}
 
 		// Return the attachment's links.
 		wp_send_json_success(
@@ -109,6 +112,9 @@ class WP_Carousel_Free_Admin {
 
 		// Prepare variables.
 		$attach_id = isset( $_POST['attach_id'] ) ? intval( wp_unslash( $_POST['attach_id'] ) ) : false;
+		if ( ! $this->can_edit_attachment( $attach_id ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'You are not allowed to edit this image.', 'wp-carousel-free' ) ) );
+		}
 		$meta      = isset( $_POST['meta'] ) ? wp_unslash( $_POST['meta'] ) : array(); //@codingStandardsIgnoreLine
 		// Update attachment post data.
 		$update_attachment_data = array(
@@ -126,6 +132,16 @@ class WP_Carousel_Free_Admin {
 
 		wp_send_json_success();
 	}
+	/**
+	 * Whether the current user may edit the given attachment.
+	 *
+	 * @param  int $attachment_id Attachment ID.
+	 * @return bool
+	 */
+	private function can_edit_attachment( $attachment_id ) {
+		return $attachment_id && 'attachment' === get_post_type( $attachment_id ) && current_user_can( 'edit_post', $attachment_id );
+	}
+
 	/**
 	 * Getting image metadata.
 	 *
@@ -179,6 +195,9 @@ class WP_Carousel_Free_Admin {
 		$attachment_id = isset( $_POST['attach_id'] ) ? absint( wp_unslash( $_POST['attach_id'] ) ) : false;
 		if ( ! $attachment_id ) {
 			wp_send_json_error( array( 'message' => esc_html__( 'Invalid Attachment ID.', 'wp-carousel-free' ) ) );
+		}
+		if ( ! $this->can_edit_attachment( $attachment_id ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'You are not allowed to edit this image.', 'wp-carousel-free' ) ) );
 		}
 		$image_meta = $this->getting_image_metadata( $attachment_id );
 		$json       = wp_json_encode( $image_meta );
@@ -284,7 +303,11 @@ class WP_Carousel_Free_Admin {
 	public function add_plugin_action_links( $links, $plugin_file ) {
 
 		if ( WPCAROUSELF_BASENAME === $plugin_file ) {
-			$ui_links = sprintf( '<a href="%s">%s</a>', admin_url( 'post-new.php?post_type=sp_wp_carousel' ), __( 'Add New', 'wp-carousel-free' ) );
+			$add_new_url = $this->block_editor_is_available()
+				? admin_url( 'post-new.php?post_type=page&wpcpblock_inserter=true' )
+				: admin_url( 'post-new.php?post_type=sp_wp_carousel' );
+
+			$ui_links = sprintf( '<a href="%s">%s</a>', esc_url( $add_new_url ), __( 'Add New', 'wp-carousel-free' ) );
 
 			array_unshift( $links, $ui_links );
 
@@ -292,6 +315,29 @@ class WP_Carousel_Free_Admin {
 		}
 
 		return $links;
+	}
+
+	/**
+	 * Whether a new page would open in the block editor with our blocks registered.
+	 *
+	 * @since 3.0.0
+	 * @return bool
+	 */
+	private function block_editor_is_available() {
+
+		if ( version_compare( $GLOBALS['wp_version'], '5.8', '<' ) ) {
+			return false;
+		}
+
+		if ( ! file_exists( WPCAROUSELF_PATH . 'assets/editor/index.asset.php' ) ) {
+			return false;
+		}
+
+		if ( ! function_exists( 'use_block_editor_for_post_type' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/post.php';
+		}
+
+		return use_block_editor_for_post_type( 'page' );
 	}
 
 	/**
@@ -314,8 +360,8 @@ class WP_Carousel_Free_Admin {
 	public function plugin_row_meta( $plugin_meta, $plugin_file ) {
 		if ( WPCAROUSELF_BASENAME === $plugin_file ) {
 			$row_meta = array(
-				'docs' => '<a href="https://wpcarousel.io/wp-carousel-free-demo/" aria-label="' . esc_attr( __( 'Live Demo', 'wp-carousel-free' ) ) . '" target="_blank">' . __( 'Live Demo', 'wp-carousel-free' ) . '</a>',
-				'ideo' => '<a href="https://docs.shapedplugin.com/docs/wordpress-carousel/introduction/" aria-label="' . esc_attr( __( 'View WP Carousel Video Tutorials', 'wp-carousel-free' ) ) . '" target="_blank">' . __( 'Docs & Video Tutorials', 'wp-carousel-free' ) . '</a>',
+				'docs' => '<a href="https://wpcarousel.io/patterns/carousel/" aria-label="' . esc_attr( __( 'Live Demo', 'wp-carousel-free' ) ) . '" target="_blank">' . __( 'Live Demo', 'wp-carousel-free' ) . '</a>',
+				'ideo' => '<a href="https://docs.wpcarousel.io/guide/introduction" aria-label="' . esc_attr( __( 'View WP Carousel Video Tutorials', 'wp-carousel-free' ) ) . '" target="_blank">' . __( 'Docs & Video Tutorials', 'wp-carousel-free' ) . '</a>',
 			);
 
 			$plugin_meta = array_merge( $plugin_meta, $row_meta );
@@ -355,18 +401,5 @@ class WP_Carousel_Free_Admin {
 		}
 
 		return $text;
-	}
-
-	/**
-	 * Declare the compatibility of WooCommerce High-Performance Order Storage (HPOS) feature.
-	 *
-	 * @since 2.5.7
-	 *
-	 * @return void
-	 */
-	public function declare_compatibility_with_woo_hpos_feature() {
-		if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
-			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', 'wp-carousel-free/wp-carousel-free.php', true );
-		}
 	}
 }

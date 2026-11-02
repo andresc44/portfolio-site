@@ -4,7 +4,7 @@ Tags: Elementor addons, mega menu builder,  header footer builder, elementor add
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 4.0.5
+Stable tag: 4.0.9
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -12,7 +12,7 @@ Join millions who empower their websites with ElementsKit Elementor Addons. Get 
 
 == Description ==
 
-**[ELEMENTSKIT, ALL-IN-ONE ELEMENTOR ADDON](https://wpmet.com/plugin/elementskit/?utm_source=org&utm_medium=readme), EMPOWERING 2 MILLION+ ELEMENTOR USERS WITH 110+ POWERFUL ELEMENTS & 1000+ TEMPLATES.**
+**[ELEMENTSKIT, ALL-IN-ONE ELEMENTOR ADDON](https://wpmet.com/plugin/elementskit/?utm_source=org&utm_medium=readme), EMPOWERING 2 MILLION+ USERS WITH 100+ ELEMENTOR WIDGETS, ELEMENTOR ELEMENTS & 1000+ ELEMENTOR TEMPLATES.**
 
 The ultimate addons for Elementor, ElementsKit is a nice, comprehensive page builder solution with **100+** Elementor Widgets, **20+** modules, & ever-growing Elementor template library.
 
@@ -39,11 +39,11 @@ https://www.youtube.com/watch?v=VhBl3dHT5SY
 
 🔥 All time downloads of ElementsKit : **50 million+**
 
-⭐ **100+** Free and Premium Elementor Widgets
+⭐ **100+** Premium and Free Elementor Widgets
 
 ⭐ **20+ Exclusive Modules** for advanced design solution
 
-⭐ **100+ Pre-designed** Header & Footer Elementor Templates
+⭐ **100+ Pre-designed** Header & Footer Elementor Templates 
 
 ⭐ **98+ Ready Pages** to start Elementor website in no time
 
@@ -357,6 +357,43 @@ ElementsKit is brought to you by Wpmet, a name **trusted by 10,00,000 satisfied 
 Visit  [wpmet](https://wpmet.com/?utm_source=org&utm_medium=readme) for essential WordPress [Tutorials, Tips & Tricks](https://wpmet.com/blog)!
 
 == Changelog ==
+= ElementsKit Elementor Addons Version: 4.0.9 (2026-10-20) =
+* Improved: Moved Pro-only One Page Scroll navigation styles to ElementsKit Pro.
+* Improved: Moved Pro-only Nav Menu dropdown indicator icons to ElementsKit Pro.
+* Improved: Opt-in data sharing consent and privacy handling during onboarding.
+* Improved: Privacy Policy links and consent information in admin notices and deactivation feedback modal.
+* Improved: Onboarding "Unlock All & Continue" button now explains which plugins will be installed and activated.
+* Improved: Added a One Page Scroll settings shortcut to the Elementor editor top bar.
+* Improved: Replaced the embedded YouTube video on the Forms dashboard page with a link.
+* Fixed: Video widget popup close button style controls not applying.
+
+= ElementsKit Elementor Addons Version: 4.0.8 (2026-10-11) =
+* Improved: Header Footer compatibility with ShopEngine templates.
+* Improved: Frontend CSS and JavaScript loading for Header Footer templates.
+* Improved: Automatic asset loading for ShopEngine templates and nested Elementor widgets.
+* Improved: Added icon spacing controls for the Image Box widget.
+* Improved: Updated Testimonial widget badge styling controls for Style 6.
+* Fixed: WooCommerce checkout AJAX conflicts caused by Header Footer template rendering.
+* Fixed: Mega Menu REST API response issues caused by unexpected Elementor CSS output.
+* Fixed: An `elementorFrontendConfig` error on non-Elementor pages.
+* Fixed: Page List widget SVG icon sizing issues.
+* Fixed: Post List widget default icon rendering.
+* Fixed: Pie Chart widget issues caused by an incorrect hover animation setting.
+
+= ElementsKit Elementor Addons Version: 4.0.7 (2026-09-29) =
+* Security: Enhanced Widget Builder output escaping to prevent stored XSS vulnerabilities.
+* Improved: Post title output escaping in the Blog Posts widget's Block and Grid With Thumb layouts.
+* Fixed: Stored XSS vulnerability in the Blog Posts widget's featured image alt attributes.
+* Fixed: Taxonomy archives overwriting Elementor template CSS.
+* Fixed: Image Accordion functionality in the editor when used with Atomic Flexbox elements.
+
+= ElementsKit Elementor Addons Version: 4.0.6 (2026-09-21) =
+* Added: Support for Elementor Atomic Elements.
+* Added: Blog Post image widget image position control responisve
+* Improved: Output escaping for media image attributes to enhance security.
+* Fixed: Mega Menu rendering issues in the Elementor editor.
+* Fixed: A stored XSS vulnerability in the Nav Menu widget’s mobile logo image attributes.
+
 = ElementsKit Elementor Addons Version: 4.0.5 (2026-09-09) =
 * Improved: Compatibility with the latest version of WPML.
 * Fixed: PHP warning caused by invalid Nav Menu item references during Mega Menu asset discovery.
@@ -975,133 +1012,6 @@ ElementsKit Elementor Addons Version: 2.5.10 (2022-05-18)
 Fixed: Minor CSS fix.
 Fixed: TablePress JS console error.
 
-ElementsKit Elementor Addons Version: 2.5.9 (2022-05-10)
-Fixed: HTML special character issue fix.
-
-ElementsKit Elementor Addons Version: 2.5.8 (2022-05-10)
-Fixed: Missing HTML scape functions.
-
-ElementsKit Elementor Addons Version: 2.5.7 (2022-04-25)
-Fixed: Advance Tab widget issue.
-Fixed: Advance Accordion widget issue.
-Fixed: Advance Toggle widget issue.
-Fixed: Advance Slider widget issue.
-
-ElementsKit Elementor Addons Version: 2.5.6 (2022-04-18)
-Added: Language Files.
-Added: WPMI support for ElementsKit template, especially for Header & Footer Builder.
-Fixed: Escaping issues.
-Fixed: Theme support issue.
-Fixed: One-page scroll issue.
-Tweaked: Change some links.
-
-ElementsKit Elementor Addons Version: 2.5.5 (2022-03-24)
-Added: WhatsApp widget.
-Fixed: Elementor responsive control devices compatibility issue.
-Fixed: Image accordion active issue on hover.
-Fixed: One-page scroll not working for mobile with OceanWP theme.
-Improved: Added link for heading widget.
-Fixed: Elementor 3.6.1 conflicts for depreciation.
-Fixed: Menu dropdown and sticky feature issue.
-
-ElementsKit Elementor Addons Version: 2.5.4 (2022-02-15)
-Improved: Image_accordion widget for wrapper link, etc.
-Fixed: Compatibility issues with Elementor Pro's Latest Version.
-Fixed: The Nav menu widget was not responding properly when the Elementor PRO is activated.
-Fixed: Nav menu click issue.
-Fixed: Nav menu widget issue with a jetpack.
-Fixed: Video widget issue.
-Fixed: Post list widget issue.
-Fixed: Page list vertical alignment does not work for icons.
-Fixed: WP submenu list isn't working if Megamenu is activated.
-
-ElementsKit Elementor Addons Version: 2.5.3 (2022-01-22)
-Fixed: Nav menu widget dropdown issue with on click.
-Fixed: Nav menu links are not clickable if the item has a dropdown.
-Fixed: The submenu list isn't working if Megamenu is activated.
-Tweaked: CSS and JS improved.
-
-ElementsKit Elementor Addons Version: 2.5.2 (2022-01-09)
-Added: Nav menu widget dropdown open on click.
-Added: Ajax Loading support for Advanced Tab Widget.
-Fixed: Ask for rating notice logo not showing.
-Improved: HTML tags associated with the table.
-Tweak: CSS and JS improved.
-
-ElementsKit Elementor Addons Version: 2.5.1 (2021-12-02)
-Fixed: Megamenu Markup validation issue for the Nav Menu Widget.
-Tweak: CSS and JS improved.
-
-ElementsKit Elementor Addons Version: 2.5.0 (2021-11-25)
-New: Links support for Testimonial Widget.
-Fixed: Mobile menu visual issue (theme compatibility).
-Fixed: Price Tag hides without duration text for Pricing Widget.
-Fixed: Minor Spelling for Widget Builder Module.
-Fixed: Overlay responsive issue in the Editor for Nav Menu Widget.
-Fixed: Menu Badge arrow styling for the Nav Menu Widget.
-Fixed: Autoplay issue for Video Widget.
-Fixed: Video widget short link embed issue.
-Tweaked: Duration and Symbol Control Labels for Pricing Widget.
-
-ElementsKit Elementor Addons Version: 2.4.0 (2021-11-07)
-Fixed: Mobile Menu Animation is fixed on iOS 15
-Fixed: 'Tab' widget SVG icon visible issues have been fixed
-Fixed: Notice width issue solved
-Fixed: The right arrow icon issue
-Fixed: Some minor code updates/fixes
-Tweaked: CSS and JS improved
-Compatibility: fixed some compatibility issues
-
-ElementsKit Elementor Addons Version: 2.3.7 (23-09-2021)
-Fixed: Image box title typography control does not work.
-Fixed: Team widget popup issue with OceanWP theme
-Fixed: Video widget loop and player control functional issue
-Fixed: Dot Move navigation style for One Page Scroll Module.
-Fixed: Responsive Slides Per View for Testimonial Widget.
-Tweaked: Font faces display change for ElementsKit Icon Pack.
-
-ElementsKit Elementor Addons Version: 2.3.6 (19-08-2021)
-Fixed: Sticky feature duplicates WP Forms Widget.
-Fixed: Responsive controls issue for Post Grid Widget.
-Fixed: Removed deprecated Elementor PHP Methods from Widgets.
-Fixed: Alignment Control icons are not visible.
-
-ElementsKit Elementor Addons Version: 2.3.5 (02-08-2021)
-Tweaked: Library Layout button support for Add New Section.
-Fixed: Double Opt-in support for the Mailchimp Widget.
-Fixed: Accordion and Tab widgets conflict with the OceanWP theme.
-Fixed: Minor CSS issue for Nav Menu Widget.
-
-ElementsKit Elementor Addons Version: 2.3.4 (19-07-2021)
-Fixed: Swiper Slider conflict issues are fixed with other themes.
-
-ElementsKit Elementor Addons Version: 2.3.3 (15-07-2021)
-Fixed: In swiperJS slider is not working issue.
-
-ElementsKit Elementor Addons Version: 2.3.2 (14-07-2021)
-Fixed: Multiple placeholder image upload issues when importing widgets.
-Tweaked: Converted widgets slideshow from slick to swiper.
-Tweaked: Optimized Images.
-Tweaked: Improved CSS and JS.
-
-ElementsKit Elementor Addons Version: 2.3.1.1 (23-06-2021)
-Fixed: Email field was required for Onboarding Wizard, changed it to optional.
-
-ElementsKit Elementor Addons Version: 2.3.1 (22-06-2021)
-New: Onboarding User Guide to easily start using ElementsKit.
-New: Group Templates count for Layout Library.
-Fixed: Arabic text issue for Megamenu Badge.
-Fixed: Minor CSS issue for Layout Library Modal Button.
-
-ElementsKit Elementor Addons Version: 2.3.0 (08-06-2021)
-New: Hover trigger option for Tab Widget.
-Tweaked: Caret placement issue for Tab Widget.
-Tweaked: Getting access token made easy for Dribbble Widget.
-Fixed: Icon Search option for Megamenu Popup.
-Fixed: Image Width when Hovering on Social style for Team Widget.
-Fixed: Duration control for the Progress bar Widget.
-Fixed: Minor design issue for the Clients' Logo Widget.
-
 
 * Initial release
 
@@ -1140,7 +1050,7 @@ No, this Elementor addons works seamlessly with any themes.
 No, no need to have Elementor pro version to run the ElementsKit Elementor addon.
 
 = Do I need to know coding & design knowledge to build websites with ElementsKit? =
-No, ElementsKit has pre-built template kits that launch websites in minutes, no coding or complex design.
+No. ElementsKit has 1250+ Elementor templates and website templates that launch websites in minutes - no coding needed.
 
 = Elementor editor fails to load or not working? =
 It's due to your servers' PHP settings. Increase server PHP memory_limit = 512M and max_execution_time – 300, from the wp-config.php file or php.ini file. For help, please contact your hosting provider.

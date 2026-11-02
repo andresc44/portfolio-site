@@ -227,7 +227,7 @@ class CSS {
 		foreach ( $settings as $key => $value ) {
 			if ( is_array( $value ) ) {
 				$settings[ $key ] = $this->filter_global_style_value( $value, $global_settings );
-			} elseif ( strpos( $value, 'globals/' ) !== false ) {
+			} elseif ( is_string( $value ) && strpos( $value, 'globals/' ) !== false ) {
 				$query_string = substr( $value, strpos( $value, '?' ) + 1 );
 				parse_str( $query_string, $params );
 

@@ -1,0 +1,72 @@
+[
+ {
+  "file": "mobile-01-hero.png",
+  "key": "hero",
+  "y": 0,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "mobile-02-about.png",
+  "key": "about",
+  "y": 827,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "mobile-03-projects.png",
+  "key": "projects",
+  "y": 1671,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "mobile-04-robotics.png",
+  "key": "robotics",
+  "y": 2515,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "mobile-05-programming.png",
+  "key": "programming",
+  "y": 3359,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "mobile-06-electrical.png",
+  "key": "electrical",
+  "y": 4203,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "mobile-07-mechanical.png",
+  "key": "mechanical",
+  "y": 5047,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "mobile-08-skills.png",
+  "key": "skills",
+  "y": 5891,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "mobile-09-contact.png",
+  "key": "contact",
+  "y": 6757,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "mobile-10-contact-bottom.png",
+  "key": "contact",
+  "y": 7195,
+  "part": 2,
+  "bottom": true
+ }
+]

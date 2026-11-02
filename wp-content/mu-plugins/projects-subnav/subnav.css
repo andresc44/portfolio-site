@@ -1,0 +1,204 @@
+/* "My Projects" (/projects/) category navigation.
+
+   Two levels, stacked so the hierarchy reads top to bottom:
+
+   1. The four MAIN categories (Robotics, Programming, Electrical/Embedded,
+      Mechanical) - Elementor's own tab buttons, restyled here as one
+      segmented control. The tab being viewed is filled with the site's
+      blue-to-green gradient (same as the primary buttons); the other three
+      sit quietly on the track. They were bare text links in a row, which
+      gave no sign that they were a set of four or which one was open.
+   2. The active category's SUBCATEGORIES - small outlined chips directly
+      beneath, under a caption naming the category they belong to. Smaller
+      and quieter than the tabs on purpose: they are shortcuts into the
+      page, not a second set of categories.
+
+   On phones the tabs become a 2x2 grid (all four visible, no sideways
+   scrolling) and the chips a single swipeable row, which together take less
+   than half the height the old stacked pills + wrapped tabs did.
+
+   Everything below is scoped to .elementor-widget-n-tabs / .pp-subnav, and
+   this stylesheet is only enqueued on /projects/. !important on the tab
+   buttons: Elementor generates per-widget rules for them at much higher
+   specificity than anything a stylesheet like this can match. */
+
+/* ---------- 1. main categories: segmented control ---------- */
+
+.elementor-widget-n-tabs .e-n-tabs-heading {
+	display: flex !important;
+	flex-wrap: nowrap !important;
+	align-self: center;           /* shrink to its tabs and centre, instead of stretching the full column */
+	justify-content: center !important;
+	gap: 4px !important;
+	max-width: 100%;
+	padding: 5px;
+	border: 1px solid #42597F;
+	border-radius: 999px;
+	background-color: #0C1729;
+	background-image: linear-gradient(145deg, #132037 0%, #0C1729 55%, #0A1420 100%);
+	box-shadow: 0 12px 28px -14px rgba(0, 0, 0, 0.55);
+}
+
+.elementor-widget-n-tabs .e-n-tab-title {
+	flex: 0 0 auto !important;
+	justify-content: center !important;
+	padding: 10px 22px !important;
+	border: 0 !important;
+	border-radius: 999px !important;
+	background-color: transparent !important;
+	background-image: none !important;
+	box-shadow: none !important;
+	color: #C5D0E6 !important;
+	font-size: 15px !important;
+	font-weight: 600 !important;
+	line-height: 1.2 !important;
+	white-space: nowrap;
+	cursor: pointer;
+	transition: background-color 0.18s ease, color 0.18s ease;
+}
+/* Elementor puts the label's own colour/typography on an inner span. */
+.elementor-widget-n-tabs .e-n-tab-title .e-n-tab-title-text {
+	color: inherit !important;
+	font: inherit !important;
+}
+.elementor-widget-n-tabs .e-n-tab-title:hover,
+.elementor-widget-n-tabs .e-n-tab-title:focus-visible {
+	background-color: rgba(91, 127, 255, 0.16) !important;
+	color: #FFFFFF !important;
+}
+.elementor-widget-n-tabs .e-n-tab-title:focus-visible {
+	outline-offset: 2px;
+}
+/* The one being viewed. Dark ink on the gradient, as on the hero's primary
+   button, for contrast across both ends of it. */
+.elementor-widget-n-tabs .e-n-tab-title[aria-selected="true"],
+.elementor-widget-n-tabs .e-n-tab-title[aria-selected="true"]:hover {
+	background-image: linear-gradient(94deg, #5B7FFF, #4FCF9C) !important;
+	color: #0D131D !important;
+}
+
+/* ---------- 2. subcategories of the active category ---------- */
+
+.pp-subnav {
+	margin: -4px 0 6px;
+	text-align: center;
+}
+.pp-subnav[hidden] {
+	display: none;
+}
+
+.pp-subnav__label {
+	margin: 0 0 8px !important;
+	font-size: 11px !important;
+	line-height: 1.3 !important;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: #9FB0CE !important;
+}
+
+.pp-subnav__row {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 8px;
+}
+
+.pp-subnav__pill {
+	all: revert;
+	box-sizing: border-box;
+	display: inline-flex;
+	align-items: center;
+	/* !important throughout: the Kit's own global default
+	   (.elementor-kit-27 button {...}) styles every bare <button> element
+	   site-wide at (0,0,1,1) specificity, which beats a plain one-class
+	   selector like this one even with all:revert above it - the same
+	   collision skills-filter.css's .sf-chip already had to work around. */
+	background-image: none !important;
+	background-color: transparent !important;
+	border: 1px solid #3A5078 !important;
+	border-radius: 999px !important;
+	padding: 7px 14px !important;
+	color: #D8E0F2 !important;
+	font: inherit;
+	font-size: 13px !important;
+	font-weight: 500 !important;
+	line-height: 1.25 !important;
+	cursor: pointer !important;
+	box-shadow: none !important;
+	transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+}
+.pp-subnav__pill:hover,
+.pp-subnav__pill:focus-visible {
+	border-color: #34D399 !important;
+	background-color: rgba(52, 211, 153, 0.08) !important;
+	color: #34D399 !important;
+	outline: none;
+}
+.pp-subnav__pill:focus-visible {
+	box-shadow: 0 0 0 2px #34D399 !important;
+}
+
+/* ---------- phones ---------- */
+
+@media (max-width: 767px) {
+	/* 2x2 grid: all four categories visible at once, ~96px tall. */
+	.elementor-widget-n-tabs .e-n-tabs-heading {
+		display: grid !important;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		align-self: stretch;
+		gap: 4px !important;
+		border-radius: 22px;
+	}
+	.elementor-widget-n-tabs .e-n-tab-title {
+		padding: 10px 8px !important;
+		font-size: 14px !important;
+	}
+
+	/* Every chip visible at once, in at most two rows - no sideways
+	   scrolling. A fixed two-column grid rather than flex-wrap: flex-wrap
+	   reflows on each chip's own unwrapped text width, and Robotics' four
+	   labels (very different lengths) came out as three uneven rows. In a
+	   two-column grid four chips are always two rows of two and two chips
+	   are one row, whatever the labels; a label too long for half the width
+	   wraps onto a second line inside its own chip, and chips in a row take
+	   the height of the taller one. An odd chip out spans the full width,
+	   centred. */
+	.pp-subnav__row {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 8px;
+		overflow: visible;
+		padding: 0;
+	}
+	.pp-subnav__pill {
+		width: 100%;
+		justify-content: center;
+		text-align: center;
+		white-space: normal !important;
+		padding: 8px 10px !important;
+		line-height: 1.25 !important;
+	}
+	.pp-subnav__pill:last-child:nth-child(odd) {
+		grid-column: 1 / -1;
+		justify-self: center;
+		width: auto;
+		max-width: 100%;
+	}
+}
+
+/* Mechanical's tab panel (8be0b37) is the one panel whose container paints
+   its own flat #0F1B33. Everywhere else the page background is a single
+   field behind transparent sections, so on this tab that container showed
+   as a faintly darker rectangle around the heading and first row of cards.
+   Transparent like the other three panels. */
+.elementor-2291 .elementor-element.elementor-element-8be0b37 {
+	background-color: transparent !important;
+}
+
+/* Clicking a chip scrolls its heading to the viewport's top edge, which
+   would otherwise land directly under the site's fixed header - same
+   problem the category pages' own in-page jumps would have, avoided here
+   with scroll-margin rather than JS offset math. */
+.elementor-widget-n-tabs .elementor-heading-title {
+	scroll-margin-top: 100px;
+}

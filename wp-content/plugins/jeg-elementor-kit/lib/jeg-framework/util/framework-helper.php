@@ -141,16 +141,21 @@ if ( ! function_exists( 'jeg_allowed_protocols' ) ) {
 
 if ( ! function_exists( 'jeg_allowed_html' ) ) {
 
-	add_filter( 'wp_kses_allowed_html', 'jeg_allowed_html' );
+	add_filter( 'wp_kses_allowed_html', 'jeg_allowed_html', 10, 2 );
 
 	/**
 	 * Extend Allowed HTML WP KSES.
 	 *
-	 * @param array $allowedtags Allowed Tag.
+	 * @param array  $allowedtags Allowed Tag.
+	 * @param string $context     KSES context.
 	 *
 	 * @return array
 	 */
-	function jeg_allowed_html( $allowedtags ) {
+	function jeg_allowed_html( $allowedtags, $context = '' ) {
+		if ( ! empty( $context ) && in_array( $context, array( 'comment', 'pre_comment_content', 'post_comment' ), true ) ) {
+			return $allowedtags;
+		}
+
 		$allowedtags['br']   = array_merge( isset( $allowedtags['br'] ) ? $allowedtags['br'] : array(), array() );
 		$allowedtags['ul']   = array_merge(
 			isset( $allowedtags['ul'] ) ? $allowedtags['ul'] : array(),

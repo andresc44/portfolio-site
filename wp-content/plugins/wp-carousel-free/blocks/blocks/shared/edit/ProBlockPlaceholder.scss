@@ -1,0 +1,52 @@
+// A Pro block already saved in a post: a slim line, not a card. Picking a Pro
+// block in the inserter opens the upgrade dialog instead (shared/pro-upgrade/).
+
+.wpcp-pro-block-placeholder {
+  .wpcp-pro-block-placeholder-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border: 1px dashed #c3c4c7;
+    border-radius: 4px;
+    background: #f6f7f7;
+    color: #1e1e1e;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+    font-size: 13px;
+    line-height: 1.4;
+    box-sizing: border-box;
+  }
+
+  .wpcp-pro-block-placeholder-icon {
+    display: inline-flex;
+    flex: 0 0 auto;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .wpcp-pro-block-placeholder-text {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .wpcp-pro-block-placeholder-learn-more {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #11a10c;
+    font: inherit;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      color: #0f910b;
+    }
+  }
+}

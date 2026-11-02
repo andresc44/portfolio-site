@@ -1,11 +1,27 @@
 /* Project media gallery — desktop hero+stacked grid, mobile swipe strip, shared lightbox. */
 
+/* The Elementor widget around the gallery is sized by its contents, so until the
+   first picture loaded it (and the gallery in it) was 13px wide, and the 4:3
+   space reserved below could not apply. Full column width from the first paint
+   (browsers without :has() simply keep the old behaviour). */
+.elementor-widget:has(.project-gallery) {
+	width: 100%;
+}
+
 .project-gallery {
+	/* fill the column from the first paint: the widget it sits in can shrink-wrap
+	   its content, which left the gallery 13px wide until its first picture loaded */
+	align-self: stretch;
 	display: grid;
 	grid-template-columns: 2fr 1fr;
 	grid-template-rows: 1fr 1fr;
 	gap: 8px;
-	border-radius: 12px;
+	/* Matches the site's standard card rounding/shadow (see custom-fixes.css's
+	   "A subtle gradient on every card") - the individual tiles inside
+	   already pick that up on their own border-radius, but the outer frame
+	   around the whole gallery needs its own, separate from them. */
+	border-radius: 16px;
+	box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.45), 0 8px 16px -8px rgba(0, 0, 0, 0.3);
 	overflow: hidden;
 	margin: 0 0 20px;
 }
@@ -21,7 +37,7 @@
 	border: 0 !important;
 	padding: 0 !important;
 	margin: 0 !important;
-	background: #162131 !important;
+	background: #0C1729 !important;
 	background-image: none !important;
 	cursor: pointer !important;
 	overflow: hidden !important;
@@ -31,11 +47,29 @@
 }
 
 .project-gallery__item img,
-.project-gallery__item video {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	display: block;
+.project-gallery__item video,
+.project-gallery .project-gallery__item img,
+.project-gallery .project-gallery__item video {
+	/* width/height, !important and the doubled-up, more specific selectors:
+	   without them, some other site-wide img rule left height at its
+	   intrinsic auto value, which made the image only fill the tile's
+	   width and leave the rest of the tile as dead space below or above
+	   it. Higher specificity wins that outright instead of depending on
+	   which file loads later.
+
+	   object-fit is deliberately NOT forced here, unlike the rest of this
+	   rule. mu-plugins/media-fill/media-fill.css already sets contain on
+	   this exact element on purpose - the whole point of that system is
+	   never cropping the subject, filling whatever the image's own aspect
+	   ratio leaves over with a blurred copy of itself instead of a crop.
+	   An earlier version of this rule forced cover here too, which fought
+	   that and silently won, cropping up to ~60% off portrait or ultrawide
+	   images - the width/height collapse this rule exists for, and the
+	   object-fit fight that doesn't belong in it, read as the same bug
+	   from a screenshot but are two unrelated ones. */
+	width: 100% !important;
+	height: 100% !important;
+	display: block !important;
 }
 
 .project-gallery__item:nth-child(n + 4) {
@@ -78,7 +112,10 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: rgba(10, 14, 20, 0.25);
+	/* no tint over the picture: the play button's own dark disc is enough, and a
+	   25% dark wash over the whole tile made every video preview look duller and
+	   darker than the pictures beside it */
+	background: none;
 }
 .project-gallery__play svg {
 	width: 44px;
@@ -109,13 +146,23 @@
 @media (max-width: 767px) {
 	.project-gallery {
 		display: flex;
+		align-items: center;
 		overflow-x: auto;
 		scroll-snap-type: x mandatory;
 		-webkit-overflow-scrolling: touch;
 		gap: 10px;
 		border-radius: 0;
-		margin: 0 -16px 16px;
-		padding: 0 16px;
+		/* Full bleed to the viewport edges, then pad the slides back in so
+		   they still line up with the surrounding text. Deriving the bleed
+		   from the element's own position rather than assuming a 16px page
+		   gutter keeps it exact - the gutter is 10px here, and the old fixed
+		   -16px pushed 6px past the viewport on each side, which made the
+		   whole page scroll sideways. */
+		margin-left: calc(50% - 50vw);
+		margin-right: calc(50% - 50vw);
+		margin-bottom: 16px;
+		padding-left: calc(50vw - 50%);
+		padding-right: calc(50vw - 50%);
 		scrollbar-width: none;
 	}
 	.project-gallery::-webkit-scrollbar {
@@ -127,6 +174,10 @@
 		aspect-ratio: 4 / 3;
 		border-radius: 10px;
 		scroll-snap-align: center;
+	}
+	/* the first tile (and so the strip) follows its picture's shape - reserved from the start */
+	.project-gallery[style*="--pg-hero-ar"] .project-gallery__item:nth-child(1) {
+		aspect-ratio: var(--pg-hero-ar);
 	}
 	.project-gallery__more {
 		display: none;
@@ -177,9 +228,16 @@
 .pg-lightbox__count {
 	opacity: 0.85;
 }
-.pg-lightbox__close {
+.pg-lightbox__actions {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+.pg-lightbox__close,
+.pg-lightbox__download {
 	all: revert;
 	box-sizing: border-box;
+	display: flex;
 	background: none !important;
 	background-image: none !important;
 	border: 0 !important;
@@ -189,10 +247,21 @@
 	line-height: 0;
 	font: inherit;
 	box-shadow: none !important;
+	text-decoration: none !important;
+	opacity: 0.85;
+	transition: opacity 0.15s ease;
 }
-.pg-lightbox__close svg {
+.pg-lightbox__close:hover,
+.pg-lightbox__download:hover {
+	opacity: 1;
+}
+.pg-lightbox__close svg,
+.pg-lightbox__download svg {
 	width: 24px;
 	height: 24px;
+}
+.pg-lightbox__download[hidden] {
+	display: none !important;
 }
 .pg-lightbox__stage {
 	position: relative;
@@ -246,6 +315,11 @@
 	font: inherit;
 	padding: 0 !important;
 	box-shadow: none !important;
+	/* The arrows come before the picture frame in the markup and the frame is
+	   positioned too, so the frame was painting over them and swallowing every
+	   click and tap - the previous arrow in particular, which sits over the
+	   picture's left edge. */
+	z-index: 3 !important;
 }
 .pg-lightbox__nav svg {
 	width: 22px;
@@ -258,9 +332,16 @@
 	right: 14px;
 }
 @media (max-width: 767px) {
+	/* Phones get the arrows too (swiping still works as well): a tap target
+	   for anyone who would rather tap than swipe, kept small and translucent
+	   so they don't cover much of the picture. */
 	.pg-lightbox__nav {
-		display: none;
+		width: 40px !important;
+		height: 40px !important;
+		background: rgba(20, 26, 36, 0.5) !important;
 	}
+	.pg-lightbox__nav--prev { left: 8px; }
+	.pg-lightbox__nav--next { right: 8px; }
 }
 .pg-lightbox__hint {
 	text-align: center;
@@ -268,4 +349,108 @@
 	font-size: 12px;
 	padding: 8px 0 14px;
 	flex: 0 0 auto;
+}
+
+.pg-lightbox__caption {
+	text-align: center;
+	color: #fff;
+	font-size: 14px;
+	line-height: 1.45;
+	padding: 12px 24px 0;
+	max-width: 760px;
+	margin: 0 auto;
+	flex: 0 0 auto;
+}
+
+.pg-lightbox__caption[hidden] {
+	display: none;
+}
+
+/* Reserve the gallery's final height, and keep placeholders from setting it.
+   Until a picture has loaded, the image is a 1x1 placeholder that the page
+   scaled up to the width of its tile - a square - so the gallery was far
+   taller than it ends up and then collapsed when the real picture arrived (or,
+   with nothing there yet, 18px tall and then jumped): a layout shift of 0.5 on
+   a desktop. project-gallery.php works out the final height from the pictures'
+   shapes (--pg-ar on desktop, --pg-hero-ar for a phone's strip). With that
+   height fixed, the first three tiles' pictures simply fill their tile - which
+   is what they already did (width and height 100%, contained over their
+   blurred copy), so once loaded nothing looks different. Galleries whose
+   first three pictures are not all of known shape (a hosted video), and the
+   other tiles of a phone's strip behave exactly as before. */
+@media (min-width: 768px) {
+	.project-gallery[style*="--pg-ar"] {
+		aspect-ratio: var(--pg-ar);
+	}
+	.project-gallery[style*="--pg-ar"] .project-gallery__item:nth-child(-n + 3) > :is(img, video) {
+		position: absolute !important;
+		inset: 0;
+	}
+	/* A portrait first picture/video: the hero column is only as wide as the
+	   picture is at the capped height (project-gallery.php), so its two
+	   neighbours get the rest of the width instead of tall empty tiles. */
+	.project-gallery[style*="--pg-cols"] {
+		grid-template-columns: var(--pg-cols);
+	}
+	/* a YouTube thumbnail whose video is portrait or extra wide: crop it to the
+	   video (its tile already has the video's shape) instead of showing the
+	   thumbnail's built-in black bars */
+	.project-gallery .project-gallery__item[data-fit="video"] > img {
+		object-fit: cover !important;
+	}
+	.project-gallery .project-gallery__item[data-fit="video"] > .mf-bg {
+		display: none;
+	}
+	/* hero across the top, the other two side by side beneath it */
+	.project-gallery[data-layout="top"] .project-gallery__item:nth-child(1) { grid-column: 1 / -1; grid-row: 1; }
+	.project-gallery[data-layout="top"] .project-gallery__item:nth-child(2) { grid-column: 1; grid-row: 2; }
+	.project-gallery[data-layout="top"] .project-gallery__item:nth-child(3) { grid-column: 2; grid-row: 2; }
+	/* a gallery scaled down in width (so its height stays reasonable) is centred */
+	.project-gallery[style*="--pg-w"] {
+		width: calc(var(--pg-w) * 100%);
+		margin-left: auto;
+		margin-right: auto;
+		align-self: center;
+	}
+	/* pictures in a row (project-gallery.php) */
+	.project-gallery[data-layout="row"] {
+		grid-template-rows: 1fr;
+	}
+	.project-gallery[data-layout="row"] .project-gallery__item:nth-child(1) { grid-column: 1; grid-row: 1; }
+	.project-gallery[data-layout="row"] .project-gallery__item:nth-child(2) { grid-column: 2; grid-row: 1; }
+	.project-gallery[data-layout="row"] .project-gallery__item:nth-child(3) { grid-column: 3; grid-row: 1; }
+	/* ...and the two stacked tiles in proportion to their pictures' heights */
+	.project-gallery[style*="--pg-rows"] {
+		grid-template-rows: var(--pg-rows);
+	}
+	/* The neighbours' tiles are no longer the shape their pictures were laid
+	   out for, so a picture "near enough" to fill its tile (media-fill's 8%
+	   rule) would lose that margin off its edges - cutting into labels in a
+	   chart. Here nothing is cropped: the picture is shown whole over its
+	   blurred copy. */
+	.project-gallery[style*="--pg-cols"] .project-gallery__item.mf-cover > img {
+		object-fit: contain !important;
+	}
+	.project-gallery[style*="--pg-cols"] .project-gallery__item.mf-cover > .mf-bg {
+		display: block;
+	}
+	/* A gallery widened to the minimum column width (project-gallery.php,
+	   PG_MIN_COL): its tiles are no longer their pictures' exact shapes, and
+	   instead of bars of blurred padding the pictures fill them, a little
+	   cropped (at most 20% off one side - PG_MAX_CROP). The viewer opens the
+	   whole picture. */
+	.project-gallery[data-crop] .project-gallery__item:nth-child(-n + 3) > :is(img, video) {
+		object-fit: cover !important;
+		/* centred across, a little above centre down: titles and labels sit near the top */
+		object-position: 50% 30%;
+	}
+	.project-gallery[data-crop] .project-gallery__item:nth-child(-n + 3) > .mf-bg {
+		display: none !important;
+	}
+}
+@media (max-width: 767px) {
+	.project-gallery[style*="--pg-hero-ar"] .project-gallery__item:nth-child(1) > :is(img, video) {
+		position: absolute !important;
+		inset: 0;
+	}
 }

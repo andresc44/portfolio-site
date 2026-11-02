@@ -20,10 +20,26 @@ class Install_Tracker {
 	const OPTION_KEY = 'wpmet_onboarded_plugins';
 
 	/**
+	 * Option name used to flag that an onboarding email has been collected.
+	 *
+	 * @since 3.9.5
+	 * @var string
+	 */
+	const EMAIL_COLLECTED_KEY = 'wpmet_onboard_email_collected';
+
+	/**
+	 * Option name used to store the collected onboarding email address.
+	 *
+	 * @since 3.9.5
+	 * @var string
+	 */
+	const COLLECTED_EMAIL_KEY = 'wpmet_onboard_collected_email';
+
+	/**
 	 * Onboarding status options used by known Wpmet plugins.
 	 *
 	 * @since 3.9.5
-	 * @var array<string, array{option: string, value: mixed, crm_slug?: string}>
+	 * @var array<string, array{option?: string, value?: mixed, crm_slug?: string}>
 	 */
 	const ONBOARD_STATUS_MAP = array(
 		'elementskit-lite/elementskit-lite.php'           => array( 'option' => 'elements_kit_onboard_status', 'value' => 'onboarded', 'crm_slug' => 'elementskit-lite' ),
@@ -33,6 +49,8 @@ class Install_Tracker {
 		'gutenkit-blocks-addon/gutenkit-blocks-addon.php' => array( 'option' => 'gutenkit_onboard_status', 'value' => 'onboarded', 'crm_slug' => 'gutenkit-blocks-addon' ),
 		'getgenie/getgenie.php'                           => array( 'option' => 'getgenie_onboard_status', 'value' => 'onboarded', 'crm_slug' => 'getgenie' ),
 		'popup-builder-block/popup-builder-block.php'     => array( 'option' => 'popupkit_onboard_status', 'value' => 'onboarded', 'crm_slug' => 'popupkit' ),
+		'rox-dynamic-cpt-fields-engine/rox-dynamic-cpt-fields-engine.php' => array( 'crm_slug' => 'rox-dynamic-cpt-fields-engine' ),
+		'rox-appointment-booking/rox-appointment-booking.php' => array( 'option' => 'rox_appointment_booking_onboarded', 'value' => 1, 'crm_slug' => 'rox-appointment-booking' ),
 	);
 
 	/**
@@ -68,7 +86,7 @@ class Install_Tracker {
 
 		$map = self::get_onboard_status_map();
 
-		if ( isset( $map[ $plugin_file ] ) && ! get_option( $map[ $plugin_file ]['option'] ) ) {
+		if ( isset( $map[ $plugin_file ]['option'] ) && ! get_option( $map[ $plugin_file ]['option'] ) ) {
 			update_option( $map[ $plugin_file ]['option'], $map[ $plugin_file ]['value'], false );
 		}
 	}
@@ -97,7 +115,7 @@ class Install_Tracker {
 	}
 
 	/**
-	 * Store the collected onboarding email in the shared registry.
+	 * Store the collected onboarding email in its own options.
 	 *
 	 * @since 3.9.5
 	 *
@@ -109,23 +127,25 @@ class Install_Tracker {
 			return;
 		}
 
-		$registry                              = self::get_registry();
-		$registry['_shared']['email']           = sanitize_email( $email );
-		$registry['_shared']['email_collected'] = true;
-		$registry['_shared']['updated_at']      = time();
-		self::save_registry( $registry );
+		update_option( self::EMAIL_COLLECTED_KEY, true, false );
+		update_option( self::COLLECTED_EMAIL_KEY, $email, false );
 	}
 
 	/**
-	 * Get the email address stored in the shared onboarding registry.
+	 * Get the collected onboarding email address.
 	 *
 	 * @since 3.9.5
 	 *
 	 * @return string Sanitized email address, or an empty string when unavailable.
 	 */
 	public static function get_collected_email(): string {
-		$registry = self::get_registry();
-		$email    = isset( $registry['_shared']['email'] ) ? $registry['_shared']['email'] : '';
+		$email = (string) get_option( self::COLLECTED_EMAIL_KEY, '' );
+
+		if ( ! is_email( $email ) ) {
+			// Fall back to the legacy entry kept in the shared registry.
+			$registry = self::get_registry();
+			$email    = isset( $registry['_shared']['email'] ) ? $registry['_shared']['email'] : '';
+		}
 
 		return is_email( $email ) ? sanitize_email( $email ) : '';
 	}
@@ -138,6 +158,11 @@ class Install_Tracker {
 	 * @return bool True when an email address has been collected.
 	 */
 	public static function has_collected_email(): bool {
+		if ( get_option( self::EMAIL_COLLECTED_KEY ) ) {
+			return true;
+		}
+
+		// Fall back to the legacy entry kept in the shared registry.
 		$registry = self::get_registry();
 
 		return ! empty( $registry['_shared']['email_collected'] );

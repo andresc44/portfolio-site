@@ -1,9 +1,17 @@
-/* Fix for gradient text span in footer/headers - inherit parent gradient */
+/* Fix for gradient text span in footer/headers - inherit parent gradient.
+
+   h3 and h5 were missing from this list, which is not cosmetic: without the
+   background-clip the gradient paints as a solid filled block behind the
+   text instead of through it. The Contact page's "Get in touch" is an h3 and
+   was rendering as a green-to-blue rectangle with white text on top, nothing
+   like the gradient lettering used for headings everywhere else. */
 h2.elementor-heading-title span[style*="background"],
 h1 span[style*="background"],
+h3 span[style*="background"],
 h4 span[style*="background"],
+h5 span[style*="background"],
 h6 span[style*="background"] {
-  background: -webkit-linear-gradient(#AB83FE, #AB83FE, #4FCF9C, #4FCF9C) !important;
+  background: -webkit-linear-gradient(#5B7FFF, #5B7FFF, #4FCF9C, #4FCF9C) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
@@ -28,3 +36,2905 @@ h6 span[style*="background"] {
 		margin-right: auto;
 	}
 }
+
+/* Skills & Tools education block: keep the bottom two cards level.
+
+   The two columns are independent vertical stacks, so whichever card is taller
+   in the top row pushes its lower card down. The BASc title wraps to two lines
+   at every 2-column width (768-1440px, measured), while the MEng title is one
+   line, leaving the bottom row ~20px out of step. Reserving two line-heights on
+   the top-row titles squares them up. Only the top row needs this; applying it
+   to the bottom row would just open a gap beneath those shorter titles. */
+@media (min-width: 768px) {
+	.elementor-element-5d257d1 .elementor-heading-title,
+	.elementor-element-34bc48c .elementor-heading-title {
+		min-height: 2.4em; /* 2 x 1.2 line-height at 17px = 40.8px */
+	}
+}
+
+/* Lightbox carousel navigation arrows.
+
+   Elementor's own .elementor-swiper-button-prev/-next ship with left:0/right:0
+   but no position:absolute (confirmed via computed style: position defaults
+   to static), so those offsets do nothing and the buttons collapse into
+   normal document flow instead of sitting at the screen edges - effectively
+   invisible. Their built-in <svg><use> icon also doesn't render visibly here
+   even though the sprite symbol exists in the DOM, so rather than chase an
+   icon-loading quirk, the chevron is drawn with plain CSS borders instead -
+   that renders reliably regardless of icon-font/sprite state. */
+.elementor-lightbox .elementor-swiper-button-prev,
+.elementor-lightbox .elementor-swiper-button-next {
+	position: fixed !important;
+	top: 50%;
+	transform: translateY(-50%);
+	left: auto;
+	right: auto;
+	z-index: 10000;
+	width: 54px !important;
+	height: 54px !important;
+	border-radius: 50% !important;
+	background: rgba(0, 0, 0, 0.55) !important;
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+
+.elementor-lightbox .elementor-swiper-button-prev:hover,
+.elementor-lightbox .elementor-swiper-button-next:hover {
+	background: rgba(0, 0, 0, 0.85);
+}
+
+.elementor-lightbox .elementor-swiper-button-prev {
+	left: 24px !important;
+}
+
+.elementor-lightbox .elementor-swiper-button-next {
+	right: 24px !important;
+}
+
+.elementor-lightbox .elementor-swiper-button-prev svg,
+.elementor-lightbox .elementor-swiper-button-next svg {
+	display: none;
+}
+
+.elementor-lightbox .elementor-swiper-button-prev::before,
+.elementor-lightbox .elementor-swiper-button-next::before {
+	content: "";
+	display: block;
+	width: 14px;
+	height: 14px;
+	border-top: 3px solid #fff;
+	border-right: 3px solid #fff;
+}
+
+.elementor-lightbox .elementor-swiper-button-prev::before {
+	transform: rotate(-135deg);
+	margin-left: 6px;
+}
+
+.elementor-lightbox .elementor-swiper-button-next::before {
+	transform: rotate(45deg);
+	margin-right: 6px;
+}
+
+/* Skills & Tools mobile pill wall: "Google Apps Script (JavaScript-based)"
+   is far longer than every other skill label. skills-filter.css already
+   wraps long labels inside their own grid cell on purpose (see its comment
+   on .sf-category), but at the pill's default 15px in a half-width column
+   that still wraps to 3-4 cramped lines, more than twice the height of its
+   neighbours and no longer reading as the same shape of pill. Shrinking the
+   font just made a smaller cramped pill; spanning both grid columns gives
+   the label roughly double the width instead, which is enough room to fit
+   in 1-2 relaxed lines at a size close to every other pill's. Only this one
+   widget is affected - the ~40 other pills already fit at half width. */
+@media (max-width: 767px) {
+	.elementor-element-4b003ad {
+		grid-column: 1 / -1 !important;
+	}
+	.elementor-element-4b003ad .elementor-button {
+		font-size: 13px !important;
+		line-height: 1.25 !important;
+	}
+	/* Google Apps Script (full-width, above) / Spanish (last, centred):
+	   Google Apps Script is the full-width row above, same recipe as the
+	   odd-trailing-pill centring skills-filter.css and the category pages'
+	   quick-nav pills both already use for exactly this shape of problem -
+	   a lone item left in the grid's first column by default instead of
+	   centred under the row above it. Source order has Spanish fifth and
+	   Google Apps Script sixth/last; left as-is, the full-width span pushes
+	   Google Apps Script onto its own row after Spanish, i.e. below it, and
+	   left Spanish - now alone in a row of its own - sitting uncentred in
+	   the left column. The order swap puts the full-width row first and
+	   Spanish last, matching both halves of the request at once: Spanish
+	   can only be the row that needs centring once it's actually last. */
+	.elementor-element-4b003ad {
+		order: 1;
+	}
+	.elementor-element-d070e2c {
+		order: 2;
+		grid-column: 1 / -1;
+		justify-self: center;
+	}
+}
+
+@media (max-width: 767px) {
+	.elementor-lightbox .elementor-swiper-button-prev,
+	.elementor-lightbox .elementor-swiper-button-next {
+		width: 44px !important;
+		height: 44px !important;
+	}
+
+	.elementor-lightbox .elementor-swiper-button-prev {
+		left: 10px !important;
+	}
+
+	.elementor-lightbox .elementor-swiper-button-next {
+		right: 10px !important;
+	}
+}
+
+/* About Me: scale the two lead photos down a little.
+
+   They sit in different columns - the graduation photo is the whole right
+   column starting at the top, while the Iceland photo sits under the heading
+   and two paragraphs in the left column - so their bottoms only line up at
+   one particular pair of sizes. Shrinking them by the same number of pixels
+   of height (rather than by the same percentage) keeps that relationship, so
+   the percentages below differ: 405px * 0.79 and 740px * 0.885 both come out
+   ~85px shorter. */
+@media (min-width: 768px) {
+	.elementor-element-8fda37e img {
+		max-width: 88.5%;
+	}
+}
+
+/* Backpacking Adventures: one image size for all five collages.
+
+   The top two share their row with the heading and body copy, which caps
+   them at 267px, while the bottom three had a full-width row to themselves
+   and rendered at 360px. Nothing can widen the top pair without squeezing
+   the text, so the bottom row comes down to match: same 287px container, and
+   the row centres what is now narrower than the available width. */
+@media (min-width: 768px) {
+	.elementor-element-6308305,
+	.elementor-element-d8dc105,
+	.elementor-element-b942aee {
+		width: 25.2%;
+		flex-grow: 0;
+		flex-shrink: 0;
+	}
+
+	.elementor-1759 .elementor-element.elementor-element-ddced6c {
+		--justify-content: center;
+		--column-gap: 10px;
+	}
+}
+
+/* ---------------------------------------------------------------------------
+   Rounded corners + grey outline for images and cards.
+
+   The project cards set the house style: border-radius 8px with a 1px
+   #42597F outline (#42597F is already the site's border colour in 113 places
+   in the generated CSS). Standalone photos on About Me and Skills & Tools had
+   no radius or outline at all, and several cards had one but not the other,
+   so this brings both in line. Project cards are left alone - they already
+   clip their thumbnails via overflow:hidden and need no change.
+   --------------------------------------------------------------------------- */
+
+/* Content photos that stand on their own. Deliberately a blanket rule so
+   photos added later pick the treatment up too; the exclusions below carve
+   out the handful that must not have it. Same rounding + shadow as every
+   card elsewhere on the site (see "A subtle gradient on every card" further
+   down) - a standalone photo is visually a card too, just without a fill
+   colour of its own. */
+.elementor-widget-image img {
+	border-radius: 16px;
+	border: 1px solid #42597F;
+	box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.45), 0 8px 16px -8px rgba(0, 0, 0, 0.3);
+}
+
+/* Exclusions.
+   - add5602 is the circular portrait (500px radius); a square outline would
+     fight its shape.
+   - the Fields of Interest / Skills icons are line art on the card background
+     rather than photos, and already sit inside outlined cards.
+   - 8bec99b is the tool-logo strip, likewise already inside an outlined card.
+   - 4fdba178 is a 0x0 decorative element - a border would paint a stray dot.
+   - the rest are photos that sit flush against the edge of a card that is
+     itself outlined below; they get their corners from the card's clipping,
+     so a second outline 1px inside the first would read as a double border. */
+.elementor-element-add5602 img,
+.elementor-element-daadeeb img,
+.elementor-element-abef260 img,
+.elementor-element-e177e20 img,
+.elementor-element-ab80b55 img,
+.elementor-element-6b3aedc img,
+.elementor-element-b59e98c img,
+.elementor-element-966351a img,
+.elementor-element-ba4cd15 img,
+.elementor-element-8e4eccb img,
+.elementor-element-99b5d59 img,
+.elementor-element-8bec99b img,
+.elementor-element-4fdba178 img,
+.elementor-element-f0b3c30 img,
+.elementor-element-c36fab7 img,
+.elementor-element-12f10e2 img,
+.elementor-element-43843e1 img,
+.elementor-element-275725e img,
+.elementor-element-dfd97de img,
+.elementor-element-e9da794 img,
+.elementor-element-93a18d8 img,
+.elementor-element-594aa53 img,
+.elementor-element-5223b0c img {
+	border-radius: 0;
+	border: 0;
+	box-shadow: none;
+}
+
+/* Home page cards whose photo runs edge to edge. They already had the 8px
+   radius but overflow:visible, so the photo's square corners sat on top of
+   the rounded ones (visible on every Fields of Interest card). Clipping fixes
+   that, and the outline was missing entirely.
+
+   087d055 and ec3f5ae (Mechanical's two images) aren't in this list - on
+   desktop they're now flush halves of one outer card rather than two cards
+   of their own, so the outer card carries this treatment instead (see the
+   Mechanical section below); on mobile the one photo it keeps sits inside
+   the single Mechanical card, which carries the outline itself. */
+.elementor-element-2fae975,
+.elementor-element-8347b1f,
+.elementor-element-47b1f64,
+.elementor-element-6731295,
+.elementor-element-733433c,
+.elementor-element-181f715,
+.elementor-element-a318fdc,
+.elementor-element-90225b7 {
+	overflow: hidden;
+	--border-style: solid;
+	--border-width: 1px 1px 1px 1px;
+	--border-color: #42597F;
+	border: 1px solid #42597F;
+}
+
+
+/* Hobbies video posters came in at 4px; match everything else. */
+.elementor-1759 .elementor-element.elementor-element-0318ed4 > .elementor-widget-container,
+.elementor-1759 .elementor-element.elementor-element-ab37020 > .elementor-widget-container,
+.elementor-1759 .elementor-element.elementor-element-55c3726 > .elementor-widget-container {
+	border-radius: 16px;
+	box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.45), 0 8px 16px -8px rgba(0, 0, 0, 0.3);
+}
+
+/* Same thing below the tablet breakpoint, where all five stack in one column:
+   the top pair's row carries 10px of side padding and the bottom row carried
+   none, so the lower three sat 20px wider than the two above them. */
+@media (max-width: 767px) {
+	.elementor-1759 .elementor-element.elementor-element-ddced6c {
+		--padding-left: 10px;
+		--padding-right: 10px;
+	}
+}
+
+/* ---------------------------------------------------------------------------
+   Home page, Mechanical section: a special card of its own.
+
+   Robotics/Programming/Electrical each have per-item cards (image left, text
+   right - see "Fields of Interest cards" further down). Mechanical has no
+   subsections to make cards out of - just two images and one shared
+   sentence - so rather than force it into that same image+text shape, it
+   gets a card of its own: image, then the sentence, then the second image,
+   left to right, all three inside one bordered card at 75% of the row's
+   width, centred. The caption text (a2a1b0c) was moved in the page data to
+   sit between the two image containers (087d055, ec3f5ae) as an actual
+   sibling - it used to be a separate paragraph below the image pair, and
+   CSS alone can't interleave an element between two others that live in a
+   different parent.
+
+   d5870ef (heading) and 2fb4a22 (spacer) are left alone - they already span
+   the full column width correctly, which is why this only needs
+   align-items:center on f73297b to centre the now-75%-wide card under them.
+
+   Earlier versions of this section are worth knowing about if this needs
+   touching again: the first gave both images equal fixed widths at a fixed
+   height, which cropped the CNC render (574x320 landscape) by about 38%
+   since it was forced into the same box as the square FEA composite
+   (1439x1439). The fix there - each image sized from its own aspect-ratio
+   rather than a shared width - carries over unchanged below; what's new
+   this time is only the text's position (between the images, not below
+   them) and the card's width (an explicit 75%, replacing a width that used
+   to just be whatever the two images added up to). */
+@media (min-width: 768px) {
+	.elementor-1236 .elementor-element.elementor-element-f73297b {
+		align-items: center;
+	}
+
+	/* Grid rather than a flex row since the "Mechanical" title moved inside
+	   the card (2026-10-25): photo | title over text | photo. */
+	.elementor-1236 .elementor-element.elementor-element-c96428e {
+		display: grid !important;
+		grid-template-columns: 230px minmax(0, 1fr) 230px;
+		grid-template-rows: auto auto;
+		align-content: center;
+		align-items: center;
+		/* full width, lined up with the Programming / Electrical cards above:
+		   the wider middle column keeps the description to 2-3 lines, which is
+		   what makes room for the full-size "Mechanical" heading (same 32px
+		   gradient style as "Programming") without the card growing */
+		width: 100%;
+		column-gap: 20px;
+		row-gap: 8px;
+		padding: 18px;
+		border: 1px solid #42597F;
+		border-radius: 16px;
+		box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.45), 0 8px 16px -8px rgba(0, 0, 0, 0.3);
+		/* Same card gradient as every other Fields of Interest card (see
+		   "A subtle gradient on every card" further down) - this card never
+		   had any fill of its own, since its two image children carry
+		   #0C1729 but sit fully covered by their own photos, so the colour
+		   was never actually visible. Without this the padding ring around
+		   the images/text showed bare page background instead of a card
+		   surface, which is exactly what made it read as a different kind
+		   of element from its siblings rather than another card among them. */
+		background-image: linear-gradient(145deg, #132037 0%, #0C1729 55%, #0A1420 100%);
+		background-color: #0C1729;
+	}
+
+	/* The Robotics/Programming/Electrical cards get their hover highlight
+	   (border turns white) from the kit's own default container hover style,
+	   since they carry no border of their own at the card level and let that
+	   default show through. This card's border is set explicitly just above
+	   (needed for its own three-part layout), at higher specificity than the
+	   kit default - so it always won, hover or not, and this card alone
+	   never highlighted on hover. Matching the same white explicitly here. */
+	.elementor-1236 .elementor-element.elementor-element-c96428e:hover {
+		/* Same lift + blue-green glow + blue border as every other card (the
+		   shared "Cards:" hover rule only reaches containers that are links
+		   themselves, which here are the two photo boxes, not the card). */
+		transform: translateY(-5px) !important;
+		border-color: #5B7FFF !important;
+		box-shadow:
+			0 16px 32px -10px rgba(91, 127, 255, 0.35),
+			0 10px 18px -10px rgba(79, 207, 156, 0.3) !important;
+	}
+	.elementor-1236 .elementor-element.elementor-element-c96428e {
+		transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+	}
+	/* ...and the photos inside don't hover on their own: they ride along
+	   with the card, exactly like the photos in the other cards. */
+	.elementor-1236 .elementor-element.elementor-element-c96428e > a.e-con:hover {
+		transform: none !important;
+		border-color: rgb(255, 255, 255) !important;
+		box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.45), 0 8px 16px -8px rgba(0, 0, 0, 0.3) !important;
+	}
+
+	/* Images: same 230px-wide, own-aspect-ratio treatment as the
+	   Robotics/Programming/Electrical cards (see "Fields of Interest cards"
+	   further down) - this is the "formatted like one of the cards" part.
+	   FiniteElementMethod.jpg is natively 1439x1439 (square); image-32-min.png
+	   (the CNC render) is 574x320, the same shape as every other Fields of
+	   Interest photo - matching each box to its own photo's ratio is what
+	   makes object-fit:cover have (almost) nothing left to crop. */
+	.elementor-1236 .elementor-element.elementor-element-087d055,
+	.elementor-1236 .elementor-element.elementor-element-ec3f5ae {
+		flex: 0 0 230px;
+		width: 230px;
+		grid-row: 1 / 3;
+	}
+	.elementor-1236 .elementor-element.elementor-element-087d055 { grid-column: 1; }
+	.elementor-1236 .elementor-element.elementor-element-ec3f5ae { grid-column: 3; }
+	.elementor-1236 .elementor-element.elementor-element-c96428e > .elementor-element-d5870ef {
+		grid-column: 2;
+		grid-row: 1;
+		align-self: end;
+		margin: 0 !important;
+	}
+	.elementor-1236 .elementor-element.elementor-element-c96428e > .elementor-element-a2a1b0c {
+		grid-column: 2;
+		grid-row: 2;
+		align-self: start;
+	}
+	.elementor-1236 .elementor-element-d5870ef :is(.elementor-widget-container, .elementor-heading-title) {
+		text-align: center !important;
+	}
+	.elementor-1236 .elementor-element.elementor-element-087d055 img,
+	.elementor-1236 .elementor-element.elementor-element-ec3f5ae img {
+		width: 100%;
+		height: auto;
+		object-fit: cover;
+		display: block;
+		border-radius: 6px;
+	}
+	/* Was 1 / 1 for the old square FEA composite; the photo is now the
+	   stringer deformation plot at 3:2 (the same cover the project uses). */
+	.elementor-1236 .elementor-element.elementor-element-087d055 img {
+		aspect-ratio: 3 / 2;
+	}
+	.elementor-1236 .elementor-element.elementor-element-ec3f5ae img {
+		aspect-ratio: 3 / 2;
+	}
+
+	/* Text: the middle column, flexing to fill whatever's left between the
+	   two fixed-width images. Centred, unlike the other cards' left-aligned
+	   body copy - flanked symmetrically by an image on each side, a ragged
+	   left edge butting up against the left photo read oddly in a way it
+	   doesn't when there's only ever an image on one side. */
+	.elementor-1236 .elementor-element.elementor-element-a2a1b0c {
+		flex: 1 1 auto;
+		min-width: 0;
+		text-align: center;
+	}
+
+	/* The <p>'s own default bottom margin (~14px, from the theme's body
+	   typography) doesn't contain any visible text - it's blank space below
+	   the last line - but it still counts as part of this flex item's
+	   height, so align-items:center on the card was centring a box that
+	   was 14px taller than the text actually visible inside it. That
+	   shifted the glyphs themselves about 7px above true centre, closer to
+	   the top image than the bottom edge even though the card's own
+	   bounding-box math looked centred. Zeroing it lets the item's measured
+	   height match what's actually on screen, so centring the box and
+	   centring the text become the same thing. */
+	.elementor-1236 .elementor-element.elementor-element-a2a1b0c p {
+		margin: 0;
+	}
+}
+
+/* Mobile: Mechanical is ONE card, in the same format as the Fields of
+   Interest cards above it (Robotics, Programming, Electrical/Embedded):
+   photo flush across the top, then the description in padded text below,
+   inside a single rounded, outlined, gradient-filled card with the same
+   shadow. It used to be a swipe track of two separate things - a bordered
+   text box and a separate bordered photo - which looked nothing like the
+   other cards.
+
+   The card is the same width as theirs (82% of the track, which is what
+   their slides use) and centred, since with a single card there is no next
+   one peeking in to balance it. No scrolling is involved any more, so the
+   swipe-progress bar the other tracks get doesn't appear here either.
+
+   Order: the text widget comes before the photo in the page, so the photo
+   is moved up with `order`. There is no per-card title as on the others -
+   those titles are subcategory names, and Mechanical has no subcategories;
+   the section heading above the card is its title. */
+@media (max-width: 767px) {
+	.elementor-1236 .elementor-element.elementor-element-c96428e {
+		display: flex;
+		flex-direction: column;
+		flex-wrap: nowrap;
+		align-items: stretch;
+		gap: 20px;
+		width: calc((100% - 8px) * 0.82) !important;
+		max-width: calc((100% - 8px) * 0.82) !important;
+		margin: 0 auto;
+		padding: 0;
+		overflow: hidden;
+		border: 1px solid #42597F;
+		border-radius: 16px;
+		background-image: linear-gradient(145deg, #132037 0%, #0C1729 55%, #0A1420 100%);
+		background-color: #0C1729;
+		box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.45), 0 8px 16px -8px rgba(0, 0, 0, 0.3);
+	}
+
+	/* 087d055 (FiniteElementMethod.jpg) is a 2x2 grid of FEA analysis
+	   screenshots - stress colour maps and a small graph, legible only at
+	   a size a phone card gives it. ec3f5ae (the CNC mill, image-32-min.png)
+	   is an actual rendered 3D model and reads fine small, so mobile keeps
+	   only that one photo. Desktop, with more room, keeps both. */
+	.elementor-1236 .elementor-element.elementor-element-087d055 {
+		display: none;
+	}
+
+	/* The photo: first, full width, no outline or rounding of its own - the
+	   card carries those, as on the other cards. It's a link (opens the
+	   lightbox), and the site-wide "lift on hover" for links like it would
+	   raise just the photo inside the card on tap, so that's switched off
+	   here. Shaped to the photo's own 574x320 so nothing is cropped, the
+	   same ratio the other cards' photos use. */
+	.elementor-1236 .elementor-element.elementor-element-ec3f5ae {
+		order: 0;
+		flex: 0 0 auto;
+		width: 100%;
+		margin: 0;
+		border: 0 !important;
+		border-radius: 0 !important;
+		box-shadow: none !important;
+	}
+	.elementor-1236 .elementor-element.elementor-element-ec3f5ae:hover {
+		transform: none !important;
+		box-shadow: none !important;
+		border-color: transparent !important;
+	}
+	.elementor-1236 .elementor-element.elementor-element-ec3f5ae img {
+		display: block;
+		width: 100%;
+		height: auto;
+		aspect-ratio: 574 / 320;
+		object-fit: cover;
+		border-radius: 0;
+	}
+
+	/* The description: below the photo, with the same side inset (15px) and
+	   type size as the other cards' text, but centred - there is no title
+	   or other left-edge element in this card for left-aligned text to line
+	   up with, and the photo above it spans the card's full width. No box
+	   of its own any more. */
+	.elementor-1236 .elementor-element.elementor-element-a2a1b0c {
+		order: 1;
+		flex: 0 0 auto;
+		width: 100%;
+		margin: 0;
+		padding: 0 15px 10px;
+		border: 0;
+		border-radius: 0;
+		box-shadow: none;
+		background: none;
+		text-align: center;
+		display: block;
+		font-size: 15px;
+	}
+	.elementor-1236 .elementor-element.elementor-element-a2a1b0c > .elementor-widget-container {
+		display: block;
+		text-align: center;
+	}
+	.elementor-1236 .elementor-element.elementor-element-a2a1b0c p {
+		font-size: 15px;
+		line-height: 17px;
+		text-align: center;
+	}
+
+	/* The "Mechanical" heading above it was left-aligned while Programming
+	   and Electrical / Embedded are centred; centred like them. */
+	.elementor-1236 .elementor-element.elementor-element-d5870ef,
+	.elementor-1236 .elementor-element.elementor-element-d5870ef .elementor-heading-title {
+		text-align: center !important;
+	}
+}
+
+/* The CNC render's old fixed-height/aspect-ratio treatment used to live
+   here, before the Mechanical section above started setting its own
+   per-image aspect-ratio on 087d055/ec3f5ae directly - removed rather than
+   left to silently lose a specificity fight against that. */
+
+/* Home page portrait: shrink to better match the height of the About Me
+   text beside it. The circle was rendering at 396px tall against a text
+   block (heading + paragraph + Read More) of only 250px, overshooting it by
+   close to 150px. Cut as a percentage, like the generated rule it overrides,
+   so it scales the same way at every breakpoint rather than just at 1440. */
+.elementor-1236 .elementor-element.elementor-element-add5602 img {
+	width: 64%;
+}
+
+/* ---------------------------------------------------------------------------
+   Interactive states: making "this is clickable" actually read as clickable.
+
+   The kit sets a global a:hover of --e-global-color-secondary (#4FCF9C).
+   That works for white links - nav items go white to green, clearly. But
+   most in-content links already sit at #34D399, and #34D399 -> #4FCF9C is
+   rgb(52,211,153) -> rgb(79,207,156): a shift of 27 in red and under 5 in
+   the other channels. On screen that is effectively no feedback at all, so
+   every green link on the site currently looks inert on hover.
+
+   Two things carry the hover instead: a genuine step up in lightness, and an
+   underline. Links that are already underlined at rest still get the colour
+   change, so both kinds are covered.
+
+   Scoped to text and heading widgets on purpose. The Fields of Interest
+   cards are themselves <a> elements wrapping a heading and a paragraph, so
+   a blanket a:hover colour rule would repaint their body copy green on
+   hover. Targeting links *inside* text/heading widgets never matches those
+   wrappers, which contain widgets rather than sitting within one.
+
+   The !important is doing real work rather than papering over specificity:
+   several in-content links carry a hand-written inline style (for example
+   the "2025 QS rankings" link is style="color:#ffffff;text-decoration:
+   underline"). Inline styles outrank any selector, so those links had no
+   hover response whatsoever. It is set on the hover colour only, so each
+   link keeps exactly the resting appearance it was authored with.
+   --------------------------------------------------------------------------- */
+.elementor-widget-text-editor a:hover,
+.elementor-widget-heading .elementor-heading-title a:hover {
+	color: #6EE7B7 !important;
+	text-decoration: underline;
+}
+
+.elementor-widget-text-editor a,
+.elementor-widget-heading .elementor-heading-title a {
+	transition: color 0.18s ease;
+}
+
+/* The same hover for the "Read More" link on every project card (home,
+   My Projects, the category pages): brighter green and underlined. */
+.elementor-widget-posts .elementor-post__read-more {
+	transition: color 0.18s ease;
+}
+.elementor-widget-posts .elementor-post__read-more:hover {
+	color: #6EE7B7 !important;
+	text-decoration: underline;
+}
+
+/* Keyboard focus. The project cards and the Robotics / Programming /
+   Electrical / Mechanical headings are all real links now, so they are in
+   the tab order, but nothing styled their focus state - keyboard users got
+   only the browser default, which is easy to lose against this dark navy.
+   :focus-visible rather than :focus so it appears for keyboard navigation
+   without ringing every element the mouse touches. */
+a:focus-visible,
+button:focus-visible,
+.project-gallery__item:focus-visible {
+	outline: 2px solid #34D399;
+	outline-offset: 3px;
+	border-radius: 4px;
+}
+
+/* The card hover glow was applied with no transition, so it snapped on and
+   off. Only box-shadow is transitioned - nothing here touches layout. */
+.elementor-post,
+a.e-con {
+	transition: box-shadow 0.25s ease;
+}
+
+/* Making the Fields of Interest cards clickable turned them from <div> into
+   <a>, which quietly opted them into the kit's global link colouring:
+   .elementor-kit-27 a sets the accent purple, and everything inside the card
+   that doesn't declare its own colour inherited it. The card descriptions
+   were rendering purple instead of the body grey they had as <div>s, and
+   flipping to green on hover along with the kit's a:hover.
+
+   The card titles were unaffected because they set their own colour, which
+   is why this slipped through - only the description paragraphs moved.
+   Neutralising the anchor's own colour restores the inheritance chain these
+   cards had before they became links. */
+a.e-con,
+a.e-con:hover {
+	color: inherit;
+}
+
+/* Link blue for text that people actually read: the footer menu and links
+   inside body copy.
+
+   Both inherited the Kit's accent (#5B7FFF) via ".elementor-kit-27 a". That
+   blue is right for the brand gradient and buttons, but as small text on
+   the dark navy it only reaches 4.84:1 - just over the AA floor, and visibly
+   dim next to the white copy around it. #8AA3FF is the same hue, lifted to
+   about 7:1. Done here, per element, rather than by changing the Kit's
+   accent colour, which also feeds the heading gradients, buttons and
+   outlines that should stay as they are.
+
+   :not(:hover) keeps these out of the hover state, so the Kit's own
+   a:hover colour (green) still takes over on hover exactly as before. The
+   footer's own text span is targeted as well as the anchor, because the
+   widget can set a colour on the span directly, which the anchor's colour
+   would never reach. */
+.elementor-widget-text-editor a:not(:hover) {
+	color: #34D399;
+}
+
+/* Update (owner's request, 2026-10-26): links in body copy are the site's
+   green (#34D399, the same as the "Read More" links and the contact links on
+   the home page) rather than the blue-violet above, which read as purple.
+   Brighter than the blue it replaces on this backdrop, so contrast only goes
+   up. Hover is unchanged: the brighter #6EE7B7 with an underline. */
+
+/* ...except the footer menu, which is white (owner's request, 2026-10-07):
+   on the site backdrop's blue glows (site-backdrop/backdrop.css) the footer
+   sits over the brightest, bluest part of the field, where blue links lose
+   contrast and white does not. Still :not(:hover), so hover turns green. */
+.elementor-location-footer .elementor-widget-icon-list .elementor-icon-list-item > a:not(:hover),
+.elementor-location-footer .elementor-widget-icon-list .elementor-icon-list-item > a:not(:hover) .elementor-icon-list-text {
+	color: #FFFFFF;
+}
+
+/* Footer name: the underline on hover. The link is "Andres <span>Cervera
+   Rozo</span>", and the span is gradient text (background-clip: text) with
+   its own gradient, which the browser does not paint the link's underline
+   through - so on hover only "Andres " was underlined and the line stopped
+   dead before "Cervera Rozo". Underlining the span as well, in the same
+   hover green as the link's own underline, makes it one continuous line
+   under the whole name (the header's logo, which is a single piece of text,
+   already did). */
+.elementor-location-footer .elementor-heading-title a:hover span {
+	text-decoration: underline;
+	text-decoration-color: #6EE7B7;
+}
+
+/* Search box placeholder ("Search..."): the browser's default #757575 on an
+   input that is transparent, so it sits straight on the site backdrop's blue
+   glow - about 2.6:1, visibly dim in the footer. A light blue-grey (#C7D0E0,
+   the site's muted-text colour) is ~7.8:1 there. The contact forms' placeholders
+   are already ~9-10:1 and are left alone. */
+.jkit-search-field::placeholder,
+.elementor-search-form__input::placeholder {
+	color: #C7D0E0;
+	opacity: 1;
+}
+
+/* The header logo's upper half is the Kit blue #5B7FFF (a top-to-bottom
+   gradient: blue, blue, green, green) at 23px - one pixel short of "large
+   text", so it needs 4.5:1, and over the royal-blue glow of the site backdrop
+   it measured 4.03:1. The same gradient with a lighter blue (#7490FF, ~4.9:1
+   there) fixes it; the green half and the footer logo (24px, so "large" and
+   already above 3:1) are untouched. 2efc3d6 is the desktop logo, f1b5d47 the
+   phone one. */
+.elementor-location-header .elementor-element-2efc3d6 .elementor-heading-title,
+.elementor-location-header .elementor-element-f1b5d47 .elementor-heading-title {
+	background-image: linear-gradient(to bottom, #7490FF, #7490FF, #4FCF9C, #4FCF9C) !important;
+}
+
+/* Back-to-top button: bring it into the palette.
+
+   It ships at #4CC6F5, which is the same cyan the hero's circuit animation
+   uses (--hx-cyan in portfolio-hero/hero.css), so on the home page it has
+   something to belong to. Everywhere else - About Me, Skills, all 32
+   project pages - there is no cyan on the page at all, and a bright cyan
+   puck floating over royal-blue-and-green content is the one element that
+   reads as borrowed from another site - the two blues are close enough to
+   clash rather than agree.
+
+   The blue-to-green gradient is the site's established button treatment
+   ("View More Projects", "Schedule a Consultation"), so reusing it makes the
+   control look native on every page rather than only the first one.
+
+   The plugin also draws a scroll-progress ring as a 2px inset box-shadow in
+   that same cyan, with the progress arc itself stroked near-black over the
+   top. Recolouring only the background would have left a cyan ring around a
+   blue-green puck, so the track goes translucent white instead: it still
+   reads as the groove the dark progress arc travels in, and it works against
+   both ends of the gradient. */
+.smooth-back-to-top-button {
+	background: linear-gradient(135deg, #5B7FFF 0%, #4FCF9C 100%) !important;
+	box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.35) !important;
+	transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.smooth-back-to-top-button:hover {
+	filter: brightness(1.12);
+	transform: translateY(-3px);
+}
+/* Phones: 50px in from the edge put the button over the right end of the
+   "Scroll for more ..." cue (chapters.js), which sits centred along the bottom
+   above the page-dots pill. A little closer to the edge clears it. */
+@media (max-width: 767px) {
+	.smooth-back-to-top-button.btn-right-side { right: 12px !important; }
+}
+@media (max-width: 400px) {
+	.smooth-back-to-top-button.btn-right-side { right: 6px !important; }
+}
+
+/* ---------------------------------------------------------------------------
+   "Clickable things lift and shimmer" - the site's one hover language,
+   applied everywhere something is actually clickable: Elementor buttons,
+   project/post cards, the Fields of Interest cards, and the gallery tiles
+   that open a lightbox. Reference: the "Connect With Me" icon cards and the
+   gradient CTA button at https://praveengongada.com/ - a few px of lift,
+   a colour-matched glow that grows in on hover, and (for anything with a
+   gradient fill already) a slow continuous colour sweep rather than a
+   static block of colour. Deliberately does NOT check prefers-reduced-motion,
+   matching the standing site-wide choice already made for the hero and
+   scroll-reveal (see portfolio-hero/hero.css and portfolio-reveal/reveal.js).
+
+   transform + box-shadow + background-position are the only properties that
+   move here - no layout-affecting property is touched, so nothing reflows
+   and every element keeps the exact footprint a screen reader or keyboard
+   user already expects. */
+
+@keyframes buttonShimmer {
+	0%   { background-position: 0% 50%; }
+	50%  { background-position: 100% 50%; }
+	100% { background-position: 0% 50%; }
+}
+
+/* Turns out the Kit's blue-to-green gradient only actually reaches buttons
+   built with Elementor's "default" skin (confirmed on exactly one button
+   site-wide, the contact form's Send Message). Every other button - View
+   More Projects, the Linkedin/Github/Resume links, the homepage's own
+   Contact scroll-link - uses the "Link" skin instead, which Elementor gives
+   no fill at all by default, so each one was left however it happened to
+   be last authored: no background, a flat navy, or in one case a fully
+   transparent legacy gradient nobody ever finished cleaning up. None of
+   them had anything for the shimmer below to actually animate.
+
+   Forcing the same gradient onto every one of them here is what actually
+   makes "the whole site gets this treatment" true, rather than true only
+   for whichever button happened to already have Elementor's own fill.
+
+   Excluded on the Skills & Tools page: every skill is ALSO a button widget
+   under the hood ("Python", "SQL", "ROS/ROS2", ...) - visually a small flat
+   tag, not a CTA, and there is no class difference between those and a real
+   button to select against, only the page they're on.
+
+   The gradient is authored with three stops (blue -> green -> blue) over a
+   200%-wide background rather than two stops over one width. Two reasons:
+   at rest the visible half is a full blue-to-green sweep, so the colour
+   difference reads at its strongest without hovering; and because the
+   pattern starts and ends on the same blue, sliding it from 0% to 100%
+   loops seamlessly instead of snapping back at the end of each cycle.
+
+   background-origin/repeat are pinned deliberately. Elementor gives some
+   buttons a 3px border (the nav Contact and View More Skills, not the
+   others), and a background positioned against the padding-box but painted
+   out to the border-box leaves that 3px strip to be filled by the NEXT
+   repetition of the gradient - whose leading edge is green. That was the
+   stray green stripe down the left of exactly those buttons. Anchoring the
+   origin to the border-box removes the gap, and no-repeat means nothing can
+   wrap into it even if a future button gets a wider border. */
+.elementor-button {
+	background-size: 200% 100% !important;
+	background-position: 0% 50% !important;
+	background-origin: border-box !important;
+	background-repeat: no-repeat !important;
+	transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+}
+body:not(.page-id-2064) .elementor-button {
+	background-image: linear-gradient(90deg, #4A6BF5 0%, #1C8160 50%, #4A6BF5 100%) !important;
+	color: #FFFFFF !important;
+	border-color: transparent !important;
+}
+/* Elementor's "Link" skin swaps in a flat white fill and dark text on
+   hover/focus by default (its own built-in behaviour, nothing to do with
+   the Kit) - that's what was reading as "turns white" instead of shimmering.
+   Cancelling it here, after the rule above in source order, is what makes
+   this win rather than just adding a second conflicting hover state. */
+body:not(.page-id-2064) .elementor-button:hover,
+body:not(.page-id-2064) .elementor-button:focus-visible {
+	background-image: linear-gradient(90deg, #4A6BF5 0%, #1C8160 50%, #4A6BF5 100%) !important;
+	color: #FFFFFF !important;
+}
+.elementor-button:hover,
+.elementor-button:focus-visible {
+	transform: translateY(-3px);
+	box-shadow:
+		0 14px 28px -8px rgba(91, 127, 255, 0.45),
+		0 10px 14px -8px rgba(79, 207, 156, 0.35);
+}
+body:not(.page-id-2064) .elementor-button:hover,
+body:not(.page-id-2064) .elementor-button:focus-visible {
+	animation: buttonShimmer 2.2s ease infinite;
+}
+
+/* "Full Academic History" on Skills & Education: the page-wide
+   :not(.page-id-2064) exclusion above exists so the skill pills (which are
+   also button widgets) don't pick up the site's CTA gradient, but it also
+   caught this one genuine CTA button, leaving it in Elementor's default
+   flat Link-skin state - visibly different from "Download Resume" on the
+   home page even though both do the same job. Scoped to its own widget id,
+   same pattern as the LinkedIn/GitHub/Resume overrides below - but unlike
+   those three, tying the excluded rule's specificity and relying on source
+   order wasn't enough here (same issue the project-gallery tiles had:
+   Elementor's own generated per-widget CSS sets background-image again at
+   an equal-or-later point the browser applies after this file), so this
+   adds .elementor-2064 as a second qualifying class to win outright on
+   specificity instead of depending on load order.
+
+   That still wasn't enough for background-image specifically: color and
+   border-color took immediately, but something else - almost certainly
+   Elementor's own background-image:none reset for this widget - kept
+   winning that one property while leaving the others alone, the same
+   symptom the project-gallery tiles and the certification cards both had
+   on one property each. Each class repeated (.foo.foo) matches exactly
+   what .foo alone matches but counts twice toward specificity, enough to
+   outrank it outright rather than trade source-order guesses again. */
+body.page-id-2064.page-id-2064 .elementor-element-f560412.elementor-element-f560412 .elementor-button.elementor-button,
+body.page-id-2064.page-id-2064 .elementor-element-f560412.elementor-element-f560412 .elementor-button.elementor-button:hover,
+body.page-id-2064.page-id-2064 .elementor-element-f560412.elementor-element-f560412 .elementor-button.elementor-button:focus-visible {
+	background-image: linear-gradient(90deg, #4A6BF5 0%, #1C8160 50%, #4A6BF5 100%) !important;
+	color: #FFFFFF !important;
+	border-color: transparent !important;
+}
+body.page-id-2064.page-id-2064 .elementor-element-f560412.elementor-element-f560412 .elementor-button.elementor-button:hover,
+body.page-id-2064.page-id-2064 .elementor-element-f560412.elementor-element-f560412 .elementor-button.elementor-button:focus-visible {
+	animation: buttonShimmer 2.2s ease infinite;
+}
+
+/* The header's "Contact" button on the Skills & Tools page.
+
+   Every other page shows it as the site's blue-to-green gradient button (the
+   rule above); this page was the exception, a dark box with a 3px white
+   outline. Two page-wide rules for the skill pills caught it, because the pills
+   are button widgets too and the header is on the same page: the body-level
+   :not(.page-id-2064) exclusion above keeps the CTA gradient off every button
+   here, and ".page-id-2064 .elementor-button" paints the pill fill on all of
+   them, including this one. The page's border colour then came from the
+   button's own white default instead of the transparent one the gradient
+   rule sets elsewhere. Scoped to the header so the pills stay as they are;
+   the doubled classes beat the pill rule on specificity, the same approach as
+   "Full Academic History" above. */
+body.page-id-2064.page-id-2064 .elementor-location-header .elementor-button.elementor-button,
+body.page-id-2064.page-id-2064 .elementor-location-header .elementor-button.elementor-button:hover,
+body.page-id-2064.page-id-2064 .elementor-location-header .elementor-button.elementor-button:focus-visible {
+	background-image: linear-gradient(90deg, #4A6BF5 0%, #1C8160 50%, #4A6BF5 100%) !important;
+	background-color: transparent !important;
+	color: #FFFFFF !important;
+	border-color: transparent !important;
+}
+body.page-id-2064.page-id-2064 .elementor-location-header .elementor-button.elementor-button:hover,
+body.page-id-2064.page-id-2064 .elementor-location-header .elementor-button.elementor-button:focus-visible {
+	animation: buttonShimmer 2.2s ease infinite;
+}
+
+/* Video posters: no empty strip under them.
+
+   A lightbox video (the three Hobbies posters on About Me) is a link wrapping
+   the poster image, and both were inline elements, so they sat on a text
+   baseline inside a 26px line - which leaves an 8px strip of empty space
+   under the picture, inside the rounded frame (measured: box 238px, poster
+   229px). Block elements have no baseline, so the frame now ends exactly at
+   the poster's bottom edge. It also puts the play button back at the centre
+   of the poster: it had been 3.5px low, because it was centred in the taller
+   box. */
+.elementor-widget-video .elementor-wrapper > a,
+.elementor-widget-video .elementor-wrapper > a > img,
+.elementor-widget-video .elementor-custom-embed-image-overlay img {
+	display: block;
+}
+
+/* The three outbound links at the foot of the home page carry their own
+   brand instead of the site palette, because that is what makes them
+   recognisable at a glance - you look for LinkedIn blue, not for another
+   blue-green pill in a row of blue-green pills. Same three-stop treatment,
+   same lift and sweep, just each in its own colour. Resume has no brand of
+   its own, so instead of a generic PDF red it takes the site's own accent
+   green, kept recognisably separate from the blue-green default button only
+   by being a flatter, single-hue sweep.
+
+   Selectors are body-prefixed to outrank the site-wide rule above: that one
+   is body:not(...) .elementor-button, which on specificity alone would
+   otherwise beat a plain two-class selector no matter how late it appears.
+
+   Mid-stops are deliberately the darker end of each brand's range - these
+   carry white label text, and a lighter midpoint would dip under AA for
+   the moment the sweep passes through it. LinkedIn's midpoint sits a little
+   lighter than brand-exact blue for that reason: the true brand-tone pair
+   read as almost flat side by side, so the midpoint is nudged up to #1579C1
+   (still 4.63:1 against white) to keep the sweep visibly a gradient rather
+   than a static fill. Resume's midpoint is the site's own accent green
+   (#1C8160, 4.82:1) for the same visibility reason, and because tying it to
+   the exact site accent is what "closer to the theme colour" means here. */
+body .elementor-element-0ef1e0c .elementor-button,            /* LinkedIn */
+body .elementor-element-0ef1e0c .elementor-button:hover,
+body .elementor-element-0ef1e0c .elementor-button:focus-visible {
+	background-image: linear-gradient(90deg, #0A66C2 0%, #1579C1 50%, #0A66C2 100%) !important;
+}
+body .elementor-element-e114457 .elementor-button,            /* GitHub */
+body .elementor-element-e114457 .elementor-button:hover,
+body .elementor-element-e114457 .elementor-button:focus-visible {
+	background-image: linear-gradient(90deg, #24292F 0%, #57606A 50%, #24292F 100%) !important;
+}
+body .elementor-element-0f32085 .elementor-button,            /* Resume */
+body .elementor-element-0f32085 .elementor-button:hover,
+body .elementor-element-0f32085 .elementor-button:focus-visible {
+	background-image: linear-gradient(90deg, #145C44 0%, #1C8160 50%, #145C44 100%) !important;
+}
+/* ...and their hover glow picks up the same brand colour rather than the
+   site's blue-green, so the lift reads as belonging to the button. */
+body .elementor-element-0ef1e0c .elementor-button:hover,
+body .elementor-element-0ef1e0c .elementor-button:focus-visible {
+	box-shadow: 0 14px 28px -8px rgba(10, 102, 194, 0.55), 0 10px 14px -8px rgba(10, 102, 194, 0.35);
+}
+body .elementor-element-e114457 .elementor-button:hover,
+body .elementor-element-e114457 .elementor-button:focus-visible {
+	box-shadow: 0 14px 28px -8px rgba(110, 118, 129, 0.5), 0 10px 14px -8px rgba(110, 118, 129, 0.3);
+}
+body .elementor-element-0f32085 .elementor-button:hover,
+body .elementor-element-0f32085 .elementor-button:focus-visible {
+	box-shadow: 0 14px 28px -8px rgba(28, 129, 96, 0.55), 0 10px 14px -8px rgba(28, 129, 96, 0.35);
+}
+
+/* Every individual project page has its own "Github" button, but each is a
+   separate Elementor widget with its own auto-generated element ID (there's
+   no shared ID to target across all 38 posts the way the homepage footer
+   buttons have one each). Matching on the href itself - every one of them
+   links out to github.com - picks up all of them with one rule regardless
+   of per-post icon/text authoring differences (fab fa-github vs the jki
+   icon pack, "Github" vs "Github Repo"), and .single-post keeps it off the
+   homepage, which already has its own identical-looking e114457 rule above. */
+.single-post .elementor-button[href*="github.com"],
+.single-post .elementor-button[href*="github.com"]:hover,
+.single-post .elementor-button[href*="github.com"]:focus-visible {
+	background-image: linear-gradient(90deg, #24292F 0%, #57606A 50%, #24292F 100%) !important;
+}
+.single-post .elementor-button[href*="github.com"]:hover,
+.single-post .elementor-button[href*="github.com"]:focus-visible {
+	box-shadow: 0 14px 28px -8px rgba(110, 118, 129, 0.5), 0 10px 14px -8px rgba(110, 118, 129, 0.3);
+}
+/* Cards: project posts, the Fields of Interest / homepage highlight cards,
+   and gallery tiles. These don't carry a gradient fill, so the "non-static
+   colour" half of the effect is the border and glow visibly tinting toward
+   the brand blue-green on hover instead of a static grey.
+
+   !important on transform/box-shadow: several of these widgets already carry
+   their own per-widget hover box-shadow from Elementor's own Hover Box Shadow
+   control (generated as .elementor-element-{id}:hover, which outguns a plain
+   class selector on specificity alone), so without it this rule loses the
+   cascade and the old flat white glow wins instead of the new blue-green one. */
+.elementor-post,
+a.e-con,
+.project-gallery__item {
+	transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+	/* Safety net alongside "A subtle gradient on every card" further down,
+	   which already covers every a.e-con this site currently has by its
+	   specific widget id - this catches any a.e-con added later that isn't
+	   on that list yet, so a new Fields-of-Interest-style card never ships
+	   flat-shadowed by default. */
+	box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.45), 0 8px 16px -8px rgba(0, 0, 0, 0.3);
+}
+.elementor-post:hover,
+a.e-con:hover,
+.project-gallery__item:hover,
+.project-gallery__item:focus-visible {
+	transform: translateY(-5px) !important;
+	border-color: #5B7FFF !important;
+	box-shadow:
+		0 16px 32px -10px rgba(91, 127, 255, 0.35),
+		0 10px 18px -10px rgba(79, 207, 156, 0.3) !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Highlighted Projects card text: white bold title, plus a category ·
+   subcategory line above it matching the search/tag-archive cards
+   (project-tags/tags.css .project-archive__card-cat/-title) - same green
+   label + white bold title pattern, so a homepage card and a search-result
+   card for the same project read as the same kind of thing.
+
+   The category/subcategory line itself isn't something Elementor's Posts
+   widget can show (it has no parent/child-aware taxonomy display, and these
+   duplicate posts only carry the "Top Projects" category - the real
+   category/subcategory lives on the post each one aliases to), so the text
+   is injected by mu-plugins/highlighted-projects-cards.php rather than pulled
+   from Elementor settings; this just styles the .hp-card-cat span it adds. */
+.elementor-1236 .elementor-element-20aba35 .elementor-post__title,
+.elementor-1236 .elementor-element-20aba35 .elementor-post__title a {
+	color: #FFFFFF !important;
+	font-weight: 700 !important;
+}
+
+/* The same white bold title on every project listing - My Projects,
+   Robotics, Programming, Electrical/Embedded, Mechanical. They had been
+   falling back to the Kit's link blue at medium weight, which read as dim
+   next to the white card text and unlike the home page's identical cards.
+   Scoped to the Posts widget, which is what renders those cards; the home
+   page rule above is kept as it was. White in the hover state too, on
+   purpose: the card's lift and glow is the hover feedback, same as on the
+   home page. */
+.elementor-widget-posts .elementor-post__title,
+.elementor-widget-posts .elementor-post__title a {
+	color: #FFFFFF !important;
+	font-weight: 700 !important;
+}
+.elementor-1236 .elementor-element-20aba35 .hp-card-cat {
+	display: block;
+	color: #34D399;
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	margin-bottom: 6px;
+}
+
+/* ---------------------------------------------------------------------------
+   Highlighted Projects: 3 x 2 on desktop, one swipeable row on phones.
+
+   Six cards stacked vertically is close to six full screens of scrolling
+   before the next section, which buries everything below it. The same
+   scroll-snap approach already used for the Mechanical section's two images
+   turns the row into a swipeable carousel instead: no JS, each card is a
+   snap target, and holding the slides under full width leaves the next one
+   peeking so it reads as swipeable rather than cut off.
+
+   Elementor renders this container as a CSS grid driven by a --grid-columns
+   custom property, so display and the template both have to be overridden
+   rather than just the column count. */
+
+/* Uniform card height, desktop. The grid already has align-items:stretch
+   (Elementor's default), which matches heights WITHIN a row - cards in row 1
+   fill row 1's own tallest card, row 2 fills row 2's - but each row is still
+   free to be a different height from the other, since CSS Grid auto-sizes
+   each row independently. Equal rows (1fr) make all six cards the height of
+   the tallest of the six, whichever row it is in - and no more: this used to
+   be a fixed 520px floor, which was a guess at that height. */
+@media (min-width: 768px) {
+	.elementor-1236 .elementor-element-20aba35 .elementor-posts-container {
+		grid-auto-rows: 1fr;
+	}
+}
+
+@media (max-width: 767px) {
+	.elementor-1236 .elementor-element-20aba35 .elementor-posts-container {
+		display: flex !important;
+		grid-template-columns: none !important;
+		flex-wrap: nowrap !important;
+		/* stretch, not center: a single-row flex carousel's align-items
+		   already sizes every card to the tallest one present when stretched,
+		   which is the mobile equivalent of the desktop min-height above -
+		   center left every card at its own natural (and uneven) height. */
+		align-items: stretch;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		-webkit-overflow-scrolling: touch;
+		gap: 14px;
+		/* room for the lift-on-tap shadow so it isn't clipped by the scroller */
+		padding: 4px 4px 10px;
+		scrollbar-width: none;
+	}
+
+	.elementor-1236 .elementor-element-20aba35 .elementor-posts-container::-webkit-scrollbar {
+		display: none;
+	}
+
+	.elementor-1236 .elementor-element-20aba35 .elementor-post {
+		flex: 0 0 82%;
+		scroll-snap-align: center;
+		margin: 0 !important;
+	}
+}
+
+/* ---------------------------------------------------------------------------
+   Category pages (Robotics, Programming, Electrical/Embedded, Mechanical):
+   same fix, same reason, for every subcategory's own "posts" widget.
+
+   Each of these pages stacks a heading + a Posts widget per subcategory
+   (Computer Vision & Perception, Drones & Aerial Robotics, Localization,
+   Motion Planning, ...), and on phones the widget's own responsive setting
+   already drops to one column - which means scrolling past every project in
+   a subcategory, one full-width card at a time, before even reaching the
+   next subcategory's heading. Three or four of these stacked in a row is
+   the same "six screens of scrolling" problem Highlighted Projects had
+   above, just repeated once per subcategory down the page. Identical
+   scroll-snap carousel treatment, just addressed per page/widget since
+   these are 9 separate Posts widgets across 4 separate pages rather than
+   one widget on the homepage. */
+@media (max-width: 767px) {
+	.elementor-2597 .elementor-element-b5bdf5a .elementor-posts-container,   /* Robotics: Computer Vision & Perception */
+	.elementor-2597 .elementor-element-b05d267 .elementor-posts-container,  /* Robotics: Drones & Aerial Robotics */
+	.elementor-2597 .elementor-element-a7168a1 .elementor-posts-container,  /* Robotics: Localization */
+	.elementor-2597 .elementor-element-c6c7fd0 .elementor-posts-container,  /* Robotics: Motion Planning */
+	.elementor-2602 .elementor-element-b50018f .elementor-posts-container,  /* Programming: Machine Learning */
+	.elementor-2602 .elementor-element-925fa85 .elementor-posts-container,  /* Programming: Data Science */
+	.elementor-2607 .elementor-element-3564487 .elementor-posts-container,  /* Electrical/Embedded: Embedded Systems & Prototyping */
+	.elementor-2607 .elementor-element-da9b74d .elementor-posts-container,  /* Electrical/Embedded: Hardware & Power Systems */
+	.elementor-2615 .elementor-element-ea08e57 .elementor-posts-container,  /* Mechanical (flat, no subcategories) */
+	/* "My Projects" (/projects/) reuses these same nine Posts widgets, by
+	   the same widget ids, inside its per-category tabs - it never got this
+	   carousel treatment of its own, so its cards stacked one-per-row in a
+	   long vertical list on mobile instead of matching every other project
+	   listing on the site. */
+	.elementor-2291 .elementor-element-b5bdf5a .elementor-posts-container,
+	.elementor-2291 .elementor-element-b05d267 .elementor-posts-container,
+	.elementor-2291 .elementor-element-a7168a1 .elementor-posts-container,
+	.elementor-2291 .elementor-element-c6c7fd0 .elementor-posts-container,
+	.elementor-2291 .elementor-element-925fa85 .elementor-posts-container,
+	.elementor-2291 .elementor-element-b50018f .elementor-posts-container,
+	.elementor-2291 .elementor-element-3564487 .elementor-posts-container,
+	.elementor-2291 .elementor-element-da9b74d .elementor-posts-container,
+	.elementor-2291 .elementor-element-ea08e57 .elementor-posts-container {
+		display: flex !important;
+		grid-template-columns: none !important;
+		flex-wrap: nowrap !important;
+		/* stretch, not center: matches every card in a row to the row's
+		   tallest instead of leaving each at its own natural (uneven)
+		   height - same fix and reasoning as Highlighted Projects above. */
+		align-items: stretch;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		-webkit-overflow-scrolling: touch;
+		gap: 14px;
+		padding: 4px 4px 10px;
+		scrollbar-width: none;
+	}
+
+	.elementor-2597 .elementor-element-b5bdf5a .elementor-posts-container::-webkit-scrollbar,
+	.elementor-2597 .elementor-element-b05d267 .elementor-posts-container::-webkit-scrollbar,
+	.elementor-2597 .elementor-element-a7168a1 .elementor-posts-container::-webkit-scrollbar,
+	.elementor-2597 .elementor-element-c6c7fd0 .elementor-posts-container::-webkit-scrollbar,
+	.elementor-2602 .elementor-element-925fa85 .elementor-posts-container::-webkit-scrollbar,
+	.elementor-2602 .elementor-element-b50018f .elementor-posts-container::-webkit-scrollbar,
+	.elementor-2607 .elementor-element-3564487 .elementor-posts-container::-webkit-scrollbar,
+	.elementor-2607 .elementor-element-da9b74d .elementor-posts-container::-webkit-scrollbar,
+	.elementor-2615 .elementor-element-ea08e57 .elementor-posts-container::-webkit-scrollbar,
+	.elementor-2291 .elementor-element-b5bdf5a .elementor-posts-container::-webkit-scrollbar,
+	.elementor-2291 .elementor-element-b05d267 .elementor-posts-container::-webkit-scrollbar,
+	.elementor-2291 .elementor-element-a7168a1 .elementor-posts-container::-webkit-scrollbar,
+	.elementor-2291 .elementor-element-c6c7fd0 .elementor-posts-container::-webkit-scrollbar,
+	.elementor-2291 .elementor-element-925fa85 .elementor-posts-container::-webkit-scrollbar,
+	.elementor-2291 .elementor-element-b50018f .elementor-posts-container::-webkit-scrollbar,
+	.elementor-2291 .elementor-element-3564487 .elementor-posts-container::-webkit-scrollbar,
+	.elementor-2291 .elementor-element-da9b74d .elementor-posts-container::-webkit-scrollbar,
+	.elementor-2291 .elementor-element-ea08e57 .elementor-posts-container::-webkit-scrollbar {
+		display: none;
+	}
+
+	.elementor-2597 .elementor-element-b5bdf5a .elementor-post,
+	.elementor-2597 .elementor-element-b05d267 .elementor-post,
+	.elementor-2597 .elementor-element-a7168a1 .elementor-post,
+	.elementor-2597 .elementor-element-c6c7fd0 .elementor-post,
+	.elementor-2602 .elementor-element-925fa85 .elementor-post,
+	.elementor-2602 .elementor-element-b50018f .elementor-post,
+	.elementor-2607 .elementor-element-3564487 .elementor-post,
+	.elementor-2607 .elementor-element-da9b74d .elementor-post,
+	.elementor-2615 .elementor-element-ea08e57 .elementor-post,
+	.elementor-2291 .elementor-element-b5bdf5a .elementor-post,
+	.elementor-2291 .elementor-element-b05d267 .elementor-post,
+	.elementor-2291 .elementor-element-a7168a1 .elementor-post,
+	.elementor-2291 .elementor-element-c6c7fd0 .elementor-post,
+	.elementor-2291 .elementor-element-925fa85 .elementor-post,
+	.elementor-2291 .elementor-element-b50018f .elementor-post,
+	.elementor-2291 .elementor-element-3564487 .elementor-post,
+	.elementor-2291 .elementor-element-da9b74d .elementor-post,
+	.elementor-2291 .elementor-element-ea08e57 .elementor-post {
+		flex: 0 0 82%;
+		scroll-snap-align: center;
+		margin: 0 !important;
+		/* No shared height: the cards of a swipe row match each other
+		   (align-items: stretch on the row above sizes every card to the
+		   tallest one IN THAT ROW), but a row of short cards is no longer
+		   padded out to the height of the tallest card anywhere else on the
+		   site - it used to carry a fixed 460px floor, which left blank space
+		   under the text of every shorter carousel. */
+	}
+}
+
+/* Skills & Tools pills: same flat navy fill (#0F1B33, both gradient stops
+   identical - Elementor's own per-element CSS, not a real gradient) on
+   every one of the ~41 pills read as a wall of grey boxes. The diagonal
+   three-stop gradient used for every other card on the site gives them the
+   same subtle sheen instead, at pill scale. Needs !important: the flat fill
+   comes from Elementor's own post-2064.css at the same specificity, and
+   this rule has to outrank it the same way the rest of this page's button
+   overrides already do. */
+.page-id-2064 .elementor-button {
+	background-image: linear-gradient(145deg, #132037 0%, #0C1729 55%, #0A1420 100%) !important;
+	background-color: #0C1729 !important;
+}
+
+/* Skills & Tools pill icons: the logos are raw <img width="15"> baked into
+   each button's label text, which renders them at 15px - small enough that
+   most of the logos are unidentifiable, which defeats the point of having
+   them. Overriding the attribute here rather than editing ~90 button labels
+   by hand, and scoped to that page so no other button icon is affected. */
+.page-id-2064 .elementor-button img {
+	width: 21px !important;
+	height: auto !important;
+	vertical-align: -4px;
+}
+
+/* ...except the CAD pill's icon (3butto.png), which isn't one logo but three
+   (SolidWorks, Onshape, Fusion 360) side by side in a single 148x46 image -
+   the blanket 21px above was squeezing all three into the space meant for
+   one, making each individually smaller than every other pill's icon
+   instead of merely sharing a pill with two neighbours. Raising this one
+   icon's own width keeps each of its three logos close to the same size as
+   everywhere else: native per-logo width is about 49px (148 / 3), and 63px
+   scales that down by about the same factor (0.43x) that 21px scales a
+   single 49px-ish icon elsewhere on this page.
+
+   .elementor-element-5919534 is the button's own outer wrapper div, not the
+   same element .elementor-button is on (that's a nested <a>, several levels
+   down) - .elementor-button.elementor-element-5919534 as one compound class
+   would never match anything. Needs a selector at least as specific as the
+   rule above since both carry !important: repeating .elementor-button as
+   its own step in the descendant chain brings this to three class steps
+   against the base rule's two, so it wins on specificity rather than
+   relying on appearing later in the file. */
+.page-id-2064 .elementor-element-5919534 .elementor-button img {
+	width: 63px !important;
+}
+
+/* Skills & Tools pill icons, round two.
+
+   1. Centred on the label. The icon sat on the text baseline (vertical-align
+      -4px), so icons of different heights landed a pixel or two off the text's
+      middle and the pills with a taller icon (Gazebo) came out taller than
+      their neighbours. The label is a flex row for pills that carry an icon,
+      so every icon is centred on the text whatever its height.
+   2. A few logos are wide and short, and a fixed 21px width left them tiny
+      (YOLO and scikit-learn 11-12px tall, Point Cloud 10px, FEA 13px, RViz
+      15px, Drones 16px). Those are sized by height instead, so they read at
+      about the same size as the square ones; Gazebo's tall icon is capped to
+      match. Only these are touched; the other icons keep their 21px.
+   3. No grey box while an icon loads. The lazy-load placeholder is a grey
+      rectangle; until the real image is in (data-ll-status="loaded", set by the
+      lazy loader) the icon is simply invisible, and fades in. */
+.page-id-2064 .elementor-button-text:has(> img) {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3em;
+}
+.page-id-2064 .elementor-button img {
+	vertical-align: middle;
+}
+.page-id-2064 .elementor-button.elementor-button img[src*="YOLO"],
+.page-id-2064 .elementor-button.elementor-button img[src*="SciKitLearn"],
+.page-id-2064 .elementor-button.elementor-button img[src*="PointCloud"],
+.page-id-2064 .elementor-button.elementor-button img[src*="FiniteElementAnalysis"],
+.page-id-2064 .elementor-button.elementor-button img[src*="RViz"],
+.page-id-2064 .elementor-button.elementor-button img[src*="drone-1"],
+.page-id-2064 .elementor-button.elementor-button img[src*="Controls-1"],
+.page-id-2064 .elementor-button.elementor-button img[src*="Optimization-1"],
+.page-id-2064 .elementor-button.elementor-button img[src*="Group-164"] {
+	width: auto !important;
+	height: 20px !important;
+	max-width: 38px;
+}
+.page-id-2064 .elementor-button.elementor-button img[src*="g1614"] {
+	width: auto !important;
+	height: 22px !important;
+}
+@media (max-width: 767px) {
+	.page-id-2064 .elementor-button.elementor-button img[src*="YOLO"],
+	.page-id-2064 .elementor-button.elementor-button img[src*="SciKitLearn"],
+	.page-id-2064 .elementor-button.elementor-button img[src*="PointCloud"],
+	.page-id-2064 .elementor-button.elementor-button img[src*="FiniteElementAnalysis"],
+	.page-id-2064 .elementor-button.elementor-button img[src*="RViz"],
+	.page-id-2064 .elementor-button.elementor-button img[src*="drone-1"],
+	.page-id-2064 .elementor-button.elementor-button img[src*="Controls-1"],
+	.page-id-2064 .elementor-button.elementor-button img[src*="Optimization-1"],
+	.page-id-2064 .elementor-button.elementor-button img[src*="Group-164"] {
+		height: 17px !important;
+		max-width: 32px;
+	}
+	.page-id-2064 .elementor-button.elementor-button img[src*="g1614"] { height: 19px !important; }
+}
+.page-id-2064 .elementor-button img[data-src]:not([data-ll-status="loaded"]) {
+	opacity: 0;
+	background: none !important;
+}
+.page-id-2064 .elementor-button img[data-src] {
+	transition: opacity 0.2s ease;
+}
+
+/* Skills & Tools pills: stop the page scrolling sideways on phones.
+   Several labels are long enough on their own ("CAD (Solidworks, Onshape,
+   & Fusion 360)", "Google Apps Script (JavaScript-based)") that with
+   white-space held on one line the row forced the document to ~811px
+   against a 375px viewport. Letting the label wrap inside the pill keeps
+   every row within the screen. Pre-dates the icon resize above - the
+   measured overflow is identical before and after it. */
+@media (max-width: 767px) {
+	.page-id-2064 .elementor-button {
+		white-space: normal !important;
+		max-width: 100%;
+		height: auto !important;
+	}
+	.page-id-2064 .elementor-widget-button {
+		max-width: 100%;
+	}
+	.page-id-2064 .elementor-button-content-wrapper,
+	.page-id-2064 .elementor-button-text {
+		white-space: normal !important;
+		overflow-wrap: anywhere;
+	}
+}
+
+/* Responsive guard for linked image widgets.
+
+   Two Certifications & Education images are inserted at full size (a
+   width=\"800\" attribute) inside a link. An inline <a> shrink-wraps to that
+   800px, so the image's max-width:100% was resolving against the oversized
+   anchor and constraining nothing - the page scrolled sideways at 375px.
+   Making the anchor block-level is the whole fix: it takes the container's
+   width, and the percentage cap then has something real to resolve against.
+
+   Deliberately no width/height override here. An earlier attempt forced
+   width:auto !important, which outranked the portrait's own width:64% and
+   Elementor's per-widget icon sizing and blew both up to full size. */
+.elementor-widget-image .elementor-widget-container a {
+	display: block;
+	max-width: 100%;
+}
+.elementor-widget-image img {
+	max-width: 100%;
+	height: auto;
+}
+
+/* Home page skills strip: nine transparent hotspots laid over the one
+   flattened logo image, so each logo links to its tag without the artwork
+   being rebuilt out of lower-resolution pieces. Positions come from
+   mu-plugins/home-skills-strip.php and are percentages, so they track the
+   image at any width. */
+.skill-map {
+	position: relative;
+	display: inline-block;
+	max-width: 100%;
+	line-height: 0;
+}
+/* The strip's own artwork is a single flattened image at a fixed, wide
+   aspect ratio (chosen deliberately over a CSS grid of separate logos -
+   see mu-plugins/home-skills-strip.php's own reasoning) - it can only ever
+   render as wide as its card allows and exactly as tall as that width
+   divided by its own ratio, so making it feel less cramped on a phone
+   mostly comes down to letting it have as much of the card's width as
+   possible. The card's default side padding ate noticeably into that at
+   390px; trimming it is the whole available lever here without a second,
+   mobile-specific piece of artwork cut for a taller aspect ratio. */
+@media (max-width: 767px) {
+	.elementor-element-527045e {
+		padding-left: 6px !important;
+		padding-right: 6px !important;
+	}
+}
+
+/* Skills & Education, phones: let it breathe.
+
+   This section is its own full-screen chapter, but its contents were laid
+   out as if space were tight: about 500px of content in an 844px chapter,
+   with the logo card running flush to both screen edges, the paragraph
+   starting at the card's bottom border with no gap, 15px type on a 19px
+   line, no right-hand margin on that paragraph (its 25px of padding was on
+   the left only, so lines ran into the screen edge), and the button 10px
+   under the last line.
+
+   Now: 16px side gutters on the whole group so the card is inset like a
+   card, a 28px gap between the card and the paragraph, 8px more inside the
+   paragraph's own container on both sides (24px from the screen edge, same
+   as the card's inset plus a little), 16px type on a 1.65 line, and 24px
+   more above the button. The card's own 6px side padding above is kept, so
+   the logo strip stays as large as the 16px gutters allow.
+
+   !important: Elementor generates per-element padding, row-gap and font-size
+   for these exact containers and widgets. */
+@media (max-width: 767px) {
+	.elementor-1236 .elementor-element.elementor-element-636519e > .e-con-inner {
+		padding: 40px 16px 4px !important;
+		row-gap: 28px !important;
+	}
+	.elementor-1236 .elementor-element.elementor-element-d2ffcdc {
+		padding: 0 8px !important;
+	}
+	.elementor-1236 .elementor-element.elementor-element-6751a4b,
+	.elementor-1236 .elementor-element.elementor-element-6751a4b p {
+		font-size: 16px !important;
+		line-height: 1.65 !important;
+	}
+	.elementor-1236 .elementor-element.elementor-element-8c24b62 {
+		padding-top: 24px !important;
+	}
+}
+/* Short phones (360x640, 375x667): the roomy spacing above would make the
+   chapter taller than the screen, pushing "View More Skills" under the page
+   dots at the bottom. Same layout, tightened just enough to fit one screen. */
+@media (max-width: 767px) and (max-height: 720px) {
+	.elementor-1236 .elementor-element.elementor-element-636519e > .e-con-inner {
+		padding-top: 16px !important;
+		row-gap: 16px !important;
+	}
+	.elementor-1236 .elementor-element.elementor-element-527045e {
+		padding-top: 26px !important;
+		padding-bottom: 26px !important;
+	}
+	.elementor-1236 .elementor-element.elementor-element-6751a4b,
+	.elementor-1236 .elementor-element.elementor-element-6751a4b p {
+		font-size: 15px !important;
+		line-height: 1.55 !important;
+	}
+	.elementor-1236 .elementor-element.elementor-element-8c24b62 {
+		padding-top: 10px !important;
+	}
+}
+/* Smallest phones (320x568): a little tighter again. */
+@media (max-width: 767px) and (max-height: 600px) {
+	.elementor-1236 .elementor-element.elementor-element-636519e > .e-con-inner {
+		padding-top: 6px !important;
+		row-gap: 12px !important;
+	}
+	.elementor-1236 .elementor-element.elementor-element-527045e {
+		padding-top: 16px !important;
+		padding-bottom: 16px !important;
+	}
+	.elementor-1236 .elementor-element.elementor-element-6751a4b,
+	.elementor-1236 .elementor-element.elementor-element-6751a4b p {
+		font-size: 14px !important;
+		line-height: 1.5 !important;
+	}
+	.elementor-1236 .elementor-element.elementor-element-8c24b62 {
+		padding-top: 4px !important;
+	}
+}
+.skill-map .skill-hit {
+	position: absolute;
+	display: block;
+	border-radius: 7px;
+	/* a hair of inset so neighbouring hotspots never touch */
+	margin: 1.5%;
+	transition: background-color 0.2s ease, transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.skill-map .skill-hit:hover,
+.skill-map .skill-hit:focus-visible {
+	background-color: rgba(91, 127, 255, 0.16);
+	transform: translateY(-2px);
+	outline: none;
+}
+.skill-map .skill-hit:focus-visible {
+	box-shadow: 0 0 0 2px #5B7FFF;
+}
+
+/* ---------------------------------------------------------------------------
+   One background for the whole site.
+
+   Every page was painting its own background in bands: most top-level
+   sections carried background-color #0F1B33, two on the home page carried
+   #1D2735 (the lighter strip behind the five discipline tiles), and a
+   scattering carried background images - bg.jpg on About Me and Skills &
+   Tools, Header-All.jpg and formbg.jpg on the home page, a box-pattern
+   overlay on Backpacking. Each of those is a hard-edged rectangle, so the
+   page read as a stack of slightly different navies with visible seams.
+
+   The previous attempt at a continuous wash painted one fixed-attachment
+   gradient onto every top-level section. It could not work, because
+   Elementor lazy-loads container backgrounds with
+
+       .e-con.e-parent:nth-of-type(n+4):not(.e-lazyloaded) {
+           background-image: none !important; }
+
+   at specificity (0,5,0) - which outranks a section-targeting rule and
+   blanks the gradient on everything from the fourth section down until its
+   JS adds .e-lazyloaded on scroll. That is why the wash only ever showed in
+   the first couple of sections and then appeared to switch on mid-scroll.
+
+   So the background is no longer a section background at all. It is one
+   fixed, viewport-sized layer behind the whole document, painted once on
+   body::before, and every top-level section is made transparent so that
+   layer shows through unbroken. Nothing is tied to section boundaries,
+   page length or scroll position, so all pages share the identical field
+   and there is nothing left to seam. Being a positioned element rather
+   than background-attachment:fixed, it also behaves on iOS, which ignores
+   fixed attachment - the old rule had to fall back to a per-section
+   repeat below 1024px, which re-introduced the banding on phones.
+
+   Base is #0F1B33 because the hero fades out to exactly that colour
+   (.hx::after in hero.css), so the PCB animation hands off to the shared
+   field invisibly. Inner containers keep their own backgrounds - the cards
+   at #0C1729 are meant to read as cards sitting on this surface.
+   --------------------------------------------------------------------------- */
+body {
+	/* also the overscroll/rubber-band colour, which used to be a lighter
+	   #13213D that flashed at the top and bottom of a scroll */
+	background-color: #0F1B33 !important;
+}
+
+/* NOTE (2026-10-07): the quiet field below and the "two-layer parallax"
+   body::after further down are the DEFAULT, and are now overridden on every
+   front-end page by the scroll-linked blue glows in
+   mu-plugins/site-backdrop/backdrop.css (selectors `html body::before/after`,
+   which win regardless of load order). They only show if that plugin is
+   missing, e.g. after a transfer that leaves out mu-plugins. The contrast
+   reasoning in the comments here (a ceiling of ~0.05 alpha, links at 4.84:1)
+   is superseded by the audit in backdrop.css: no small #5B7FFF text sits
+   directly on the field. */
+body::before {
+	content: "";
+	position: fixed;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+	background-color: #0F1B33;
+	/* Kept deliberately quiet across the top of the viewport. The field is
+	   fixed, so its top edge is always behind the site header - and on the
+	   home page the header sits directly above the hero's own dark panel.
+	   A bright stop up there (the first gradient used to sit at 8% from the
+	   top) lit the header and left a visible step where the hero began. */
+	/* Alphas are capped by contrast, not taste. Body copy carries #5B7FFF
+	   links, which sit at 4.84:1 against the #0F1B33 base - only just above
+	   the 4.5:1 floor. Every unit the wash lightens the background eats into
+	   that margin, and a blue wash eats it fastest: at the 0.17 this field
+	   started with, links fell to 3.97:1. Measured, the ceiling for a blue
+	   stop is ~0.05 before the page stops meeting AA, so the wash is a tint
+	   you feel rather than a glow you look at.
+
+	   Only two of the original four gradients live here now - see "two-layer
+	   parallax" below for where the other two went and why. These are the
+	   pair already tuned closest to the header, so they keep the smaller,
+	   slower drift. */
+	background-image:
+		radial-gradient(70% 50% at 8% 40%,  rgba(91, 127, 255, 0.045), transparent 72%),
+		radial-gradient(58% 44% at 92% 30%, rgba(79, 207, 156, 0.035), transparent 74%);
+}
+
+/* Two-layer parallax.
+
+   The other two gradients from the field above, on their own pseudo-element
+   so they can move at a different rate from the first two. body::after sits
+   painted on top of body::before (same negative z-index, and generated
+   content breaks z-index ties in tree order, so the later box - ::after -
+   wins) while both stay behind every real element on the page, which is
+   still only z-index:auto.
+
+   This exists because distance alone turned out not to read as motion here.
+   The first version of this drift moved a single layer by up to 80px at
+   full scroll and was measured - by sampling the rendered background at
+   fixed canvas points across the scroll range - to shift the actual pixel
+   colour by about 1 unit per channel, because every gradient's peak alpha
+   is capped at ~0.045 by the contrast budget above: even standing exactly
+   on a blob's hottest point, the composited colour is only a few units off
+   the base. No amount of panning a near-invisible tint makes it more
+   visible. What the eye does pick up readily is two such tints sliding past
+   each other at different speeds - relative motion between layers reads as
+   depth even when neither layer alone would register, which is the same
+   reason dashboard parallax backgrounds use several thin layers instead of
+   one bold one. Nothing here raises any gradient's alpha, so the contrast
+   analysis above is untouched by this - it is a redistribution of the same
+   four gradients across two elements, not a brighter field. */
+body::after {
+	content: "";
+	position: fixed;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+	background-color: transparent;
+	background-image:
+		radial-gradient(75% 55% at 22% 88%, rgba(91, 127, 255, 0.040), transparent 74%),
+		radial-gradient(55% 45% at 85% 94%, rgba(76, 198, 245, 0.030), transparent 76%);
+}
+
+/* Top-level sections - page content, header and footer alike - go
+   transparent so the shared field is what you actually see. Scoped to
+   .e-parent so inner containers (cards, tiles, the certification panels)
+   keep their own fills.
+
+   Matched at any depth rather than as a direct child: on the home page
+   portfolio-chapters wraps these same sections in .ch elements, and a
+   child combinator here would stop matching the moment it did, bringing
+   every section's own background back as a band. .e-parent is only ever
+   put on top-level sections, so depth does not loosen what this selects. */
+body .elementor .e-con.e-parent {
+	background-color: transparent !important;
+	background-image: none !important;
+}
+
+/* Elementor renders a section's "background overlay" as its own absolutely
+   positioned child, so clearing the section's background leaves the overlay
+   behind - the box-pattern on Backpacking and the bg.jpg washes on Skills &
+   Tools are overlays rather than backgrounds. */
+body .elementor .e-con.e-parent > .elementor-background-overlay {
+	display: none !important;
+}
+
+/* ...and the same overlay drawn the other way. The rule above only reaches
+   an overlay that is a real child element. Containers whose overlay is set
+   in the Elementor editor draw it on their ::before pseudo-element instead,
+   which a child selector cannot match - so three sections kept painting the
+   old textures at 50% opacity straight through the clean background above:
+   the box-pattern and glow behind the Backpacking text on About Me, and the
+   bg.jpg wash behind the credential cards and the Full Academic History
+   button on Skills & Education. On the latter it showed as a lighter band
+   with a hard edge exactly where the banner section ends and the cards
+   section begins (measured: rgb(18,31,59) above the edge, rgb(26,33,57)
+   below it). Audited every top-level section on the home, About Me, Skills,
+   Projects, the four category pages, a project page and a tag page: those
+   three are the only ones that paint one. */
+body .elementor .e-con.e-parent::before {
+	background-image: none !important;
+	background-color: transparent !important;
+	/* The overlay is decoration and now paints nothing, but the box is still
+	   there: it covers the whole container, and where a container is flattened
+	   with display: contents (the Education chapter's "Full Academic History"
+	   section) its ::before is laid out against the chapter instead, on top of
+	   the credential cards - which swallowed every click on their links.
+	   Taking it out of hit-testing leaves the links clickable. */
+	pointer-events: none !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Fields of Interest cards: image left, text right, two per row.
+
+   Replaces the earlier image-on-top card with a media-object layout (image
+   as a left column, heading + description stacked in a column to its
+   right), and changes how the categories tile: Robotics has four cards, so
+   it becomes a 2x2 grid; Programming and Electrical / Embedded have two
+   cards each, so each becomes a single column of two, with the two
+   categories sitting side by side the way they already did. Every card
+   therefore ends up roughly the same width regardless of which category
+   it's in - a Robotics card is one grid column of the full-width row, and a
+   Programming/Electrical card is the single column of its half-width row.
+
+   Desktop/tablet only (min-width: 768px). Below that every one of these
+   groups is already a horizontal swipe carousel (see further down this
+   file) with each card as a full-ish-width slide - there isn't room for a
+   left-hand image column at that size without crowding the text, and the
+   carousel cards weren't part of this request, so they keep the image-on-
+   top layout they already have.
+
+   The card markup is just three sibling widgets (image, heading,
+   text-editor) inside each card container - no Elementor restructuring
+   needed, CSS Grid placement does the image-left/text-right split directly
+   on those three existing children. Selectors are written against the
+   three card containers generically (not per-card id) so this applies
+   uniformly to every card in all three categories.
+
+   First version of this made the image stretch (height:100%, grid-row:1/3)
+   to exactly match whatever height the heading+text column needed, flush to
+   the card's edges. That turned out to crop badly: these photos are 574x320
+   (1.79:1, landscape) and the card's natural text-driven height put the
+   image box at roughly 150x235 (0.64:1, portrait) - object-fit:cover had to
+   throw away about 64% of the image's width to fill that, and several of
+   these images carry baked-in titles/captions near their edges (e.g. "Trail
+   Segmentation With Polynomial-fit Centreline and Nav. Waypoint"), which
+   were simply cut off.
+
+   Fixed by decoupling the image's box from the text column's height: the
+   image now gets a fixed width with aspect-ratio: 574/320 (its own native
+   ratio, so object-fit:cover has essentially nothing to crop) and sits
+   top-aligned next to the heading, rather than stretched to span down to
+   wherever the description happens to end. The card gets real padding
+   instead of the image bleeding to its edges, since the image is no longer
+   guaranteed to reach the card's bottom edge on its own.
+   --------------------------------------------------------------------------- */
+@media (min-width: 768px) {
+	/* Robotics - 2x2 grid */
+	.elementor-1236 .elementor-element.elementor-element-b49e282 {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 20px 24px;
+	}
+	.elementor-1236 .elementor-element.elementor-element-b49e282 > .elementor-element {
+		width: auto;
+	}
+
+	/* Programming | Electrical - two labelled halves sharing one row, as
+	   before - this part is unchanged. */
+	.elementor-1236 .elementor-element.elementor-element-dddc274,
+	.elementor-1236 .elementor-element.elementor-element-8bd69ab {
+		flex: 1 1 0;
+		min-width: 0;
+		width: auto;
+	}
+
+	/* ...but within each half, its two cards now stack instead of sitting
+	   side by side - at half the row's width there isn't room for two
+	   image-left/text-right cards next to each other, and stacking keeps
+	   each card the same width as a Robotics card above. */
+	.elementor-1236 .elementor-element.elementor-element-a4a66e7,
+	.elementor-1236 .elementor-element.elementor-element-ee67158 {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+	.elementor-1236 .elementor-element.elementor-element-a4a66e7 > .elementor-element,
+	.elementor-1236 .elementor-element.elementor-element-ee67158 > .elementor-element {
+		width: auto;
+	}
+
+	/* Card internals: the subject title runs across the whole card on a
+	   row of its own (centred, so even "Embedded Systems & Prototyping" fits
+	   on one line), and below it the photo sits beside the description.
+	   Padding replaces the old flush-to-edge image, so the card's own
+	   border-radius + overflow:hidden is no longer what clips the photo - the
+	   image gets a smaller radius of its own instead. The rows hug their
+	   content (no stretching), which is what keeps the cards from being
+	   taller than what's in them. */
+	.elementor-1236 .elementor-element.elementor-element-b49e282 > .elementor-element,
+	.elementor-1236 .elementor-element.elementor-element-a4a66e7 > .elementor-element,
+	.elementor-1236 .elementor-element.elementor-element-ee67158 > .elementor-element {
+		display: grid !important;
+		grid-template-columns: 230px 1fr;
+		/* title row at the top of every card, so titles in the same row of
+		   cards line up; the photo + text row takes the rest and centres */
+		grid-template-rows: auto 1fr;
+		column-gap: 20px;
+		row-gap: 12px !important;
+		align-items: center;
+		padding: 18px;
+	}
+	.elementor-1236 .elementor-element.elementor-element-b49e282 > .elementor-element > .elementor-widget-image,
+	.elementor-1236 .elementor-element.elementor-element-a4a66e7 > .elementor-element > .elementor-widget-image,
+	.elementor-1236 .elementor-element.elementor-element-ee67158 > .elementor-element > .elementor-widget-image {
+		grid-column: 1;
+		grid-row: 2;
+		margin: 0 !important;
+	}
+	.elementor-1236 .elementor-element.elementor-element-b49e282 > .elementor-element > .elementor-widget-image img,
+	.elementor-1236 .elementor-element.elementor-element-a4a66e7 > .elementor-element > .elementor-widget-image img,
+	.elementor-1236 .elementor-element.elementor-element-ee67158 > .elementor-element > .elementor-widget-image img {
+		width: 100%;
+		height: auto;
+		/* Every card photo is shown at 3:2 (the shape the covers are now
+		   prepared in), so object-fit:cover has nothing or almost nothing
+		   to trim. */
+		aspect-ratio: 3 / 2;
+		object-fit: cover;
+		display: block;
+		border-radius: 6px;
+	}
+	/* Hardware & Power Systems and Machine Learning used to carry 574x320
+	   crops of much taller originals (a stacked two-layer PCB diagram and a
+	   flags+neural-net diagram), cropped from the top down to fit this box -
+	   the 574/320 assumption above held for every other card's photo but not
+	   these two, and the crop cut off the bottom half of both: the PCB's
+	   second layer, and the entire neural-net portion of the ML graphic. Both
+	   cards now use different, already-landscape photos (2026-10-25 Homepage
+	   batch: the PCB top-layer crop and the LEDNet architecture diagram, both
+	   closer to the 574/320 box than the originals these overrides were
+	   written for), so the portrait aspect-ratio these two cards used to need
+	   is gone - back to the generic rule above, no override here. */
+	.elementor-1236 .elementor-element.elementor-element-b49e282 > .elementor-element > .elementor-widget-heading,
+	.elementor-1236 .elementor-element.elementor-element-a4a66e7 > .elementor-element > .elementor-widget-heading,
+	.elementor-1236 .elementor-element.elementor-element-ee67158 > .elementor-element > .elementor-widget-heading {
+		grid-column: 1 / -1;
+		grid-row: 1;
+		margin: 0 !important;
+	}
+	/* Beats the Fields of Interest left-align rule further down (that one is
+	   for the descriptions beside the photo); the title is centred across the
+	   card instead. */
+	.elementor-1236 :is(.elementor-element-b49e282, .elementor-element-a4a66e7, .elementor-element-ee67158) > .elementor-element > .elementor-widget-heading :is(.elementor-widget-container, .elementor-heading-title) {
+		text-align: center !important;
+	}
+	.elementor-1236 .elementor-element.elementor-element-b49e282 > .elementor-element > .elementor-widget-text-editor,
+	.elementor-1236 .elementor-element.elementor-element-a4a66e7 > .elementor-element > .elementor-widget-text-editor,
+	.elementor-1236 .elementor-element.elementor-element-ee67158 > .elementor-element > .elementor-widget-text-editor {
+		grid-column: 2;
+		grid-row: 2;
+		margin: 0 !important;
+	}
+	.elementor-1236 :is(.elementor-element-b49e282, .elementor-element-a4a66e7, .elementor-element-ee67158) > .elementor-element > .elementor-widget-text-editor p:last-child {
+		margin-bottom: 0;
+	}
+}
+
+/* ---------------------------------------------------------------------------
+   Horizontal snap carousels on phones.
+
+   Every media group in the home page's Fields of Interest and the
+   Certifications row becomes one swipeable track instead of a tall stack.
+   Native scroll-snap only, same approach already used for Highlighted
+   Projects - no JS, each slide is its own snap target, and holding slides
+   under full width leaves the next one peeking so the track reads as
+   swipeable rather than accidentally clipped. (About Me's three media groups
+   use the same track styling but get it further down, scoped to their own
+   duplicate carousels rather than these originals.)
+
+   Two shapes of container are involved. The "full" ones hold their cards as
+   direct children, so they scroll themselves. The "boxed" one (3d1b82f)
+   wraps its cards in an .e-con-inner that carries the max-width, so
+   scrolling has to move to that wrapper - setting overflow on the outer
+   element there would do nothing, since it is the inner one that is too
+   wide.
+   --------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+	/* --- full-width containers: the element itself is the track --- */
+	.elementor-1236 .elementor-element.elementor-element-b49e282,   /* Robotics */
+	.elementor-1236 .elementor-element.elementor-element-a4a66e7,   /* Programming */
+	.elementor-1236 .elementor-element.elementor-element-ee67158,   /* Electrical / Embedded */
+	/* Mechanical (c96428e) isn't here - it has its own dedicated mobile
+	   carousel rule above now that it carries a text slide between its two
+	   images, which needs its own border/padding/centring that a shared
+	   !important rule here would fight. */
+	/* --- boxed container: the inner wrapper is the track --- */
+	.elementor-2064 .elementor-element.elementor-element-3d1b82f > .e-con-inner {  /* Certifications & Education */
+		display: flex !important;
+		flex-direction: row !important;
+		flex-wrap: nowrap !important;
+		/* stretch, not center: every slide in a track takes the height of the
+		   tallest one in that track, so the row reads as a set of matching
+		   cards instead of a ragged skyline (Robotics was 358/341/471/471px,
+		   the Education cards 319-417px). Same fix, and same reasoning, as
+		   Highlighted Projects' track further up. Slide contents stay
+		   top-aligned, so photos and headings line up from card to card and
+		   any spare height collects at the bottom of the shorter cards. */
+		align-items: stretch !important;
+		/* Elementor's own container setting is center, which is fine while
+		   everything fits - but once the track overflows, a centered flex
+		   container only ever becomes scrollable on its end (right) side; the
+		   first slides get pushed into negative, unreachable scroll positions
+		   (scrollLeft can't go negative) and are permanently unswipeable. */
+		justify-content: flex-start !important;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		-webkit-overflow-scrolling: touch;
+		gap: 14px;
+		/* room for the card lift shadow instead of clipping it */
+		padding: 4px 4px 10px;
+		scrollbar-width: none;
+	}
+
+	.elementor-1236 .elementor-element.elementor-element-b49e282::-webkit-scrollbar,
+	.elementor-1236 .elementor-element.elementor-element-a4a66e7::-webkit-scrollbar,
+	.elementor-1236 .elementor-element.elementor-element-ee67158::-webkit-scrollbar,
+	.elementor-2064 .elementor-element.elementor-element-3d1b82f > .e-con-inner::-webkit-scrollbar {
+		display: none;
+	}
+
+	/* the boxed outer element must not clip the track it now contains */
+	.elementor-2064 .elementor-element.elementor-element-3d1b82f {
+		display: block !important;
+		overflow: visible;
+	}
+
+	/* slides */
+	.elementor-1236 .elementor-element.elementor-element-b49e282 > .elementor-element,
+	.elementor-1236 .elementor-element.elementor-element-a4a66e7 > .elementor-element,
+	.elementor-1236 .elementor-element.elementor-element-ee67158 > .elementor-element,
+	.elementor-2064 .elementor-element.elementor-element-3d1b82f > .e-con-inner > .elementor-element {
+		flex: 0 0 82% !important;
+		width: 82% !important;
+		max-width: 82% !important;
+		scroll-snap-align: center;
+		margin: 0 !important;
+	}
+
+	/* Read order on the swipe track: Master's first, then the rest of the
+	   degrees/certifications in chronological order, Engineers Australia
+	   last - independent of the 3+2 grid order on larger screens. */
+	.elementor-2064 .elementor-element.elementor-element-certcard1 { order: 0; }
+	.elementor-2064 .elementor-element.elementor-element-certcard2 { order: 1; }
+	.elementor-2064 .elementor-element.elementor-element-certcard3 { order: 2; }
+	.elementor-2064 .elementor-element.elementor-element-certcard4 { order: 3; }
+	.elementor-2064 .elementor-element.elementor-element-eacard01  { order: 4; }
+}
+
+/* ---------------------------------------------------------------------------
+   About Me: three mobile-only "duplicate" carousels.
+
+   Lead photos, Backpacking Adventures and Hobbies each lay their media out
+   in a desktop shape a single flex row can't reproduce (a photo stacked
+   under text beside a separate tall column; a 2-photo row beside text above
+   a full-width 3-photo row; photos under text beside a stacked video
+   column). Rather than compromise the desktop layout to get one mobile
+   track, the duplicate image/video widgets added to leadcaro1 / bpcaro1 /
+   hbcaro1 are hidden on desktop and shown only on mobile, where the
+   corresponding originals are hidden instead - each shape stays intact
+   independently.
+   --------------------------------------------------------------------------- */
+.elementor-element-leadcaro1,
+.elementor-element-bpcaro1,
+.elementor-element-hbcaro1 {
+	display: none;
+}
+
+@media (max-width: 767px) {
+	/* hide the desktop-only originals whose duplicates now carry the track */
+	.elementor-element-017f0e6,          /* Graduation's own column */
+	.elementor-element-b23b5fc,          /* Backpacking 2-photo row */
+	.elementor-element-ddced6c,          /* Backpacking 3-photo row */
+	.elementor-element-c7a52fc,          /* Hobbies photos */
+	.elementor-element-e981587 {         /* Hobbies videos */
+		display: none !important;
+	}
+
+	.elementor-element-leadcaro1,
+	.elementor-element-bpcaro1,
+	.elementor-element-hbcaro1 {
+		display: flex !important;
+		flex-direction: row !important;
+		flex-wrap: nowrap !important;
+		align-items: center !important;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		-webkit-overflow-scrolling: touch;
+		gap: 14px;
+		padding: 4px 4px 10px;
+		scrollbar-width: none;
+	}
+	.elementor-element-leadcaro1::-webkit-scrollbar,
+	.elementor-element-bpcaro1::-webkit-scrollbar,
+	.elementor-element-hbcaro1::-webkit-scrollbar {
+		display: none;
+	}
+
+	.elementor-element-leadcaro1 > .elementor-element,
+	.elementor-element-bpcaro1 > .elementor-element,
+	.elementor-element-hbcaro1 > .elementor-element {
+		flex: 0 0 82% !important;
+		width: 82% !important;
+		max-width: 82% !important;
+		scroll-snap-align: center;
+		margin: 0 !important;
+	}
+}
+
+/* ---------------------------------------------------------------------------
+   Background drift.
+
+   The field is fixed to the viewport, which is what makes it seamless, but
+   it also means it is completely static while the page moves - on a long
+   page that reads as a flat backdrop rather than depth. Drifting it over
+   the full scroll gives parallax against the content without ever becoming
+   motion in its own right - this is the direct answer to "the background
+   should shift/scroll slightly as you progress further down the page".
+
+   Two speeds, one per layer (see the two-layer parallax comment by
+   body::after above for why this is two layers rather than one moving
+   further): body::after, the near layer, travels -9vh/-3vw over the full
+   scroll; body::before, the far layer, travels about a third of that. The
+   gap between them is what reads as motion - sampling the rendered
+   background at fixed canvas points showed that either layer moving alone,
+   even the full -9vh/-3vw distance, shifts the actual pixel colour by
+   about 1 unit per channel (every gradient's peak alpha is capped at
+   ~0.045 by the contrast budget on body::before above, so even its hottest
+   point is only a few units off the base colour - no distance makes a
+   near-invisible tint more visible by itself). Two such tints sliding past
+   each other at different speeds is a relative-motion cue instead of a
+   raw-colour one, and the eye picks that up readily even though neither
+   layer would register alone.
+
+   Two implementations of the same movement. Where scroll-driven animations
+   exist the browser runs it off the main thread from the scroll position
+   directly, so it cannot stutter even while the main thread is busy. The
+   fallback reads a custom property that chapters.js updates in a
+   rAF-throttled scroll handler.
+
+   Scale grows alongside the translate rather than being fixed, because a
+   fixed, position:fixed layer that exactly fills the viewport has zero
+   margin to translate into - any movement at all would drag its edge into
+   view. Each layer's end scale is sized to its own travel distance with a
+   safety margin: margin on each side works out to (scale-1)/2 of the
+   viewport in that axis, so the near layer's 1.26 gives ~13vh of vertical
+   headroom against its 9vh move and the far layer's 1.12 gives ~6vh
+   against its 4vh move - both with room to spare. Transform-only, so it
+   stays on the compositor - the same constraint the hero animation is
+   built around. */
+body::before {
+	transform: translate3d(calc(var(--ch-sp, 0) * -1.5vw), calc(var(--ch-sp, 0) * -4vh), 0)
+		scale(calc(1.01 + var(--ch-sp, 0) * 0.11));
+	/* the scale makes this a raster-scaled layer; pinning the quality hint
+	   keeps the soft gradients from being re-rasterised each frame */
+	will-change: transform;
+}
+
+body::after {
+	transform: translate3d(calc(var(--ch-sp, 0) * -3vw), calc(var(--ch-sp, 0) * -9vh), 0)
+		scale(calc(1.02 + var(--ch-sp, 0) * 0.24));
+	will-change: transform;
+}
+
+@supports (animation-timeline: scroll()) {
+	body::before {
+		animation: bgDriftFar linear both;
+		animation-timeline: scroll(root block);
+	}
+	body::after {
+		animation: bgDriftNear linear both;
+		animation-timeline: scroll(root block);
+	}
+}
+
+@keyframes bgDriftFar {
+	from {
+		transform: translate3d(0, 0, 0) scale(1.01);
+	}
+	to {
+		transform: translate3d(-1.5vw, -4vh, 0) scale(1.12);
+	}
+}
+
+@keyframes bgDriftNear {
+	from {
+		transform: translate3d(0, 0, 0) scale(1.02);
+	}
+	to {
+		transform: translate3d(-3vw, -9vh, 0) scale(1.26);
+	}
+}
+
+/* ---------------------------------------------------------------------------
+   About Me discipline tiles (Robotics, Machine Learning, Data Science,
+   Software Development, Mechatronics Design).
+
+   The five tiles exist twice in the page: 745a720 laid out as a desktop row
+   and 9a6929a for tablet/phone widths.
+
+   Phones: the row is removed outright. It used to be a swipe carousel of
+   label-only tiles, which was one more thing to scroll past in a section
+   whose job is the photo and the paragraph, and the same five fields are
+   covered properly further down the page. (The chapter and swipe-indicator
+   scripts both look this container up by id and skip it harmlessly when it
+   isn't rendered.)
+
+   Tablet and desktop: still an icon and a label for each field, but no
+   longer five bordered, shadowed, gradient-filled cards butted edge to edge
+   - they read as a row of buttons, and a crowded one. Nothing here is a
+   link, so the card chrome was promising a click that never came. Stripped
+   to the bare icon and label, they read as a quiet row of captions. The
+   zero-gap row and each tile's own padding are left alone, so the five
+   columns stay evenly spaced exactly as before.
+
+   !important throughout: these tiles carry Elementor's own generated
+   per-element background, border, radius and hover-shadow rules, which are
+   authored per id and would otherwise win on specificity.
+   --------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+	.elementor-1236 .elementor-element.elementor-element-9a6929a {
+		display: none !important;
+	}
+}
+@media (min-width: 768px) {
+	.elementor-1236 .elementor-element.elementor-element-95f378a,   /* desktop row */
+	.elementor-1236 .elementor-element.elementor-element-fe0eff4,
+	.elementor-1236 .elementor-element.elementor-element-c45bac5,
+	.elementor-1236 .elementor-element.elementor-element-dc0e4b6,
+	.elementor-1236 .elementor-element.elementor-element-a8aa5b5,
+	.elementor-1236 .elementor-element.elementor-element-4ffc42e,   /* tablet row */
+	.elementor-1236 .elementor-element.elementor-element-e8e2b1e,
+	.elementor-1236 .elementor-element.elementor-element-57c3370,
+	.elementor-1236 .elementor-element.elementor-element-43fefad,
+	.elementor-1236 .elementor-element.elementor-element-d7ca9dc {
+		background: none !important;
+		background-color: transparent !important;
+		background-image: none !important;
+		border: 0 !important;
+		border-radius: 0 !important;
+		box-shadow: none !important;
+	}
+}
+
+/* ---------------------------------------------------------------------------
+   A subtle gradient on every card, instead of a flat fill.
+
+   Every repeating content tile on the site - the Fields of Interest cards,
+   Highlighted Projects cards, the
+   Skills & Tools category boxes, the project gallery tiles - shares the same
+   #0C1729 flat background colour. One gradient recipe, applied consistently
+   everywhere that colour is used as a card fill, reads as a deliberate
+   design language rather than N separate decisions; a different gradient
+   per section would have looked like noise instead.
+
+   background-image rather than replacing background-color: Elementor's own
+   per-element rule sets background-color, and image paints over colour
+   without needing to fight that rule or !important it away - colour stays
+   as the solid fallback immediately behind the gradient, same value it is
+   today, so nothing changes if gradients are ever unsupported. These are
+   all nested "e-child" containers, not the top-level "e-parent" sections
+   the sitewide background work earlier zeroed background-image on, so nothing
+   here fights that rule either.
+
+   Direction and stops: 145deg (soft light from the upper-left) with the
+   lightest stop capped well short of "noticeable" - #132037 is only one
+   step up from the base #0C1729, chosen by measuring the point where it
+   would start costing AA contrast rather than by eye. Body copy on these
+   cards carries #5B7FFF links at 5.06:1 against the base colour; every step
+   the gradient lightens eats into that margin, and by the base colour's own
+   lightest-safe point (~45% toward a lighter navy) it drops under 4.5:1.
+   #132037 sits at 4.59:1, with a bit of headroom rather than right at the
+   line. The dark stop (#0A1420) raises contrast rather than lowering it, so
+   it carried no such limit.
+   --------------------------------------------------------------------------- */
+.elementor-1236 .elementor-element.elementor-element-2fae975,   /* Fields of Interest - Robotics */
+.elementor-1236 .elementor-element.elementor-element-8347b1f,
+.elementor-1236 .elementor-element.elementor-element-47b1f64,
+.elementor-1236 .elementor-element.elementor-element-6731295,
+.elementor-1236 .elementor-element.elementor-element-733433c,   /* Fields of Interest - Programming */
+.elementor-1236 .elementor-element.elementor-element-181f715,
+.elementor-1236 .elementor-element.elementor-element-a318fdc,   /* Fields of Interest - Electrical / Embedded */
+.elementor-1236 .elementor-element.elementor-element-90225b7,
+.elementor-2064 .elementor-element.elementor-element-e1115f5,   /* Skills & Tools - category boxes */
+.elementor-2064 .elementor-element.elementor-element-7b6cb9e,
+.elementor-2064 .elementor-element.elementor-element-0b96bbd,
+.elementor-2064 .elementor-element.elementor-element-a85d83e,
+.elementor-2064 .elementor-element.elementor-element-27199d5,
+.elementor-2064 .elementor-element.elementor-element-a41d736,
+.elementor-1236 .elementor-element.elementor-element-527045e,  /* Home: tool-logo strip card */
+.elementor-post,            /* Highlighted Projects cards, every page that uses this widget */
+.project-gallery__item {    /* every project detail page's media gallery tiles */
+	background-image: linear-gradient(145deg, #132037 0%, #0C1729 55%, #0A1420 100%);
+	/* Rounder corners and a resting drop shadow, matching the reference at
+	   https://praveengongada.com/ (16px/rounded-2xl cards with a soft offset
+	   shadow) - every card on this list previously had either no radius rule
+	   reaching it at all (so it inherited Elementor's flatter 4-8px default)
+	   or an 8px rule of its own, both now superseded here. !important:
+	   several of these same widgets carry Elementor's own generated
+	   per-element border-radius, which would otherwise win on specificity
+	   since it's authored per element id. The shadow's own dark, low-opacity
+	   values read as lift against this site's navy rather than the grey
+	   halo a lighter shadow would leave - the same reasoning the hover glow
+	   below already uses for this exact element group. */
+	border-radius: 16px !important;
+	box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.45), 0 8px 16px -8px rgba(0, 0, 0, 0.3);
+}
+
+/* Card text is centred - except the Fields of Interest cards.
+
+   Every card's text was left-aligned: the project cards (Feature Projects on
+   the home page, every project listing and the My Projects tabs), the Fields
+   of Interest cards, the Certifications & Education cards, and the tag and
+   search result cards. The Mechanical card and the mobile skill boxes were
+   already centred. The owner then asked for card text to be centred and,
+   separately, for the Fields of Interest text to be left-aligned, so those
+   three cards (Robotics, Programming, Electrical / Embedded) are explicitly
+   left-aligned below; the Mechanical card, in the same section, stays
+   centred as it was specifically asked to be.
+
+   !important and the child selectors: Elementor writes its own alignment per
+   element (and per widget wrapper), at higher specificity than a single class
+   could beat, and its widgets nest the text a few wrappers deep. */
+.elementor-post__text,
+.elementor-post__text :is(.hp-card-cat, .elementor-post__title, .elementor-post__title a, .elementor-post__excerpt, .elementor-post__excerpt p, .elementor-post__read-more-wrapper, .elementor-post__read-more) {
+	text-align: center !important;
+}
+.elementor-1236 :is(.elementor-element-b49e282, .elementor-element-a4a66e7, .elementor-element-ee67158) > .elementor-element :is(.elementor-widget-heading, .elementor-widget-text-editor, .elementor-heading-title, .elementor-widget-container, p, h5) {
+	text-align: left !important;
+}
+.elementor-2064 .elementor-element-3d1b82f > .e-con-inner > .elementor-element :is(.elementor-widget-heading, .elementor-widget-text-editor, .elementor-heading-title, .elementor-widget-container, p, h5) {
+	text-align: center !important;
+}
+.project-archive__card-body,
+.project-archive__card-body > * {
+	text-align: center;
+}
+/* the skill category name (in its own left column on desktop, above its pills on phones) */
+.elementor-2064 :is(.elementor-element-e1115f5, .elementor-element-7b6cb9e, .elementor-element-0b96bbd, .elementor-element-a85d83e, .elementor-element-27199d5, .elementor-element-a41d736) > .elementor-element:first-child,
+.elementor-2064 :is(.elementor-element-e1115f5, .elementor-element-7b6cb9e, .elementor-element-0b96bbd, .elementor-element-a85d83e, .elementor-element-27199d5, .elementor-element-a41d736) > .elementor-element:first-child .elementor-heading-title {
+	text-align: center !important;
+}
+
+/* Home page tool-logo strip: flat fill, not the card gradient.
+
+   The strip is a single flattened image (uploads/2025/12/skilla.jpg) whose
+   own backdrop is one flat #0C1729 - sampled identical at every corner and
+   gap. Sitting on the gradient above (#132037 at the top-left corner down
+   to #0A1420 at the bottom-right), that flat rectangle is a different shade
+   from the card behind it at every point but the middle, which showed as a
+   faint box inside the card around the logos. The card is the same
+   #0C1729 here, so the image's backdrop and the card are one surface and
+   the logos simply sit on the card. Border, radius and shadow still come
+   from the rule above, so it keeps the same outline as its neighbours. */
+.elementor-1236 .elementor-element.elementor-element-527045e {
+	background-image: none !important;
+	background-color: #0C1729 !important;
+}
+
+/* The Certifications & Education cards (eacard01, certcard1-4) never had any
+   fill or border at all - unlike every other card on the site, they were
+   transparent boxes relying on their logo image alone. Brought in line with
+   the rest of the card language here rather than just given the gradient,
+   since "no box" next to "gradient box" would have been a bigger visual
+   mismatch than the flat-fill one this whole change is fixing.
+
+   !important on the gradient specifically: Elementor's own per-widget CSS
+   for these sets background-image:none at the same specificity and loads
+   after this file, which otherwise wins that one property while
+   background-color (not contested the same way) still applies - the cards
+   end up flat-filled instead of gradient-filled, invisibly matching the
+   color this rule intended to move them away from. */
+.elementor-2064 .elementor-element.elementor-element-eacard01,
+.elementor-2064 .elementor-element.elementor-element-certcard1,
+.elementor-2064 .elementor-element.elementor-element-certcard2,
+.elementor-2064 .elementor-element.elementor-element-certcard3,
+.elementor-2064 .elementor-element.elementor-element-certcard4 {
+	background-image: linear-gradient(145deg, #132037 0%, #0C1729 55%, #0A1420 100%) !important;
+	background-color: #0C1729;
+	border: 1px solid #42597F;
+	border-radius: 16px;
+	box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.45), 0 8px 16px -8px rgba(0, 0, 0, 0.3);
+	padding: 18px;
+}
+
+/* About Me, Hobbies section (desktop): the left column (heading + text +
+   2-photo row) sits beside a 3-video stack on the right that's taller than
+   it, so Elementor's flex default stretches the left column's own box to
+   match the row's full height - but that just enlarges the box, and the
+   box's own content (a column-direction flex stack) still anchors to its
+   top by default, leaving the extra height as dead space below. The result
+   reads as top-aligned against the top video rather than centred against
+   the row. justify-content is the main-axis (vertical, since this is a
+   column flex container) alignment for that content stack - centering it
+   within the already-stretched box is what lines the visible content's
+   centre up with the row's centre, i.e. the middle (2nd) video. */
+@media (min-width: 768px) {
+	.elementor-element-0e8288a {
+		justify-content: center !important;
+	}
+}
+
+/* Skills & Tools, desktop: category titles centred over their pills instead
+   of sitting left-aligned at the card's edge - the chip bar on mobile
+   already centres its own label on every chip, so this brings the desktop
+   heading in line with that rather than leaving it the odd one out. Scoped
+   to each category's own first child (the heading container) rather than
+   a bare heading selector, matching the pattern mu-plugins/skills-filter
+   already uses to hide that same element on mobile. */
+.elementor-2064 .elementor-element.elementor-element-e1115f5 > .elementor-element:first-child,
+.elementor-2064 .elementor-element.elementor-element-7b6cb9e > .elementor-element:first-child,
+.elementor-2064 .elementor-element.elementor-element-0b96bbd > .elementor-element:first-child,
+.elementor-2064 .elementor-element.elementor-element-a85d83e > .elementor-element:first-child,
+.elementor-2064 .elementor-element.elementor-element-27199d5 > .elementor-element:first-child,
+.elementor-2064 .elementor-element.elementor-element-a41d736 > .elementor-element:first-child {
+	text-align: center;
+}
+
+/* Pill rows: each row of 1-3 buttons is Elementor's own grid, but its
+   column count comes from the widget's responsive column setting (3), not
+   from how many pills actually landed in that particular row - a 2-pill
+   row still renders a 3-column grid with its last track empty, so even
+   centering the grid itself (justify-content on a grid container centers
+   the whole track area, phantom column included) still reads as
+   left-weighted. Flex instead of grid sizes to the pills actually present,
+   so centering has nothing phantom to center around.
+
+   Desktop only (min-width: 768px): these same row containers are exactly
+   what mu-plugins/skills-filter/skills-filter.css sets to display:contents
+   on mobile, to flatten every pill into the category's own 2-column grid
+   for the tap-to-filter view - an unscoped display:flex here would fight
+   that at the same !important weight and break the mobile grid. */
+@media (min-width: 768px) {
+	.elementor-2064 .elementor-element.elementor-element-e1115f5 > .elementor-element:not(:first-child),
+	.elementor-2064 .elementor-element.elementor-element-7b6cb9e > .elementor-element:not(:first-child),
+	.elementor-2064 .elementor-element.elementor-element-0b96bbd > .elementor-element:not(:first-child),
+	.elementor-2064 .elementor-element.elementor-element-a85d83e > .elementor-element:not(:first-child),
+	.elementor-2064 .elementor-element.elementor-element-27199d5 > .elementor-element:not(:first-child),
+	.elementor-2064 .elementor-element.elementor-element-a41d736 > .elementor-element:not(:first-child) {
+		display: flex !important;
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+}
+
+/* Certifications & Education banner: this used to be baked into the photo
+   itself (text drawn onto the JPEG as pixels), so shrinking the image for a
+   narrow viewport shrank the "text" right along with it - no font-size
+   rule could ever fix that, since it was never real text, just part of the
+   picture. It's a genuine heading widget now (see
+   mu-plugins/skills-filter.php's sibling fix for the same principle - match
+   the asset to how it actually needs to render rather than fighting a
+   baked-in constraint), sitting above a photo that's been cropped to drop
+   the text band it used to carry. Desktop's 28px (set inline on the
+   widget) is kept slightly smaller here on phones only because the card
+   itself is already narrower, not because the text needs shrinking the way
+   the old baked-in version did.
+
+   (The heading's size - 22px on phones, 28px inline - is superseded: it now
+   shares one size with the page title, "Skills and Tools", at every screen
+   size; see the --sk-h-fs variables in portfolio-chapters/chapters.css.) */
+
+/* Fields of Interest section headings (Robotics, Programming,
+   Electrical / Embedded): each heading widget's own box is already exactly
+   as wide as its card row below it, but the text inside defaults to
+   Elementor's left (text-align:start), so it sat flush against the row's
+   left edge instead of over its middle. */
+.elementor-1236 .elementor-element-59dd08b,
+.elementor-1236 .elementor-element-ac66b8a,
+.elementor-1236 .elementor-element-8078568 {
+	text-align: center;
+}
+
+/* (Programming and Electrical/Embedded used to carry fixed min-heights of
+   330/332px here to keep their side-by-side cards level. Since the titles
+   moved onto their own full-width row (2026-10-25) the paired cards come
+   out the same height on their own at 1024-1920px, so the fixed heights -
+   which made every one of these cards taller than its content - are gone.) */
+
+/* ---------------------------------------------------------------------------
+   Category pages (Robotics, Programming, Electrical/Embedded): the "jump to
+   a subcategory" quick nav under the page heading is an Elementor icon-list
+   widget, which by default renders as plain inline text links with a
+   divider rule between them - the same flat-link treatment the Skills &
+   Tools pills looked like before this site's card-gradient language existed
+   everywhere else. Turning these into pills matching that same language
+   (skills-filter.css's .sf-chip and the skill pills themselves both use the
+   identical recipe) is what makes this read as "the site's button", not a
+   leftover plain link row next to it.
+
+   Mechanical has no subcategories and so no equivalent widget - nothing to
+   change there.
+
+   2026-10-07: restyled to match My Projects' emphasis chips exactly
+   (projects-subnav/subnav.css - ".pp-subnav__pill" and its caption), so the
+   category pages and My Projects read as one system: outlined pills (the
+   filled gradient pills these were are gone), 13px, the same border, hover
+   and phone grid, and the same small "<Category> EMPHASES" caption above. */
+.elementor-2597 .elementor-element-7d2252d::before,  /* Robotics */
+.elementor-2602 .elementor-element-ffebae5::before,  /* Programming */
+.elementor-2607 .elementor-element-80cc1a5::before { /* Electrical / Embedded */
+	display: block;
+	margin: 0 0 8px;
+	text-align: center;
+	font-size: 11px;
+	line-height: 1.3;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: #9FB0CE;
+}
+.elementor-2597 .elementor-element-7d2252d::before { content: "Robotics emphases"; }
+.elementor-2602 .elementor-element-ffebae5::before { content: "Programming emphases"; }
+.elementor-2607 .elementor-element-80cc1a5::before { content: "Electrical/Embedded emphases"; }
+
+.elementor-2597 .elementor-element-7d2252d .elementor-icon-list-items,  /* Robotics */
+.elementor-2602 .elementor-element-ffebae5 .elementor-icon-list-items,  /* Programming */
+.elementor-2607 .elementor-element-80cc1a5 .elementor-icon-list-items { /* Electrical / Embedded */
+	display: flex !important;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 8px;
+	/* An ancestor further up clips overflow, flush against this row's own
+	   top edge - zero headroom, so the hover lift below (translateY(-2px))
+	   pushed the pill's top 2px past that boundary and got its top sliced
+	   off instead of lifting cleanly. Padding the row itself, rather than
+	   touching that ancestor's overflow (set for an unrelated reason),
+	   gives the lift somewhere to go without affecting anything else that
+	   ancestor clips. !important: Elementor's own icon-list widget resets
+	   padding to 0 on this same element at equal-or-later priority, which
+	   otherwise silently wins and leaves zero headroom in place. */
+	padding-top: 4px !important;
+}
+.elementor-2597 .elementor-element-7d2252d .elementor-icon-list-item,
+.elementor-2602 .elementor-element-ffebae5 .elementor-icon-list-item,
+.elementor-2607 .elementor-element-80cc1a5 .elementor-icon-list-item {
+	width: auto;
+	margin-inline: 0 !important;
+}
+/* Elementor's inline-list divider is a ::after pseudo-element (a left
+   border, not a real border on the item itself) - the pill's own
+   background/border now does that separating job, so this has to be hidden
+   outright or a thin line would still show through the gap between pills. */
+.elementor-2597 .elementor-element-7d2252d .elementor-icon-list-item::after,
+.elementor-2602 .elementor-element-ffebae5 .elementor-icon-list-item::after,
+.elementor-2607 .elementor-element-80cc1a5 .elementor-icon-list-item::after {
+	display: none !important;
+}
+.elementor-2597 .elementor-element-7d2252d .elementor-icon-list-item > a,
+.elementor-2602 .elementor-element-ffebae5 .elementor-icon-list-item > a,
+.elementor-2607 .elementor-element-80cc1a5 .elementor-icon-list-item > a {
+	display: inline-flex !important;
+	align-items: center;
+	/* the same recipe as My Projects' .pp-subnav__pill */
+	background-image: none !important;
+	background-color: transparent !important;
+	border: 1px solid #3A5078 !important;
+	border-radius: 999px !important;
+	padding: 7px 14px !important;
+	color: #D8E0F2 !important;
+	font-size: 13px !important;
+	font-weight: 500 !important;
+	line-height: 1.25 !important;
+	text-decoration: none !important;
+	transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+}
+.elementor-2597 .elementor-element-7d2252d .elementor-icon-list-item > a:hover,
+.elementor-2597 .elementor-element-7d2252d .elementor-icon-list-item > a:focus-visible,
+.elementor-2602 .elementor-element-ffebae5 .elementor-icon-list-item > a:hover,
+.elementor-2602 .elementor-element-ffebae5 .elementor-icon-list-item > a:focus-visible,
+.elementor-2607 .elementor-element-80cc1a5 .elementor-icon-list-item > a:hover,
+.elementor-2607 .elementor-element-80cc1a5 .elementor-icon-list-item > a:focus-visible {
+	border-color: #34D399 !important;
+	background-color: rgba(52, 211, 153, 0.08) !important;
+	color: #34D399 !important;
+	outline: none;
+}
+.elementor-2597 .elementor-element-7d2252d .elementor-icon-list-item > a:focus-visible,
+.elementor-2602 .elementor-element-ffebae5 .elementor-icon-list-item > a:focus-visible,
+.elementor-2607 .elementor-element-80cc1a5 .elementor-icon-list-item > a:focus-visible {
+	box-shadow: 0 0 0 2px #34D399;
+}
+
+/* Mobile: fixed 2-column grid instead of flex-wrap, same reasoning and
+   recipe as skills-filter.css's own mobile pill grid. flex-wrap reflows
+   based on each pill's own unwrapped text width, which is uneven and
+   content-dependent - Robotics' four pills wrapped to a lopsided 1/2/1
+   across three rows, and Electrical/Embedded's two pills were wide enough
+   to force one-per-row instead of sitting side by side. A fixed 2-column
+   grid gives every pill an equal half-width track regardless of its own
+   text length, so pills always pair up two-to-a-row; a label too long for
+   that width wraps to a second line inside its own pill instead of
+   pushing the layout around it. */
+@media (max-width: 767px) {
+	.elementor-2597 .elementor-element-7d2252d .elementor-icon-list-items,
+	.elementor-2602 .elementor-element-ffebae5 .elementor-icon-list-items,
+	.elementor-2607 .elementor-element-80cc1a5 .elementor-icon-list-items {
+		display: grid !important;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+	.elementor-2597 .elementor-element-7d2252d .elementor-icon-list-item,
+	.elementor-2602 .elementor-element-ffebae5 .elementor-icon-list-item,
+	.elementor-2607 .elementor-element-80cc1a5 .elementor-icon-list-item {
+		width: 100%;
+	}
+	/* A lone odd-one-out pill (Robotics' fourth, if a future edit adds a
+	   fifth subcategory and leaves one stranded) spans both tracks and
+	   centres itself rather than sitting alone in the left column - same
+	   fix skills-filter.css uses for the same shape of problem. */
+	.elementor-2597 .elementor-element-7d2252d .elementor-icon-list-item:last-child:nth-child(odd),
+	.elementor-2602 .elementor-element-ffebae5 .elementor-icon-list-item:last-child:nth-child(odd),
+	.elementor-2607 .elementor-element-80cc1a5 .elementor-icon-list-item:last-child:nth-child(odd) {
+		grid-column: 1 / -1;
+		justify-self: center;
+	}
+	.elementor-2597 .elementor-element-7d2252d .elementor-icon-list-item > a,
+	.elementor-2602 .elementor-element-ffebae5 .elementor-icon-list-item > a,
+	.elementor-2607 .elementor-element-80cc1a5 .elementor-icon-list-item > a {
+		width: 100%;
+		justify-content: center;
+		text-align: center;
+		white-space: normal !important;
+		padding: 8px 10px !important;
+	}
+	.elementor-2597 .elementor-element-7d2252d .elementor-icon-list-items,
+	.elementor-2602 .elementor-element-ffebae5 .elementor-icon-list-items,
+	.elementor-2607 .elementor-element-80cc1a5 .elementor-icon-list-items {
+		gap: 8px;
+		/* Elementor's inline icon list pulls the whole list out by 8px each side
+		   (negative margins, balanced by the items' own margins, which are
+		   reset above) - harmless in a centred row, but in this grid it pushed
+		   the outer pills' edges off the widget's box, where they were clipped. */
+		margin-left: 0 !important;
+		margin-right: 0 !important;
+	}
+}
+
+/* ---------------------------------------------------------------------------
+   Home page: remove the three horizontal divider lines between chapters
+   (above About, above Highlighted Projects, above Skills & Tools). The
+   chapter system (portfolio-chapters) already separates sections with a
+   full-screen scroll-snap and its own crossfade, so a thin rule doing the
+   same job on top of that read as a leftover rather than a deliberate line.
+   display:none rather than deleting the widgets from the page, so the
+   content stays exactly as authored in the editor and this is a one-line
+   revert if the chapters system ever changes. */
+.elementor-1236 .elementor-element-dd5b081,
+.elementor-1236 .elementor-element-46d5a37,
+.elementor-1236 .elementor-element-4198c95 {
+	display: none !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Mobile hamburger menu: the "Projects" submenu (Robotics, Programming,
+   Electrical/Embedded, Mechanical) renders at 11.05px, noticeably smaller
+   than the 14px the same links get in the desktop hover dropdown - small
+   enough to be genuinely hard to read on a phone. The two share the same
+   inner "sub-menu elementor-nav-menu--dropdown" markup; what's different is
+   the outer container, which only carries elementor-nav-menu--dropdown
+   itself (alongside elementor-nav-menu__container) in the mobile case, so
+   that combination is specific enough to raise just this one without
+   touching the desktop hover menu that happens to reuse the inner class. */
+.elementor-nav-menu__container.elementor-nav-menu--dropdown .elementor-sub-item {
+	font-size: 16px !important;
+}
+
+/* Indent the category links (Robotics, Programming, Electrical/Embedded,
+   Mechanical) under "Projects" in the hamburger menu. They sat only 8px
+   further in than the top-level items (28px against 20px), which doesn't
+   read as "these belong to Projects" at a glance. 44px does. !important:
+   Elementor generates the item padding per widget at higher specificity. */
+.elementor-nav-menu__container.elementor-nav-menu--dropdown .sub-menu .elementor-sub-item {
+	padding-left: 44px !important;
+}
+
+/* Mobile header: keep the site name on one line.
+
+   The name is 24px, which needs about 220px beside the menu button. Below
+   ~345px wide there is less than that, so it wrapped onto two lines
+   ("Andres Cervera / Rozo"), the header grew from 58px to 98px, and - since
+   the page is pulled up underneath the header - everything below it,
+   including the top of the hero, shifted down with it. Scales from 24px at
+   375px wide and up (6.4vw reaches 24px at 375) down to 18px at the very
+   smallest, and is set not to wrap as a backstop. The header is shared, so
+   this holds on every page. */
+@media (max-width: 767px) {
+	.elementor-1508 .elementor-element.elementor-element-f1b5d47 .elementor-heading-title {
+		font-size: clamp(18px, 6.4vw, 24px) !important;
+		white-space: nowrap;
+	}
+}
+
+/* Home page, phones: the Fields of Interest descriptions (left-aligned on
+   desktop, where the text sits beside its photo) and the Skills & Education
+   paragraph are centred, to match the cards and headings around them. */
+@media (max-width: 767px) {
+	.elementor-1236 :is(.elementor-element-b49e282, .elementor-element-a4a66e7, .elementor-element-ee67158) > .elementor-element :is(.elementor-widget-heading, .elementor-widget-text-editor, .elementor-heading-title, .elementor-widget-container, p, h5),
+	.elementor-1236 .elementor-element-6751a4b,
+	.elementor-1236 .elementor-element-6751a4b :is(.elementor-widget-container, p) {
+		text-align: center !important;
+	}
+}
+
+/* Swipe rows must not clip their cards' shadows. The cards carry a soft drop
+   shadow (0 20px 40px -12px: it reaches about 48px below a card), and a swipe
+   row is an overflow container with only ~10px of padding under its cards, so
+   the shadow was sliced off flat at the row's edge - a hard-edged dark box
+   under the cards (seen under the Localization row). Each row gets room below
+   for the whole shadow, and an equal negative margin so the page layout does
+   not grow. (The project / category rows are done in portfolio-chapters/
+   chapters.css, which owns their layout.) */
+@media (max-width: 767px) {
+	.elementor-1236 .elementor-element-20aba35 .elementor-posts-container,
+	.elementor-1236 :is(.elementor-element-b49e282, .elementor-element-a4a66e7, .elementor-element-ee67158),
+	.elementor-2064 .elementor-element-3d1b82f > .e-con-inner {
+		padding-top: 10px !important;
+		padding-bottom: 68px !important;
+		margin-top: -6px !important;
+		margin-bottom: -56px !important;
+	}
+}
+
+/* ---------------------------------------------------------------------------
+   Text alignment, by area (2026-10-07 review of every paragraph and heading
+   on every page, phone and desktop checked separately).
+
+   The pattern: pages built around a centred axis (the home page, the project
+   listings, Skills & Education, Contact, the tag/search/404 pages, every
+   card) centre their headings, intros and card text. Reading pages - About
+   Me and the individual project write-ups - keep long copy and its headings
+   left-aligned, which reads better in a long column. Beside a photo on
+   desktop, text is left-aligned (home About, Fields of Interest); once it
+   stacks under the photo on a phone it follows the centred axis.
+   Fixes below are the places that did not follow it.
+   --------------------------------------------------------------------------- */
+
+/* Home, phones: About Me is stacked under a centred photo, like every other
+   home section - heading and paragraph centred (they were left-aligned). */
+@media (max-width: 767px) {
+	.elementor-1236 .elementor-element-305fe115,
+	.elementor-1236 .elementor-element-305fe115 .elementor-heading-title,
+	.elementor-1236 .elementor-element-48f5092e,
+	.elementor-1236 .elementor-element-48f5092e :is(.elementor-widget-container, p) {
+		text-align: center !important;
+	}
+	/* Home, phones: Get In Touch - the paragraph and the phone / email /
+	   location lines sit under a centred heading, full width */
+	.elementor-1236 .elementor-element-51716a9,
+	.elementor-1236 .elementor-element-51716a9 :is(.elementor-widget-container, p),
+	.elementor-1236 .elementor-element-bd938e8,
+	.elementor-1236 .elementor-element-bd938e8 :is(.elementor-widget-container, p, ul, li, .elementor-icon-list-items, .elementor-icon-list-item, .elementor-icon-list-text) {
+		text-align: center !important;
+	}
+	.elementor-1236 .elementor-element-bd938e8 :is(.elementor-icon-list-items, .elementor-icon-list-item) { justify-content: center !important; }
+	/* project write-ups, phones: "Explore with Tags" over the (centred) tag pills */
+	.elementor-element-d288e83,
+	.elementor-element-d288e83 .elementor-heading-title { text-align: center !important; }
+}
+
+/* Home, desktop: the Mechanical heading sat left over a centred card while
+   Robotics / Programming / Electrical are centred. */
+.elementor-1236 .elementor-element-d5870ef,
+.elementor-1236 .elementor-element-d5870ef .elementor-heading-title { text-align: center !important; }
+
+/* Project listings (Robotics, Programming, Electrical/Embedded, Mechanical,
+   My Projects), every width: the emphasis headings ("Localization", ...) sit
+   between two rules over rows of centred cards, under a centred page title
+   and centred chips - centred, not left. */
+.ch-page-cat .elementor-widget-heading .elementor-heading-title,
+.ch-page-projects .elementor-widget-heading .elementor-heading-title,
+.ch-page-cat .elementor-widget-heading,
+.ch-page-projects .elementor-widget-heading { text-align: center !important; }
+
+/* 404: centred like the other utility pages (search, tag). */
+.error404 .page-header, .error404 .page-content,
+.error404 :is(.entry-title, .page-title, .page-content p) { text-align: center !important; }
+
+/* 404, phones: the page title sat under the floating header (it overlaps the
+   top 75px of a phone page) and at 50px wrapped to two lines across it. */
+@media (max-width: 767px) {
+	.error404 .page-header, .error404 main > :first-child { padding-top: 96px; }
+	.error404 .entry-title, .error404 .page-title { font-size: 34px !important; line-height: 40px !important; }
+}
+
+/* Home, Contact: the GitHub button's icon.
+   It is the one glyph on the whole site that came from the jkit icon font - a
+   392 KB font file that the home page downloaded for that single icon.
+   Font Awesome's GitHub mark (the same icon every project page's GitHub button
+   already uses) is drawn instead: 80 KB, shared with those pages, and the jkit
+   font is no longer requested at all. */
+.elementor-1236 i.jki-github-light {
+	font-family: "Font Awesome 5 Brands" !important;
+	font-weight: 400 !important;
+	font-style: normal;
+}
+.elementor-1236 i.jki-github-light::before {
+	font-family: "Font Awesome 5 Brands" !important;
+	font-weight: 400 !important;
+	content: "\f09b" !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Per-project gallery layout overrides (desktop only). The shared
+   hero+stacked-pair grid in mu-plugins/project-gallery/gallery.css is the
+   right default almost everywhere; these two projects asked for a different
+   arrangement for their own specific images, scoped to just that one post
+   via the postid-NNNN body class WordPress already adds on single posts.
+   --------------------------------------------------------------------------- */
+@media (min-width: 768px) {
+	/* YOLO-Driven 3D Traffic Mapping: all three images share the same wide,
+	   shallow aspect ratio (1800x543) - stack them in one column instead of
+	   the default hero-left/pair-right grid. */
+	body.postid-2274 .project-gallery {
+		/* first image across the full width; the second and third beneath it,
+		   side by side (left, right) */
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: none;
+		/* the reserved-height ratio (--pg-ar, gallery.css) assumes the default
+		   hero+pair grid; here the gallery is as tall as its three stacked
+		   images, and a ratio shorter than that squeezed the rows so the
+		   images overlapped. Height follows the content instead. */
+		aspect-ratio: auto !important;
+		gap: 12px;
+	}
+	body.postid-2274 .project-gallery__item:nth-child(1),
+	body.postid-2274 .project-gallery__item:nth-child(2),
+	body.postid-2274 .project-gallery__item:nth-child(3) {
+		aspect-ratio: 1800 / 543;
+		/* the shared base rule's height:100% !important fights aspect-ratio
+		   on an auto-sized row - let the aspect-ratio drive the height */
+		height: auto !important;
+	}
+	body.postid-2274 .project-gallery__item:nth-child(1) { grid-column: 1 / -1; grid-row: 1; }
+	body.postid-2274 .project-gallery__item:nth-child(2) { grid-column: 1; grid-row: 2; }
+	body.postid-2274 .project-gallery__item:nth-child(3) { grid-column: 2; grid-row: 2; }
+
+	/* 3D Point Cloud Matching Using SVD and ICP: two images, same size,
+	   side by side (the default 2-up layout gives the first one 2x the
+	   width of the second). */
+	body.postid-2270 .project-gallery.pg-count-2 {
+		grid-template-columns: 1fr 1fr;
+	}
+	body.postid-2270 .project-gallery.pg-count-2 .project-gallery__item:nth-child(1) {
+		/* base rule spans grid-row 1/3 (hero spanning 2 rows) - with only
+		   one row defined here that pulls in an empty implicit row and
+		   makes this tile a few px taller than its neighbour */
+		grid-row: 1;
+	}
+}
+
+/* Home page, About Me intro: now split into two paragraphs (the second
+   starting "I earned my..."), centred on phones only - the rest of the
+   page's body text is left-aligned at this width, but this block sits
+   directly under a centred heading and reads better matching it. */
+@media (max-width: 767px) {
+	.elementor-1236 .elementor-element-48f5092e p {
+		text-align: center;
+	}
+}
+
+/* Home page, desktop: the Programming / Electrical / Mechanical chapter is
+   taller than most screens, so it has two stops - and at the first stop the
+   Mechanical card used to sit almost entirely below the fold (24px of it
+   showed at 1440x900, none at 1366x768), so nothing said there was more of
+   the section to come before the next one. Tightening the vertical rhythm
+   (the 30px spacer widgets under each heading go, a 24px gap replaces them,
+   and the space above Mechanical comes down from 60px to 44px) brings the
+   top ~140px of the Mechanical card into the first stop at 1440x900, its
+   heading into view at 1366x768, and the whole chapter onto one screen at
+   1920x1080. */
+@media (min-width: 768px) {
+	.elementor-1236 :is(.elementor-element-5e66a55, .elementor-element-22f7cc1, .elementor-element-2fb4a22) {
+		display: none !important;
+	}
+	.elementor-1236 :is(.elementor-element-dddc274, .elementor-element-8bd69ab, .elementor-element-f73297b) {
+		gap: 24px !important;
+	}
+	.elementor-1236 .elementor-element-0c16ab7 > .e-con-inner {
+		padding-top: 32px !important;
+	}
+	.elementor-1236 .elementor-element-5d9d235 > .e-con-inner {
+		padding-top: 24px !important;
+	}
+}
+/* Shorter desktop screens (under ~860px tall, e.g. 1366x768 or a 1536x864
+   laptop once the browser's own bars are taken off): the same compact card
+   treatment the Robotics cards get on short screens (chapters.css, "Short
+   laptop windows"). The whole Programming / Electrical / Mechanical chapter
+   is 852px of content at full size and 775px compact, so 860px is the cut-off
+   that keeps it on one screen down to 775px tall. */
+@media (min-width: 768px) and (max-height: 860px) {
+	.elementor-1236 :is(.elementor-element-a4a66e7, .elementor-element-ee67158) > .elementor-element {
+		padding: 12px 16px !important;
+		row-gap: 8px !important;
+	}
+	.elementor-1236 :is(.elementor-element-a4a66e7, .elementor-element-ee67158) > .elementor-element p,
+	.elementor-1236 .elementor-element-a2a1b0c p {
+		font-size: 14px !important;
+		line-height: 20px !important;
+	}
+	.elementor-1236 .elementor-element.elementor-element-c96428e {
+		padding: 12px 16px !important;
+	}
+	.elementor-1236 :is(.elementor-element-a4a66e7, .elementor-element-ee67158) {
+		gap: 14px !important;
+	}
+	.elementor-1236 .elementor-element-0c16ab7 > .e-con-inner {
+		padding-top: 20px !important;
+	}
+}
+
+/* Phones: photo first, then title, then text - the same order as the other
+   Fields of Interest cards (photo is order 0, text order 1). */
+@media (max-width: 767px) {
+	.elementor-1236 .elementor-element.elementor-element-c96428e > .elementor-element-d5870ef {
+		order: 1;
+		padding: 0 15px;
+		margin: 0 0 -12px !important;
+	}
+	.elementor-1236 .elementor-element.elementor-element-c96428e > .elementor-element-a2a1b0c {
+		order: 2;
+	}
+	.elementor-1236 .elementor-element-d5870ef :is(.elementor-widget-container, .elementor-heading-title) {
+		text-align: center !important;
+	}
+}
+
+/* Home, Skills & Education blurb: a little larger on desktop and tablet.
+   It was 15px beside the logo box, which left the text looking small for the
+   space it has; 18px (16px on tablets, where the column is narrower) fills
+   it. Phones keep their own 16px. */
+@media (min-width: 1100px) {
+	.elementor-1236 .elementor-element-6751a4b .elementor-widget-container {
+		font-size: 18px !important;
+		line-height: 30px !important;
+	}
+}
+@media (min-width: 768px) and (max-width: 1099px) {
+	.elementor-1236 .elementor-element-6751a4b .elementor-widget-container {
+		font-size: 16px !important;
+		line-height: 25px !important;
+	}
+}
+
+/* Gradient headings: keep the tails of g, j, p, q, y.
+
+   The gradient is painted by background-clip: text, and a background only
+   covers the element's own box. Project titles have a line-height of 1 (35px
+   on 35px type), so the bottom of a descender - the tail of the "g" in
+   "Geolocating" - hangs below the box where there is no gradient, and is cut
+   off. The same risk applies to any heading with a tight line-height. Padding
+   extends the painted box downwards and the equal negative margin gives the
+   space back, so nothing moves. */
+.elementor-widget-heading .elementor-heading-title {
+	padding-bottom: 0.22em;
+	margin-bottom: -0.22em;
+}
+
+/* Hover at the bottom edge of a card, button or picture.
+
+   The hover lift moves the element up 3-5px. A pointer resting on its bottom
+   edge was then no longer over it, so the hover dropped, the element moved back
+   under the pointer, the hover returned - and it flickered between the two as
+   fast as the browser could repaint. While hovered, the element now reaches 10px
+   below its lifted position (a transparent extension, same hover), so the
+   pointer is still over it after the lift. Cards that clip their contents
+   (overflow: hidden) cannot extend this way; they get the same hold from
+   media-fill.js (.hover-hold), which also keeps the lifted look. */
+.elementor-button:hover::after,
+.elementor-1236 .elementor-element.elementor-element-c96428e:hover::after,
+.skill-map .skill-hit:hover::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 100%;
+	height: 10px;
+}
+.elementor-post.hover-hold,
+a.e-con.hover-hold,
+.project-gallery__item.hover-hold {
+	transform: translateY(-5px) !important;
+	border-color: #5B7FFF !important;
+	box-shadow:
+		0 16px 32px -10px rgba(91, 127, 255, 0.35),
+		0 10px 18px -10px rgba(79, 207, 156, 0.3) !important;
+}
+
+
+/* Geotab Site button (Fuel Stations, Signal Strength, Antarctica project pages):
+   Geotab navy (#25477B, from their logo file) with their wordmark, in white, as the icon. */
+.geotab-site-btn .elementor-button-content-wrapper {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0;
+}
+/* the label stays for screen readers and search engines but is not shown: the logo is the button */
+.geotab-site-btn .elementor-button-text {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+.geotab-site-btn .elementor-button-content-wrapper::before {
+	content: "";
+	flex: none;
+	width: 84px;
+	height: 11px;
+	background: url("data:image/svg+xml,%3Csvg id='Layer_2' xmlns='http://www.w3.org/2000/svg' version='1.1' viewBox='0 0 1790 233.5'%3E %3Cpolygon fill='%23ffffff' points='326.7 231 551.7 231 551.7 208 367.4 208 367.4 124.5 544.1 124.5 544.1 101.5 367.4 101.5 367.4 25.5 551.7 25.5 551.7 2.4 326.7 2.4 326.7 231'/%3E %3Cpolygon fill='%23ffffff' points='1161.7 2.4 895.2 2.4 895.2 27.6 1008.6 27.6 1008.6 231 1049.3 231 1049.3 27.6 1161.7 27.6 1161.7 2.4'/%3E %3Cpath fill='%23ffffff' d='M1305.3,2.4h-55.9l-128.2,228.6h43.2l26.8-48.1h175.4l27,48.1h42.5L1305.5,3l-.2-.6ZM1203.2,162.2l75.1-136.7,76,136.7h-151.1Z'/%3E %3Cpath fill='%23ffffff' d='M1687.6,111.2c28.5-7,43-23.1,43-48.1s-6.7-41.4-20.1-49.1c-13.4-7.7-41.5-11.6-84.1-11.6h-154.8v228.6h171.2c36,0,61.6-5,76.2-14.7,14.6-9.8,22.1-27,22.1-51.4.2-29.5-17.9-47.6-53.5-53.8ZM1512.4,25.5h113.2c27.8,0,46,2.3,54.1,6.7,8.1,4.4,12,14.1,12,29.1s-4.6,28.6-13.8,33.5c-9.2,4.9-30.3,7.6-63.1,7.6h-102.5V25.5ZM1688.9,200.3c-9,5-28.7,7.4-58.4,7.4h-118.1v-82.4h100.4c41.2,0,66.7,2.3,75.9,6.8,9.2,4.5,13.6,16.8,13.6,36.8,0,15.9-4.5,26.5-13.5,31.4Z'/%3E %3Cpath fill='%23ffffff' d='M137.9,116.6v23h112.7v13.2h0v.8h0c0,25.4-5,41.4-14.6,47.3s-35.8,9.2-77.5,9.2-88.5-3.3-101-9.8c-12.5-6.5-18.5-23.8-18.5-52v-32.4l.4-30.3c0-27.8,5.6-45.4,16.7-52.3,11.1-6.9,39.7-10.5,85-10.5s79.4,2.2,91,6.5c11.6,4.4,16.5,15.9,16.5,34.1v6h39.7v-9.2c0-25.3-8.8-42-26.2-49.3C244.7,3.8,206.5.1,147.6.1S49.1,5.7,29.6,16.8C10.2,28,0,50.8,0,84.5v53.6c0,40.2,9,66.3,26.6,77.9,17.6,11.5,57.4,17.4,118.6,17.4s105.4-4.9,120.8-14.7c15.4-9.8,22.3-32.5,23.3-69.1h0v-33h-151.4Z'/%3E %3Cg%3E %3Cpath fill='%23ffffff' d='M1784.1,196.8c-3.9-3.9-8.7-5.9-14.2-5.9s-10.3,2-14.2,5.9c-3.9,3.9-5.9,8.7-5.9,14.2s2,10.3,5.9,14.2c3.9,3.9,8.7,5.9,14.2,5.9s10.3-2,14.2-5.9c3.9-3.9,5.9-8.7,5.9-14.2s-2-10.3-5.9-14.2ZM1782.2,223.4c-3.4,3.4-7.5,5.2-12.3,5.2s-8.9-1.7-12.3-5.2c-3.4-3.4-5.1-7.6-5.1-12.4s1.7-8.9,5.1-12.4c3.4-3.4,7.5-5.2,12.3-5.2s8.9,1.7,12.3,5.2c3.4,3.4,5.1,7.6,5.1,12.4s-1.7,8.9-5.1,12.4Z'/%3E %3Cpath fill='%23ffffff' d='M1772.8,211.2c1.5-.6,2.7-1.4,3.6-2.4.9-1,1.3-2.3,1.3-3.8s-.2-2.1-.7-2.8c-.5-.8-1.2-1.4-2.2-1.9-.9-.5-1.8-.8-2.8-.9-.9-.1-2.1-.2-3.6-.2h-7.3v21.3h3.8v-8.3h3.8l7.7,8.3h5.2l-8.9-9.3ZM1770.5,209.1c-.7.1-1.5.2-2.5.2h-3v-7.2h3.5c.8,0,1.5,0,2,.1.5,0,1.1.2,1.5.5.5.3.9.6,1.1,1.1.2.4.3.9.3,1.5s0,1.3-.3,1.7c-.2.5-.5.9-1,1.3-.4.4-1,.6-1.7.8Z'/%3E %3C/g%3E %3Cpath fill='%23ffffff' d='M854.6,19c-16.5-12.6-58.2-19-123.9-19s0,0-.1,0,0,0-.1,0c-65.7,0-107.3,6.4-123.9,19-16.6,12.6-25,44.5-25,94.7s8.1,87.9,24,100.7c15.9,12.7,57.9,19.1,124.9,19.1s0,0,.1,0,0,0,.1,0c67,0,109-6.4,124.9-19.1,15.9-12.7,24-46.6,24-100.7s-8.4-82-25-94.7ZM826.9,198.5c-9.2,7.8-41.6,11.8-96.3,11.8-54.8,0-87.2-4-96.3-11.8-9.1-7.8-13.8-35.4-13.8-81.9l.3-36.3c0-24.7,6.4-40.6,19-47.2,12.8-6.7,43.3-10.1,90.9-10.1,47.5,0,78.1,3.4,90.9,10.1,12.6,6.6,19,22.5,19,47.2l.3,36.3c0,46.5-4.6,74.1-13.8,81.9Z'/%3E %3C/svg%3E") no-repeat center / contain;
+}
+
+html body .elementor-widget-button.geotab-site-btn .elementor-button.elementor-button,
+html body .elementor-widget-button.geotab-site-btn .elementor-button.elementor-button:hover,
+html body .elementor-widget-button.geotab-site-btn .elementor-button.elementor-button:focus {
+	background: #25477B !important;
+	background-image: none !important;
+	color: #fff !important;
+	white-space: nowrap;
+}
+html body .elementor-widget-button.geotab-site-btn .elementor-button.elementor-button:hover { background: #1d3a66 !important; }
+.e-con:has(> .geotab-site-btn) { width: auto !important; flex: none; }

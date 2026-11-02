@@ -12,14 +12,25 @@
  * being linked to.
  */
 
-add_filter( 'post_link', function ( $permalink, $post ) {
-	$aliases = array(
+/**
+ * duplicate post ID => real post ID. Shared with
+ * mu-plugins/highlighted-projects-cards.php, which needs the same mapping
+ * to show each homepage card's real category/subcategory (the duplicates
+ * themselves only carry the "Top Projects" category).
+ */
+function portfolio_top_projects_aliases() {
+	return array(
 		3057 => 2275, // Robust Visual Navigation Using Semantic Segmentation and Sensor Fusion
 		3061 => 2231, // Sim to Real Drone Racing with RRT* Planning
 		3065 => 2886, // Geospatial Signal Strength Analysis Using BigQuery
 		3069 => 2838, // Real-Time Trail Segmentation Model for An Autonomous Robot
-		3073 => 2322, // Battery Characterization and PCB Assembly for High-Voltage Electric Vehicle
+		3606 => 3601, // Finnbot: AI-Powered Stock Advisor with Daily Digests and Sell Alerts
+		3524 => 2752, // Embedded Omni Directional Maze Navigating Robot with 360 LiDAR
 	);
+}
+
+add_filter( 'post_link', function ( $permalink, $post ) {
+	$aliases = portfolio_top_projects_aliases();
 
 	if ( ! isset( $aliases[ $post->ID ] ) ) {
 		return $permalink;

@@ -122,6 +122,7 @@ class Wizard {
 		$config['ajaxurl']      = admin_url( 'admin-ajax.php' );
 		$config['installNonce'] = wp_create_nonce( 'updates' );
 		$config['imageUrl']     = JEG_ELEMENTOR_KIT_URL . '/assets/img/admin';
+		$config['proActive']    = defined( 'JEG_KIT_PRO' );
 		$config['bannerData']   = jkit_get_banner_data();
 		$config['bannerNonce']  = wp_create_nonce( 'jkit-banner' );
 		return $config;

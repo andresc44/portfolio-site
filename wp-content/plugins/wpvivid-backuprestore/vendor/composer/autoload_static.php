@@ -7,19 +7,12 @@ namespace Composer\Autoload;
 class ComposerStaticInit381ef710b1ae857a1b0cca4550c7cd7e
 {
     public static $files = array (
-        //'7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
-        //'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
-        //'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
-        //'37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
-        //'decc78cc4436b1292c6c0d151b19445c' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
-        //'3919eeb97e98d4648304477f8ef734ba' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/Crypt/Random.php',
         '7b11c4dc42b3b3023073cb14e519684c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         'c964ee0ededf28c96ebd9db5099ef911' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         'a0edc8309cc5e1d60e3047b5df6b7057' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '37a3dc5111fe8f707ab4c132ef1dbc63' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
+        '5255c38a0faeba867671b61dfda6d865' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
         'decc78cc4436b1292c6c0d151b19446c' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
-        '3919eeb97e98d4648304477f8ef735ba' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/Crypt/Random.php',
-
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -27,18 +20,9 @@ class ComposerStaticInit381ef710b1ae857a1b0cca4550c7cd7e
         array (
             'Symfony\\Component\\EventDispatcher\\' => 34,
         ),
-        /*'P' =>
-        array (
-            'Psr\\Log\\' => 8,
-            'Psr\\Http\\Message\\' => 17,
-            'Psr\\Cache\\' => 10,
-        ),*/
-        /*'M' =>
-        array (
-            'Monolog\\' => 8,
-        ),*/
         'W' =>
         array (
+            'WPvividphpseclib3\\' => 18,
             'WPvividGuzzleHttp\\Psr7\\' => 23,
             'WPvividGuzzleHttp\\Promise\\' => 26,
             'WPvividGuzzleHttp\\' => 18,
@@ -52,9 +36,21 @@ class ComposerStaticInit381ef710b1ae857a1b0cca4550c7cd7e
         array (
             'Firebase\\JWT\\' => 13,
         ),
+        'P' =>
+        array (
+            'ParagonIE\\ConstantTime\\' => 23,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'WPvividphpseclib3\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
+        ),
+        'ParagonIE\\ConstantTime\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/paragonie/constant_time_encoding/src',
+        ),
         'Symfony\\Component\\EventDispatcher\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/event-dispatcher',
@@ -98,27 +94,6 @@ class ComposerStaticInit381ef710b1ae857a1b0cca4550c7cd7e
     );
 
     public static $prefixesPsr0 = array (
-        'S' => 
-        array (
-            'System' => 
-            array (
-                0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
-            ),
-        ),
-        'N' => 
-        array (
-            'Net' => 
-            array (
-                0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
-            ),
-        ),
-        'M' => 
-        array (
-            'Math' => 
-            array (
-                0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
-            ),
-        ),
         'G' => 
         array (
             'Guzzle\\Tests' => 
@@ -144,20 +119,6 @@ class ComposerStaticInit381ef710b1ae857a1b0cca4550c7cd7e
                     array (
                         0 => __DIR__ . '/../..' . '/includes/lib2/google-api-php-client/src',
                     ),
-        ),
-        'F' => 
-        array (
-            'File' => 
-            array (
-                0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
-            ),
-        ),
-        'C' => 
-        array (
-            'Crypt' => 
-            array (
-                0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
-            ),
         ),
         'A' => 
         array (

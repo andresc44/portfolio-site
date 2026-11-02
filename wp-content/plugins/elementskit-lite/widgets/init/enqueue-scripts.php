@@ -1,6 +1,7 @@
 <?php
 namespace ElementsKit_Lite\Widgets\Init;
 use ElementsKit_Lite\Libs\Framework\Attr;
+use ElementsKit_Lite\Modules\Header_Footer\Activator;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -13,6 +14,16 @@ class Enqueue_Scripts {
 		add_action( 'elementor/frontend/after_register_styles', [$this, 'register_frontend_css'] );
 		add_action( 'wp_enqueue_scripts', [$this, 'enqueue_frontend_scripts'], 99 );
 		add_action( 'wp_enqueue_scripts', [$this, 'enqueue_frontend_css'], 99 );
+
+		/**
+		 * Documents ElementsKit renders itself must reach Elementor's style pipeline
+		 * before it runs, so this sits just ahead of Elementor's own priority 20 pass.
+		 * The priority 21 pass is the fallback for pages where Elementor never runs
+		 * that pass at all. Both are handled by Nested_Document_Assets.
+		 */
+		add_action( 'wp_enqueue_scripts', [$this, 'enqueue_nested_document_assets'], 19 );
+		add_action( 'elementor/frontend/after_enqueue_post_styles', [ Nested_Document_Assets::class, 'mark_post_styles_flushed' ], 1 );
+		add_action( 'wp_enqueue_scripts', [ Nested_Document_Assets::class, 'maybe_flush_post_styles' ], 21 );
 
 		add_action( 'elementor/preview/enqueue_styles', [ $this, 'enqueue_3rd_party_style' ] );
 		add_action( 'elementor/editor/after_enqueue_styles', [$this, 'elementor_editor_css'] );
@@ -186,6 +197,13 @@ class Enqueue_Scripts {
 	 * @return void
 	 */
 	public function enqueue_frontend_scripts() {
+		// ekit-core depends on elementor-frontend, whose config Elementor only prints on
+		// pages it renders. Enqueueing it anywhere else throws "elementorFrontendConfig
+		// is not defined".
+		if ( ! $this->has_header_footer_template() ) {
+			return;
+		}
+
 		$header_script_handles = [
 			'ekit-core',
 			'ekit-nav-menu',
@@ -216,26 +234,52 @@ class Enqueue_Scripts {
 	 * @return void
 	 */
 	public function enqueue_frontend_css() {
-		$header_style_handles = [
-			'ekit-nav-menu',
-			'ekit-header-search',
-			'ekit-header-offcanvas',
-			'ekit-header-info',
-			'countdown-timer',
-		];
+		if ( $this->has_header_footer_template() ) {
+			$header_style_handles = [
+				'ekit-nav-menu',
+				'ekit-header-search',
+				'ekit-header-offcanvas',
+				'ekit-header-info',
+				'countdown-timer',
+			];
 
-		foreach ( $header_style_handles as $style_handle ) {
-			if ( wp_style_is( $style_handle, 'registered' ) ) {
-				wp_enqueue_style( $style_handle );
+			foreach ( $header_style_handles as $style_handle ) {
+				if ( wp_style_is( $style_handle, 'registered' ) ) {
+					wp_enqueue_style( $style_handle );
+				}
 			}
 		}
-
-		( new Nested_Document_Assets() )->enqueue();
 
 		// RTL styles
 		if ( is_rtl() ) {
 			wp_enqueue_style( 'elementskit-rtl', \ElementsKit_Lite::widget_url() . 'init/assets/css/rtl.css', [], \ElementsKit_Lite::version() );
 		}
+	}
+
+	/**
+	 * Whether an ElementsKit Header/Footer Builder template renders on this request.
+	 *
+	 * @return bool
+	 */
+	private function has_header_footer_template() {
+		if ( ! class_exists( Activator::class ) ) {
+			return false;
+		}
+
+		return ! empty( array_filter( (array) Activator::template_ids() ) );
+	}
+
+	/**
+	 * Preloads the assets of every Elementor document ElementsKit renders itself.
+	 *
+	 * Runs before Elementor's own style pass (priority 20) so that nested documents -
+	 * Widget Area content, Mega Menu panels, Header/Footer templates - are announced in
+	 * time for their Atomic (V4) style files to be generated and enqueued.
+	 *
+	 * @return void
+	 */
+	public function enqueue_nested_document_assets() {
+		( new Nested_Document_Assets() )->enqueue();
 	}
 
 	public function enqueue_3rd_party_style() {

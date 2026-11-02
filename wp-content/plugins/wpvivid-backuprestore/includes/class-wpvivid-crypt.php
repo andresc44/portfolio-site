@@ -14,15 +14,22 @@ class WPvivid_crypt
 
     public function __construct($public_key)
     {
-        $this->public_key=$public_key;
         include_once WPVIVID_PLUGIN_DIR . '/vendor/autoload.php';
-        $this->rij= new Crypt_Rijndael();
-        $this->rsa= new Crypt_RSA();
+
+        $this->public_key=$public_key;
+
+        $this->rij = new \WPvividphpseclib3\Crypt\Rijndael('cbc');
+        $this->rij->setIV(str_repeat("\0", 16));
+
+        $this->rsa = \WPvividphpseclib3\Crypt\PublicKeyLoader::load($this->public_key)
+            ->withPadding(\WPvividphpseclib3\Crypt\RSA::ENCRYPTION_OAEP)
+            ->withHash('sha1')
+            ->withMGFHash('sha1');
     }
 
     public function generate_key()
     {
-        $this->sym_key = crypt_random_string(32);
+        $this->sym_key = \WPvividphpseclib3\Crypt\Random::string(32);
         $this->rij->setKey($this->sym_key);
     }
 
@@ -40,7 +47,6 @@ class WPvivid_crypt
 
     public function encrypt_key()
     {
-        $this->rsa->loadKey($this->public_key);
         return $this->rsa->encrypt($this->sym_key);
     }
 
@@ -48,21 +54,23 @@ class WPvivid_crypt
     {
         $len = substr($message, 0, 3);
         $len = hexdec($len);
-        $key = substr($message, 3, $len);
+        $key_cipher = substr($message, 3, $len);
 
         $cipherlen = substr($message, ($len + 3), 16);
         $cipherlen = hexdec($cipherlen);
 
         $data = substr($message, ($len + 19), $cipherlen);
-        $rsa = new Crypt_RSA();
-        $rsa->loadKey($this->public_key);
-        $key=$rsa->decrypt($key);
-        if ($key === false || empty($key))
-        {
-            return false;
-        }
-        $rij = new Crypt_Rijndael();
-        $rij->setKey($key);
+
+        $rsa = \WPvividphpseclib3\Crypt\PublicKeyLoader::load($this->public_key)
+            ->withPadding(\WPvividphpseclib3\Crypt\RSA::ENCRYPTION_OAEP)
+            ->withHash('sha1')
+            ->withMGFHash('sha1');
+        $sym_key = $rsa->decrypt($key_cipher);
+
+        $rij = new \WPvividphpseclib3\Crypt\Rijndael('cbc');
+        $rij->setIV(str_repeat("\0", 16));
+        $rij->setKey($sym_key);
+
         return $rij->decrypt($data);
     }
 
@@ -71,7 +79,6 @@ class WPvivid_crypt
         $user_info['user']=$user;
         $user_info['pw']=$pw;
         $info=wp_json_encode($user_info);
-        $this->rsa->loadKey($this->public_key);
         return $this->rsa->encrypt($info);
     }
 
@@ -80,13 +87,11 @@ class WPvivid_crypt
         $user_info['user']=$user;
         $user_info['token']=$token;
         $info=wp_json_encode($user_info);
-        $this->rsa->loadKey($this->public_key);
         return $this->rsa->encrypt($info);
     }
 
     public function encrypt_token($token)
     {
-        $this->rsa->loadKey($this->public_key);
         return $this->rsa->encrypt($token);
     }
 }
@@ -99,8 +104,38 @@ class WPvivid_Crypt_File
     public function __construct($key)
     {
         include_once WPVIVID_PLUGIN_DIR . '/vendor/autoload.php';
-        $this->rij= new Crypt_Rijndael();
-        $this->key=$key;
+
+        $this->key = $this->adjust_key_length($key);
+
+        $this->rij = new \WPvividphpseclib3\Crypt\Rijndael('cbc');
+        $this->rij->setIV(str_repeat("\0", 16));
+        $this->rij->setKey($this->key);
+    }
+
+    private function adjust_key_length($key)
+    {
+        $length = strlen($key);
+
+        switch (true)
+        {
+            case $length <= 16:
+                return str_pad($key, 16, "\0");
+
+            case $length <= 20:
+                return str_pad($key, 20, "\0");
+
+            case $length <= 24:
+                return str_pad($key, 24, "\0");
+
+            case $length <= 28:
+                return str_pad($key, 28, "\0");
+
+            case $length <= 32:
+                return str_pad($key, 32, "\0");
+
+            default:
+                return substr($key, 0, 32);
+        }
     }
 
     public function encrypt($file)

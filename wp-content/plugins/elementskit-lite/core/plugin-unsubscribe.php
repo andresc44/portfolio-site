@@ -120,6 +120,11 @@ class Plugin_Unsubscribe {
 									<?php $this->render_reason_item( $reason ); ?>
 								<?php endforeach; ?>
 							</div>
+							<p class="ekit-onboard-tut-term--helptext">
+								<?php echo esc_html__( 'Clicking “Submit & Deactivate” will help us improve ElementsKit by sharing your feedback and usage insights. Choose “Skip & Deactivate” to deactivate the plugin without sharing any data.', 'elementskit-lite' ); ?>
+
+								<a href="https://wpmet.com/privacy-policy/" target="_blank" rel="noopener noreferrer"><?php echo esc_html__( 'Privacy Policy', 'elementskit-lite' ); ?></a>
+							</p>
 
 							<?php $this->render_modal_footer(); ?>
 						</div>

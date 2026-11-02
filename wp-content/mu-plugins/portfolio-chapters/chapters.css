@@ -1,0 +1,1448 @@
+/* Homepage chapter scrolling.
+
+   Nothing here applies until chapters.js has run and added .ch-on to <html>
+   and wrapped the sections in .ch, so a browser that never ran the script
+   gets today's ordinary page rather than a half-applied snap container.
+
+   Geometry: each chapter is given a screen with min-height rather than
+   height, so a chapter whose content genuinely needs more room (Highlighted
+   Projects at desktop widths, Get In Touch on a phone) simply grows. That
+   is deliberate and safe: the scroll-snap spec says a snap area larger than
+   the viewport makes every scroll position that covers the viewport a valid
+   snap position, so an oversized chapter scrolls through freely instead of
+   trapping its own content - which is what mandatory snapping with fixed
+   heights would do.
+
+   svh rather than dvh: dvh changes as the mobile browser toolbar hides,
+   which would re-measure every chapter mid-scroll and move the snap
+   positions out from under the gesture. svh is the stable small-viewport
+   value, so the chapters never resize while scrolling; the few pixels of
+   extra room when the toolbar retracts are invisible against a continuous
+   background. */
+
+/* Sections chapters.js has marked as redundant (spacers and dividers that
+   only existed to separate one long scroll). */
+.ch-on .ch-drop {
+	display: none !important;
+}
+
+html.ch-on {
+	/* mandatory: every scroll gesture comes to rest on a chapter - one
+	   wheel notch or one swipe moves to the next one - which is the
+	   "locking" the page is built around.
+
+	   This was switched to proximity once, to fix the page bouncing back
+	   instead of letting you scroll to the very bottom. That cured the
+	   symptom and broke the locking: with proximity a short gesture ends
+	   near the chapter it started from and springs back, so on a phone a
+	   normal half-screen swipe never left the hero and a wheel notch or
+	   two on desktop did nothing either (measured: ten 300px wheel steps
+	   left the page at the top).
+
+	   The bounce had a different cause. Mandatory snapping only rests on
+	   snap positions, and the footer sits after the last chapter, outside
+	   every chapter, so the true bottom of the document wasn't one - the
+	   scroll got pulled back up to the last chapter. The footer is now a
+	   snap target of its own (below), which makes the bottom a valid place
+	   to stop and removes the reason for proximity. */
+	scroll-snap-type: y mandatory;
+	/* for the rail's scrollIntoView and for in-page anchors */
+	scroll-behavior: smooth;
+}
+
+/* Touch screens: no elastic stretch past the first/last chapter. The stretch
+   and spring-back at the page's ends read as the same "overshoot then bounce"
+   as the one glide.js removes between chapters. */
+@media (hover: none) and (pointer: coarse) {
+	html.ch-on {
+		overscroll-behavior-y: none;
+	}
+}
+
+/* Touch screens: glide.js moves the page itself (follows the finger, then glides to
+   the chapter), so the browser may only pan sideways here - which is what keeps
+   the card rows and galleries swipeable. With no native vertical scroll there is no
+   momentum for the script to fight (the cause of the page glitching and jumping
+   after the first swipe on a real phone). Added by glide.js, so it only applies
+   where the script is running. */
+html.ch-on.ch-glide,
+html.ch-on.ch-glide body,
+html.ch-on.ch-glide .ch-xrow {
+	touch-action: pan-x pinch-zoom;
+}
+/* .ch-xrow = the sideways-only scrollers (card rows, gallery strip, tag rows), marked by glide.js.
+   A scroll container does not inherit the page's touch-action, so without this a finger that
+   lands on a row still scrolled the page natively and fought the script. */
+
+/* The bottom of the page is a snap position too (see above). Aligned to its
+   end so that "footer's bottom edge at the viewport's bottom edge" is the
+   position it offers, i.e. the last scroll position there is. On desktop the
+   last chapter plus the footer fill exactly one screen, so this lands on the
+   same spot as the last chapter's own snap; on a phone, where the contact
+   chapter is taller than the screen, it is what makes the footer reachable
+   at all. */
+html.ch-on .elementor-location-footer {
+	scroll-snap-align: end;
+}
+
+.ch-on .ch {
+	min-height: 100vh;
+	min-height: 100svh;
+	scroll-snap-align: start;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	position: relative;
+}
+
+/* The first chapter shares its screen with the site header and the last
+   with the footer. Without this the very first snap would scroll the header
+   away, and the footer would sit beyond the final snap position where
+   mandatory snapping cannot settle. Both offsets are measured by
+   chapters.js (the admin bar and the phone header change them). */
+.ch-on .ch--first {
+	min-height: calc(100svh - var(--ch-top, 0px));
+	scroll-margin-top: var(--ch-top, 0px);
+}
+
+.ch-on .ch--last {
+	min-height: calc(100svh - var(--ch-bot, 0px));
+}
+
+/* The hero draws its own full-bleed panel and already sizes itself; letting
+   it fill the chapter keeps its circuit board edge-to-edge instead of
+   leaving a band of page background above the fold. */
+.ch-on .ch--first > .e-con,
+.ch-on .ch--first .hx {
+	flex: 1 1 auto;
+}
+
+/* The hero's own floor (92% of the screen, in hero.css) isn't aware of the
+   header above it: header + 92svh came to 911px on a 900px screen, 790px on
+   a 768px one. That made the first chapter taller than the screen, and a
+   snap area taller than the screen can come to rest anywhere across the
+   overshoot - so coming back up to the top left the page parked a few
+   pixels (up to ~50px on tablets) short of the top, with the header's upper
+   edge clipped. Letting the chapter set the height instead - which is
+   already "one screen minus the header", and which the flex rule above
+   stretches the hero to fill - makes the first chapter exactly one screen,
+   so the top is a single, exact resting place. The hero's own content still
+   forces it taller on screens too short to hold it.
+
+   Set to exactly that height rather than 0: the hero is nested inside
+   Elementor widget wrappers, so the flex rule above doesn't actually
+   stretch it, and a smaller value would leave a band of bare page
+   background under the circuit board.
+
+   Phones too, and for a second reason there: on a phone the header floats
+   over the top of the hero (the page is pulled up under it), so the hero's
+   dark panel has to reach the very top of the screen. With hero.css's own
+   height (90% of the screen, capped at 860px) the panel was shorter than
+   its chapter and sat vertically centred in it, which put its top edge 25-30px
+   down the screen on a 390x844 - a visible seam running straight through the
+   site name and the menu button, a lighter strip above it and the darker panel
+   below. Filling the chapter puts that edge above the screen instead
+   (--ch-top is 0 on phones, so this is simply the full screen height). */
+.ch-on .ch--first .hx {
+	min-height: calc(100svh - var(--ch-top, 0px));
+}
+
+/* ---------------------------------------------------------------------------
+   Chapter rail
+   --------------------------------------------------------------------------- */
+
+.chnav {
+	position: fixed;
+	right: clamp(10px, 1.6vw, 22px);
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 90;
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	align-items: flex-end;
+}
+
+/* !important and the full reset: the theme and the site's own button
+   treatment both style bare <button> elements (gradient fill, radius,
+   padding), which turned these into full-size pills on first render. */
+.chnav__dot {
+	appearance: none;
+	-webkit-appearance: none;
+	background: transparent !important;
+	background-image: none !important;
+	border: 0 !important;
+	box-shadow: none !important;
+	border-radius: 0 !important;
+	padding: 5px !important;
+	margin: 0 !important;
+	min-width: 0 !important;
+	width: auto !important;
+	height: auto !important;
+	cursor: pointer;
+	display: block;
+	position: relative;
+	color: inherit;
+	line-height: 0;
+	font-size: 0;
+	transform: none !important;
+	transition: none;
+}
+
+/* The dot itself is a pseudo-element so the button keeps a comfortable
+   touch target around a deliberately small mark. */
+.chnav__dot::after {
+	content: "";
+	display: block;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: rgba(199, 208, 224, 0.28);
+	transition: background-color 0.3s ease, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.chnav__dot:hover::after,
+.chnav__dot:focus-visible::after {
+	background: rgba(199, 208, 224, 0.6);
+	transform: scale(1.25);
+}
+
+.chnav__dot.is-active::after {
+	background: #4FCF9C;
+	transform: scale(1.45);
+}
+
+.chnav__dot:focus-visible {
+	outline: 2px solid #5B7FFF;
+	outline-offset: 3px;
+	border-radius: 4px;
+}
+
+/* Label rides out from the dot on hover/focus only - the rail stays a row
+   of marks at rest rather than a second navigation menu competing with the
+   header. */
+/* Taken out of flow so the rail is only ever as wide as its dots; in flow
+   it sized every button to its longest label even while invisible. */
+.chnav__label {
+	position: absolute;
+	right: calc(100% + 6px);
+	top: 50%;
+	font-size: 12px;
+	letter-spacing: 0.04em;
+	line-height: 1;
+	white-space: nowrap;
+	color: #C7D0E0;
+	opacity: 0;
+	transform: translateY(-50%) translateX(6px);
+	transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+	pointer-events: none;
+}
+
+.chnav__dot:hover .chnav__label,
+.chnav__dot:focus-visible .chnav__label {
+	opacity: 1;
+	transform: translateY(-50%);
+}
+
+/* Phones: the rail moves to a row along the bottom. At 390px the page
+   gutter is only a few pixels, so a right-hand rail sits directly on top of
+   the body copy; centred along the bottom it floats clear of the text and
+   of the back-to-top button in the corner, and reads as progress through
+   the page the way carousel pagination does. Labels go - there is no hover
+   on touch to reveal them. */
+@media (max-width: 767px) {
+	.chnav {
+		right: auto;
+		left: 50%;
+		top: auto;
+		bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+		transform: translateX(-50%);
+		flex-direction: row;
+		align-items: center;
+		gap: 4px;
+		padding: 7px 10px;
+		border-radius: 999px;
+		background: rgba(12, 23, 41, 0.55);
+		-webkit-backdrop-filter: blur(8px);
+		backdrop-filter: blur(8px);
+	}
+	.chnav__dot {
+		padding: 4px !important;
+	}
+	.chnav__dot::after {
+		width: 6px;
+		height: 6px;
+	}
+	.chnav__label {
+		display: none;
+	}
+}
+
+/* The rail is decoration over a page that is already fully navigable by
+   scrolling and by the header menu, so it goes away when there is no room
+   for it beside the content. */
+@media (max-height: 480px) {
+	.chnav {
+		display: none;
+	}
+}
+
+
+/* Feature Projects (the home page's six project cards) shows each card's
+   description in full. The desktop layout used to cap it at three lines to
+   keep the chapter closer to a screen, which cut the longer descriptions off
+   mid-sentence with "..."; the owner asked that no description text be
+   hidden, and the chapter is two stops on desktop anyway. Nothing clamps,
+   truncates or hides an excerpt anywhere on the site now. */
+
+/* ---------------------------------------------------------------------------
+   Chapter crossfade.
+
+   chapters.js already toggles .ch-active on whichever chapter the
+   IntersectionObserver says covers the middle of the viewport - originally
+   that class only drove the rail dot, with a barely-visible 0.93->1 opacity
+   dim on top (scrolling from one chapter to the next had no real animation
+   of its own beyond whatever the individual widgets inside it do on first
+   reveal - reveal.js's .pr, which only ever plays once per element and says
+   nothing about chapters as a concept).
+
+   This is the same hook turned into the main event: a full opacity fade
+   (0 -> 1) combined with a slight rise or fall, so the chapter you're
+   arriving at settles into place rather than just appearing. Direction
+   comes from chapters.js's ch-from-below/ch-from-above classes, kept in
+   sync with the active chapter: a chapter below the active one can only
+   have been reached by scrolling down, so it rises up into place (starts
+   offset downward, animates to 0); a chapter above can only have been
+   reached by scrolling up, so it falls into place (starts offset upward).
+   That reads as motion that follows the scroll rather than the same
+   canned slide every time regardless of which way you're actually moving.
+
+   An earlier version of this also desaturated and blurred the inactive
+   chapters. Blur is an expensive filter to keep animating every scroll,
+   and on anything but a fast GPU it visibly dropped frames mid-transition
+   - which reads as the page being slow to render, not as a deliberate
+   soft-focus effect. Opacity and transform alone are compositor-only
+   properties (the same discipline the hero's hxIn keyframes and the
+   scroll reveal's .pr already use - see portfolio-hero/hero.css and
+   portfolio-reveal/reveal.css), so this version has no frame drop to
+   begin with.
+
+   Independent of .pr: that class lives on children (grouped cards, icon
+   rows) and fades them in from 0 the first time they're scrolled to. This
+   lives on the chapter wrapper itself and revisits every time you pass
+   through, so the two opacities multiply rather than fight - a chapter
+   that is both off-screen-inactive and still mid-reveal stays invisible
+   until both say otherwise, which is correct.
+
+   Never applies to the header or footer: chapters.js only wraps the page's
+   own top-level sections, so the two shared chapters (hero/header,
+   contact/footer) still happen to have their chrome rendered outside any
+   .ch. */
+.ch-on .ch {
+	opacity: 0;
+	transform: translateY(22px);
+	transition: opacity 0.7s cubic-bezier(0.16, 0.84, 0.44, 1),
+		transform 0.7s cubic-bezier(0.16, 0.84, 0.44, 1);
+}
+
+.ch-on .ch.ch-from-above {
+	transform: translateY(-22px);
+}
+
+.ch-on .ch.ch-active {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+/* Scoped the same way the old filter-based version was: off entirely for
+   chapters nowhere near the viewport, so a one-screen-at-a-time snap scroll
+   only ever pays the compositing cost for the (at most three) chapters that
+   can actually be visible at once. */
+.ch-on .ch:not(.ch-active):not(.ch-near) {
+	transition: none;
+	will-change: auto;
+}
+.ch-on .ch-near,
+.ch-on .ch-active {
+	will-change: opacity, transform;
+}
+
+/* ---------------------------------------------------------------------------
+   About Me page (body.ch-page-about)
+
+   Everything above is page-agnostic and applies to this page as it stands:
+   the snap container, the rail, the crossfade. What follows is only the
+   layout tuning that gives its three chapters - the intro, Backpacking
+   Adventures and Hobbies - the same one-screen-each feel as the home page.
+
+   The intro was authored as the top of a long scroll (70px of padding above
+   it, big photos), and on a 1440x900 screen it came to 938px against the
+   817px that is left under the header. A chapter taller than the screen
+   rests anywhere across the overshoot, so the page parked 23px down at load
+   with the header's top edge clipped - the same problem the home page's hero
+   had. So on tablet and up it is tightened to fit:
+
+   - less padding above and below, and in the gaps between its parts;
+   - the volcano photo, the one flexible-height piece, is sized from the
+     screen: whatever height is left after the heading and the text, up to
+     its natural height, never below 300px. Set with object-fit: cover and
+     a bottom-weighted focus so that when it is trimmed (about 10% at
+     1440x900) it is the sky that goes, not the person at the bottom.
+     Taller screens get its natural height back; shorter ones keep the floor
+     and the chapter is simply a little taller than the screen.
+
+   Hobbies is taller than a screen on desktop regardless (three stacked
+   video posters beside the text and two collages), so like the home page's
+   tall chapters it takes two stops. On phones the intro is likewise two
+   stops - its photo carousel alone is nearly a screen - while Backpacking
+   and Hobbies fit one each.
+   --------------------------------------------------------------------------- */
+
+/* The home page's first chapter holds a hero that fills its chapter; here
+   the first chapter is ordinary content, so let it be vertically centred
+   like every other chapter instead of stretched. */
+.ch-page-about .ch--first > .e-con,
+.ch-page-skills .ch--first > .e-con {
+	flex: 0 0 auto;
+}
+
+/* The home page's last chapter (Contact) is sized to share its screen with
+   the footer, because the two together are about one screen. Hobbies plus
+   the footer are not - on a phone that is 708px + 294px against an 844px
+   screen - so sized that way the footer peeked up from the bottom of
+   Hobbies' stop with the page-dots pill sitting on it. A full screen of its
+   own instead: Hobbies is a clean stop, and the footer is the page's final
+   stop below it. */
+.ch-page-about .ch--last,
+.ch-page-skills .ch--last {
+	min-height: 100svh;
+}
+
+/* Phones: the intro's heading sat 2px under the header (70px of padding,
+   against a header that overlaps the page by 75px). A little more room. */
+@media (max-width: 767px) {
+	.ch-page-about .ch[data-ch="about-me"] > .e-con > .e-con-inner {
+		padding-top: 88px !important;
+	}
+}
+
+@media (min-width: 768px) {
+	.ch-page-about .ch[data-ch="about-me"] > .e-con > .e-con-inner {
+		padding-top: 16px !important;
+		padding-bottom: 16px !important;
+	}
+	/* Top and bottom padding only - the 10px at each side is what makes the
+	   gutter between the two columns (20px), so it stays. */
+	.ch-page-about .ch[data-ch="about-me"] .elementor-element.elementor-element-adfd3b8,
+	.ch-page-about .ch[data-ch="about-me"] .elementor-element.elementor-element-017f0e6 {
+		padding-top: 0 !important;
+		padding-bottom: 0 !important;
+		gap: 16px !important;
+	}
+	/* The Iceland photo used to sit under the text, so the text column was
+	   as tall as the portrait beside it only by way of that photo. Without
+	   it the column is just the heading and two paragraphs, shorter than the
+	   portrait: stretched to the portrait's height with its contents centred,
+	   the text sits level with the middle of the photo instead of hanging
+	   from the top of an empty column. */
+	.ch-page-about .ch[data-ch="about-me"] .elementor-element.elementor-element-adfd3b8 {
+		align-self: stretch !important;
+		justify-content: center !important;
+	}
+	/* The graduation portrait in the right-hand column is 739px tall, which
+	   on a short screen (a 1366x768 laptop) makes it the tallest thing in
+	   the chapter once the left column has been fitted. Same idea: follow
+	   the screen's height - minus the chapter's 32px of padding - up to its
+	   cap, with the focus held high so the face stays in frame if the
+	   bottom is trimmed.
+
+	   About 10% smaller than natural: 90% of the column wide and up to 665px
+	   tall (it was 100% and 739px). At that size the photo's own shape
+	   (493x739) fits the box exactly, so nothing is cropped. Centred in its
+	   column rather than left-aligned, so the space it gives up is split
+	   either side. Floor lowered to 460 (was 520). */
+	.ch-page-about .ch[data-ch="about-me"] .elementor-element-8fda37e img {
+		display: block;
+		width: 90%;
+		margin: 0 auto;
+		height: clamp(460px, calc(100svh - var(--ch-top, 0px) - 32px), 665px);
+		object-fit: cover;
+		object-position: center 25%;
+	}
+}
+
+/* About Me intro on phones: the two photos in the swipe row (the Iceland
+   landscape, the graduation portrait) are a little smaller - each slide is
+   70% of the screen wide (it was 82%), so the portrait is about 410px tall
+   instead of 469 and the row about 60px shorter, and a bit more of the next
+   photo shows at the edge, which reads better as "swipe for more". Only
+   this row: Backpacking and Hobbies keep theirs. */
+@media (max-width: 767px) {
+	.ch-page-about .elementor-element-leadcaro1 > .elementor-element {
+		flex: 0 0 70% !important;
+		width: 70% !important;
+		max-width: 70% !important;
+	}
+}
+
+/* ---------------------------------------------------------------------------
+   Skills & Education page (body.ch-page-skills)
+
+   Two chapters on every screen size: Skills (title, intro and the six
+   category boxes) and Education (banner, credential cards, "Full Academic
+   History"). The snap container, rail and crossfade are the page-agnostic
+   rules above; this is only the layout tuning.
+
+   On a desktop both chapters are taller than a screen - six boxes in three
+   rows after a title is about 1200px, the banner plus five cards about
+   1400px - so each takes two stops, as the home page's tall chapters do.
+   Boxes and cards are the content; shrinking them to force one screen would
+   mean cropping or redesigning them, not tuning.
+
+   On a phone the Skills chapter is title + intro + a chip bar + the ONE
+   category the chip selects (skills-filter.js), so its height depends on
+   which chip is active: about 840px for the short categories, up to ~1050
+   for Robotics & AI and Simulation/CAD, which have the most skills. The
+   spacing below is trimmed so the default view (Languages & Programming)
+   and the other short categories fit one screen at 390x844; the long
+   categories take a second stop.
+   --------------------------------------------------------------------------- */
+/* The page's two section headings - "Skills and Tools" and "Certifications &
+   Education" - are ONE style at every screen size: the same size, line
+   height, weight and letter-spacing, from one set of variables. They had
+   drifted apart (40px bold with tight tracking against 36px / 28px / 22px
+   semibold, depending on the screen), because each was sized by its own
+   rules in its own corner of this file. Only the colouring differs, as
+   authored: a blue-to-green gradient on the title, white with a green
+   "Education" on the other. The tiers: 40px, 36px on a laptop under 720px
+   tall, and on a phone 26px growing to 28px with the screen's height (the
+   same scale as the rest of the phone Skills chapter). */
+.ch-page-skills { --sk-h-fs: 40px; --sk-h-lh: 48px; }
+@media (min-width: 768px) and (max-height: 720px) { .ch-page-skills { --sk-h-fs: 36px; --sk-h-lh: 42px; } }
+@media (max-width: 767px) {
+	.ch-page-skills {
+		--sk-h-fs: clamp(26px, calc(26px + (100svh - 640px) * 0.0098), 28px);
+		--sk-h-lh: clamp(32px, calc(32px + (100svh - 640px) * 0.0196), 36px);
+	}
+}
+body.ch-page-skills .elementor-element-9b0895d .elementor-heading-title,
+body.ch-page-skills .elementor-element-bb30625 p,
+body.ch-page-skills .elementor-element-bb30625 p span {
+	font-size: var(--sk-h-fs) !important;
+	line-height: var(--sk-h-lh) !important;
+	font-weight: 700 !important;
+	letter-spacing: -1.4px !important;
+}
+
+@media (max-width: 767px) {
+	/* Spread out down the screen: the title block, the chips and the selected
+	   category's box share whatever room the screen has, evenly (above, between
+	   and below), instead of all sitting at the top with a hole under them.
+	   (It was top-aligned because the box changed height with every chip,
+	   which would have moved the title and chips on each tap; skills-filter.js
+	   now gives every category's box the height of the tallest, so nothing
+	   moves.) The three authored category sections dissolve so the chip bar and
+	   the box are direct children of the chapter and take part in the
+	   spacing; on a short phone there is no spare room and this is a no-op. */
+	.ch-page-skills .ch[data-ch="skills"] {
+		justify-content: space-evenly;
+	}
+	.ch-page-skills .ch[data-ch="skills"] > .elementor-element-e726ace,
+	.ch-page-skills .ch[data-ch="skills"] > .elementor-element-e726ace > .e-con-inner,
+	.ch-page-skills .ch[data-ch="skills"] > .elementor-element-9260a85,
+	.ch-page-skills .ch[data-ch="skills"] > .elementor-element-9260a85 > .e-con-inner,
+	.ch-page-skills .ch[data-ch="skills"] > .elementor-element-9580c61,
+	.ch-page-skills .ch[data-ch="skills"] > .elementor-element-9580c61 > .e-con-inner {
+		display: contents !important;
+	}
+	/* pills centred in the box when its category is shorter than the tallest */
+	.ch-page-skills .sf-category { align-content: center; }
+	/* the side gutters the dissolved sections used to provide */
+	.ch-page-skills .ch[data-ch="skills"] .sf-bar { margin-left: 14px; margin-right: 14px; }
+	.ch-page-skills .ch[data-ch="skills"] .sf-category { margin-left: 10px !important; margin-right: 10px !important; width: calc(100% - 20px) !important; max-width: none !important; box-sizing: border-box; }
+	/* The title block's own padding: 120px above the heading (the header
+	   floats over the top 75px of the page, so that is mostly header
+	   clearance, with 45px to spare) and 20px below. */
+	.ch-page-skills .ch[data-ch="skills"] > .elementor-element-13f6ccb > .e-con-inner {
+		padding-top: 88px !important;
+		padding-bottom: 6px !important;
+	}
+	.ch-page-skills .sf-bar {
+		padding-bottom: 10px;
+	}
+}
+
+/* Skills & Education, tablet and up: the Education chapter is taller than
+   a screen (banner + five cards), so its first stop lines the chapter's top
+   edge up with the screen's top edge - and its first element is the
+   "Certifications & Education" heading, which sat hard against that edge
+   with no room above it. Some breathing room, as every other chapter's
+   content has by being centred in a full screen. */
+@media (min-width: 768px) {
+	.ch-page-skills .ch[data-ch="education"] {
+		padding-top: 56px;
+	}
+}
+
+/* ===========================================================================
+   Fit to the screen: spacing and density tiers (home, About Me, Skills)
+
+   Goal: a chapter is one screen, not two. Everything here is formatting and
+   spacing only - no content is removed, hidden or cropped. Where a chapter is
+   too tall to get there cleanly it is deliberately left alone (it takes two
+   stops, as before); those are listed at the end.
+
+   "Screen" means the VISIBLE height, which on a real laptop or phone is
+   100-180px less than the device's own resolution once browser toolbars are
+   showing: roughly 730px on a 1536x864 laptop, 650px on a 1366x768 one, 664px
+   on a 390x844 iPhone, 553px on an iPhone SE. Each tier is a height query, so
+   a tall window keeps the roomy original layout and only a short one tightens.
+
+   Measured with every image loaded, on the real pages, at: laptops 1920x950,
+   1536x730, 1440x800, 1366x650; phones 430x760, 390x664, 390x844, 360x600,
+   375x553.
+   =========================================================================== */
+
+/* ---------- Phones ---------- */
+@media (max-width: 767px) {
+	/* Contact (home) and every page's last chapter: a full screen of its own,
+	   with the footer the page's final stop. (Contact used to be sized to
+	   share its screen with the footer, which only works while the form is
+	   about 500px taller than it now needs to be.) */
+	.ch-page-home .ch--last { min-height: 100svh !important; }
+
+	/* Programming / Electrical (home): Machine Learning and Hardware & Power
+	   used to hold two tall portrait diagrams (340-360px, which set the height
+	   of their whole row of cards), so this sized them to the screen's height
+	   with object-fit: contain. Both now hold landscape images, each padded
+	   to 3:2 (the LEDNet diagram, and the PCB top layer with black bands so
+	   its "Top Layer" label is never cropped), so they simply take their own
+	   shape - the tall slot only left dark bands. */
+	.ch-page-home .elementor-element-dfd97de img,
+	.ch-page-home .elementor-element-93a18d8 img {
+		width: 100% !important;
+		height: auto !important;
+		object-fit: cover !important;
+	}
+	.ch-page-home .elementor-element-dfd97de img { aspect-ratio: 3 / 2 !important; }
+	.ch-page-home .elementor-element-93a18d8 img { aspect-ratio: 3 / 2 !important; }
+
+	/* Contact form: compact. Name and email share a row, the message box is
+	   shorter, spacing is tighter, and the LinkedIn / GitHub / Resume buttons
+	   sit side by side instead of stacked. */
+	.ch-page-home .ch[data-ch="contact"] > .elementor-element-e1c0517 > .e-con-inner { padding-top: 28px !important; padding-bottom: 20px !important; }
+	.ch-page-home .elementor-element-33307a8 { gap: 12px !important; padding-top: 4px !important; padding-bottom: 4px !important; }
+	.ch-page-home .elementor-element-8827855 { gap: 10px !important; }
+	.ch-page-home .elementor-element-db98b37,
+	.ch-page-home .elementor-element-9738f49 { padding-top: 0 !important; padding-bottom: 0 !important; gap: 10px !important; }
+	.ch-page-home .elementor-element-72e76be > .elementor-widget-container { margin-top: 0 !important; }
+	.ch-page-home .elementor-element-72e76be .elementor-form-fields-wrapper { margin-bottom: -10px !important; }
+	.ch-page-home .elementor-element-72e76be .elementor-field-group { margin-bottom: 10px !important; }
+	.ch-page-home .elementor-element-72e76be .elementor-field-group:nth-child(1),
+	.ch-page-home .elementor-element-72e76be .elementor-field-group:nth-child(2) { width: 50% !important; flex: 0 0 50% !important; max-width: 50% !important; }
+	.ch-page-home .elementor-element-72e76be input.elementor-field,
+	.ch-page-home .elementor-element-72e76be textarea.elementor-field { padding-top: 9px !important; padding-bottom: 9px !important; }
+	.ch-page-home .elementor-element-72e76be textarea.elementor-field { height: 66px !important; min-height: 0 !important; }
+	.ch-page-home .elementor-element-72e76be button.elementor-button { padding-top: 10px !important; padding-bottom: 10px !important; }
+	.ch-page-home .elementor-element-51716a9 p { margin-bottom: 0 !important; }
+	.ch-page-home .elementor-element-bd938e8 p { margin-bottom: 3px !important; }
+	.ch-page-home .elementor-element-475a534 { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 8px !important; }
+	.ch-page-home .elementor-element-475a534 .elementor-button { padding: 11px 6px !important; font-size: 13px !important; }
+	.ch-page-home .elementor-element-475a534 .elementor-button-content-wrapper { gap: 4px !important; justify-content: center !important; }
+
+	/* About Me, Backpacking and Hobbies: the photo slides follow the room
+	   left under the text (square, up to the usual 82% of the width). */
+	.ch-page-about .elementor-element-bpcaro1 > .elementor-element { flex-basis: min(82%, calc(100svh - 420px)) !important; width: min(82%, calc(100svh - 420px)) !important; max-width: min(82%, calc(100svh - 420px)) !important; }
+	.ch-page-about .elementor-element-hbcaro1 > .elementor-element { flex-basis: min(82%, calc(100svh - 345px)) !important; width: min(82%, calc(100svh - 345px)) !important; max-width: min(82%, calc(100svh - 345px)) !important; }
+}
+
+/* Shorter phones: typical visible height with the browser's bars showing,
+   and below. The 40px is the page-dots pill along the bottom edge. */
+@media (max-width: 767px) and (max-height: 790px) {
+	.ch-on .ch:not(.ch--first) { padding-bottom: 40px; }
+
+	/* Home: About */
+	.ch-page-home .elementor-element-add5602 img { width: 56% !important; }
+
+	/* Home: Feature Projects */
+	.ch-page-home .ch[data-ch="projects"] > .elementor-element-31c239a > .e-con-inner { padding-top: 24px !important; padding-bottom: 10px !important; }
+	.ch-page-home .elementor-element-938281b { gap: 10px !important; }
+	.ch-page-home .elementor-element-1160f19 .elementor-heading-title { line-height: 38px !important; }
+	.ch-page-home .elementor-element-20aba35 > .elementor-widget-container { margin-top: 4px !important; }
+	.ch-page-home .elementor-element-20aba35 .elementor-post__thumbnail { padding-bottom: 44% !important; }
+	.ch-page-home .elementor-element-20aba35 .elementor-post__text { padding-top: 12px !important; padding-bottom: 10px !important; }
+	.ch-page-home .elementor-element-20aba35 .hp-card-cat { font-size: 11px !important; line-height: 15px !important; margin-bottom: 3px !important; }
+	.ch-page-home .elementor-element-20aba35 .elementor-post__title { margin-bottom: 6px !important; }
+	.ch-page-home .elementor-element-20aba35 .elementor-post__title a { font-size: 17px !important; line-height: 20px !important; }
+	.ch-page-home .elementor-element-20aba35 .elementor-post__excerpt { margin-bottom: 6px !important; }
+	.ch-page-home .elementor-element-20aba35 .elementor-post__excerpt p { font-size: 13.5px !important; line-height: 18px !important; }
+
+	/* About Me: Backpacking */
+	.ch-page-about .elementor-element-9b20387 { padding-top: 4px !important; padding-bottom: 2px !important; gap: 10px !important; }
+	.ch-page-about .elementor-element-12ef05e .elementor-heading-title { font-size: 34px !important; line-height: 34px !important; }
+	.ch-page-about .elementor-element-6af9694 p { font-size: 15px !important; line-height: 18px !important; margin-bottom: 8px !important; }
+	/* About Me: Hobbies */
+	.ch-page-about .ch[data-ch="hobbies"] > .elementor-element-da0ce86 > .e-con-inner { padding-top: 18px !important; padding-bottom: 20px !important; }
+	.ch-page-about .elementor-element-0e8288a { gap: 12px !important; }
+	.ch-page-about .elementor-element-2f28ddf .elementor-heading-title { font-size: 34px !important; line-height: 34px !important; }
+	.ch-page-about .elementor-element-74b190a p { font-size: 15px !important; line-height: 18px !important; margin-bottom: 8px !important; }
+
+	/* Skills & Education: Education */
+	.ch-page-skills .elementor-element-543847f > .e-con-inner { padding-top: 4px !important; padding-bottom: 0 !important; }
+	.ch-page-skills .elementor-element-aa69d13 { gap: 10px !important; padding-top: 2px !important; padding-bottom: 2px !important; }
+	.ch-page-skills .elementor-element-3cf4898 > .elementor-widget-container { width: 85%; margin: 0 auto; }
+	/* (was 18px: 8px of it now sits above the button instead - see "Education on phones") */
+	.ch-page-skills .elementor-element-0e445d5 > .e-con-inner { padding-bottom: 8px !important; }
+	.ch-page-skills .elementor-element-3d1b82f > .e-con-inner > .e-con { padding: 14px 18px !important; gap: 8px !important; }
+}
+
+/* Small phones: an iPhone SE, or a 360-wide Android, with browser bars. */
+@media (max-width: 767px) and (max-height: 640px) {
+	.ch-page-home .elementor-element-add5602 img { width: 42% !important; }
+	.ch-page-home .elementor-element-305fe115 .elementor-heading-title { font-size: 34px !important; line-height: 38px !important; }
+	.ch-page-home .elementor-element-48f5092e p,
+	.ch-page-home .elementor-element-48f5092e { font-size: 14.5px !important; line-height: 17px !important; }
+	/* Home: Robotics */
+	.ch-page-home .elementor-element-317e0db { gap: 8px !important; }
+	.ch-page-home .elementor-element-22d51ba .elementor-heading-title { font-size: 28px !important; line-height: 36px !important; }
+	.ch-page-home .elementor-element-59dd08b .elementor-heading-title { font-size: 22px !important; line-height: 28px !important; }
+	.ch-page-home .elementor-element-3ec2372 { height: 4px !important; min-height: 0 !important; overflow: hidden !important; }
+	.ch-page-home .elementor-element-b49e282 > .elementor-element { gap: 10px !important; }
+	/* Home: Feature Projects */
+	.ch-page-home .elementor-element-20aba35 .elementor-post__thumbnail { padding-bottom: 34% !important; }
+	.ch-page-home .elementor-element-20aba35 .elementor-post__excerpt p { font-size: 13px !important; line-height: 17px !important; }
+	.ch-page-home .elementor-element-20aba35 .elementor-post__title a { font-size: 16px !important; line-height: 19px !important; }
+	/* Home: Programming / Electrical cards */
+	.ch-page-home .elementor-element-a4a66e7 > .elementor-element,
+	.ch-page-home .elementor-element-ee67158 > .elementor-element { gap: 10px !important; }
+	/* Home: Contact - the page-dots pill needs the room */
+	.ch-page-home .ch[data-ch="contact"] > .elementor-element-e1c0517 > .e-con-inner { padding-top: 14px !important; padding-bottom: 6px !important; }
+	/* About Me: Backpacking / Hobbies */
+	.ch-page-about .elementor-element-6af9694 p,
+	.ch-page-about .elementor-element-74b190a p { font-size: 14px !important; line-height: 17px !important; margin-bottom: 6px !important; }
+	.ch-page-about .elementor-element-12ef05e .elementor-heading-title,
+	.ch-page-about .elementor-element-2f28ddf .elementor-heading-title { font-size: 30px !important; line-height: 30px !important; }
+	.ch-page-about .elementor-element-0e8288a { gap: 8px !important; }
+	.ch-page-about .ch[data-ch="hobbies"] > .elementor-element-da0ce86 > .e-con-inner { padding-top: 10px !important; padding-bottom: 8px !important; }
+	/* Education */
+	.ch-page-skills .elementor-element-3cf4898 > .elementor-widget-container { width: 60%; }
+	.ch-page-skills .elementor-element-aa69d13 { gap: 6px !important; }
+	.ch-page-skills .elementor-element-3d1b82f > .e-con-inner > .e-con { padding: 8px 16px !important; gap: 6px !important; }
+	.ch-page-skills .elementor-element-0e445d5 > .e-con-inner { padding-bottom: 4px !important; }
+}
+
+/* The smallest: an iPhone SE in Safari leaves about 550px. */
+@media (max-width: 767px) and (max-height: 580px) {
+	.ch-page-home .elementor-element-add5602 img { width: 36% !important; }
+	.ch-page-home .elementor-element-20aba35 .elementor-post__thumbnail { padding-bottom: 28% !important; }
+	.ch-page-home .elementor-element-20aba35 .elementor-post__text { padding-top: 10px !important; padding-bottom: 8px !important; }
+	.ch-page-skills .elementor-element-3cf4898 > .elementor-widget-container { width: 44%; }
+}
+
+/* Home: Feature Projects, desktop. The last stop ends with the "View More
+   Projects" button, which sat right where the "Scroll For Fields of Interest"
+   cue floats (the stop is bottom-aligned, so the button was 30px off the
+   screen's edge). 50px more room under it lifts it clear of the cue. */
+@media (min-width: 768px) {
+	.ch-page-home .ch[data-ch="projects"] > .elementor-element-31c239a > .e-con-inner { padding-bottom: 70px !important; }
+}
+
+/* ---------- Laptops ---------- */
+@media (min-width: 768px) and (max-height: 830px) {
+	/* Home: Fields of Interest - Robotics. The four cards' height is their
+	   text; slightly tighter line spacing and gaps bring it inside the screen. */
+	.ch-page-home .elementor-element-317e0db { gap: 14px !important; padding-top: 4px !important; padding-bottom: 4px !important; }
+	.ch-page-home .elementor-element-3ec2372 { height: 6px !important; min-height: 0 !important; overflow: hidden !important; }
+	.ch-page-home .elementor-element-b49e282 { row-gap: 14px !important; }
+	.ch-page-home .elementor-element-b49e282 > .elementor-element p { line-height: 22px !important; }
+
+	/* About Me: intro */
+	.ch-page-about .elementor-element-adfd3b8,
+	.ch-page-about .elementor-element-017f0e6 { gap: 10px !important; }
+	.ch-page-about .elementor-element-5f9ad70 .elementor-heading-title { font-size: 38px !important; line-height: 44px !important; }
+	.ch-page-about .elementor-element-939de95 p { line-height: 23px !important; margin-bottom: 8px !important; }
+	/* the "2026 QS rankings" link carries the site's own link size (17px on a
+	   26px line), which stands out against the tightened paragraph and
+	   stretches its line - it follows the paragraph instead */
+	.ch-page-about .elementor-element-939de95 p a { font-size: inherit !important; line-height: inherit !important; }
+	/* About Me: Backpacking / Hobbies text, Hobbies padding */
+	.ch-page-about .elementor-element-6af9694 p,
+	.ch-page-about .elementor-element-74b190a p { line-height: 23px !important; margin-bottom: 10px !important; }
+	.ch-page-about .ch[data-ch="hobbies"] > .elementor-element-da0ce86 > .e-con-inner { padding-top: 24px !important; padding-bottom: 30px !important; }
+}
+
+/* Short laptop windows: a 1366x768 laptop leaves about 650px. */
+@media (min-width: 768px) and (max-height: 700px) {
+	.hx { padding-top: 60px !important; padding-bottom: 56px !important; }
+	/* Contact (home) is its own screen, the footer the final stop: together
+	   they are about 710px, which no longer fits. */
+	.ch-page-home .ch--last { min-height: 100svh !important; }
+	/* Robotics */
+	.ch-page-home .elementor-element-b49e282 > .elementor-element { padding: 12px 16px !important; row-gap: 6px !important; }
+	.ch-page-home .elementor-element-b49e282 > .elementor-element p { font-size: 14px !important; line-height: 20px !important; }
+	.ch-page-home .elementor-element-b49e282 { row-gap: 10px !important; }
+	.ch-page-home .elementor-element-22d51ba .elementor-heading-title { font-size: 34px !important; line-height: 40px !important; }
+	/* About Me: intro */
+	.ch-page-about .elementor-element-5f9ad70 .elementor-heading-title { font-size: 34px !important; line-height: 40px !important; }
+	.ch-page-about .elementor-element-939de95 p { font-size: 15px !important; line-height: 20px !important; margin-bottom: 8px !important; }
+	.ch-page-about .ch[data-ch="about-me"] > .e-con > .e-con-inner { padding-top: 8px !important; padding-bottom: 8px !important; }
+	/* About Me: Backpacking / Hobbies */
+	.ch-page-about .elementor-element-6af9694 p,
+	.ch-page-about .elementor-element-74b190a p { font-size: 15px !important; line-height: 21px !important; margin-bottom: 8px !important; }
+}
+
+@media (min-width: 768px) {
+	/* About Me, Hobbies: the three video posters were stacked at 493px wide
+	   and set the height of the whole chapter (about 1100px). They follow the
+	   screen's height instead - the posters are 16:9-ish, three of them plus
+	   gaps is about 1.94 times one poster's width, and 150px is the chapter's
+	   own padding and gaps - and keep their natural size on a tall screen.
+	   Centred in their column. */
+	.ch-page-about .elementor-element-e981587 > .elementor-element {
+		width: clamp(240px, calc((100svh - 150px) / 1.94), 493px) !important;
+		max-width: 100% !important;
+		align-self: center !important;
+	}
+}
+
+
+/* Skills & Education on phones: the chapter holds the title, the intro, the
+   category chips and the ONE category the chip selects, so it was 840-1000px
+   tall depending on the category. Everything in it is now sized from the
+   screen's height (see the comment inside) so that EVERY category - Robotics &
+   AI (10 skills) and Simulation/CAD (11) included - fits one screen from a
+   360x640 phone up to a 430x932 one: 480-650px of content on the shortest
+   screens, the roomy original sizes on a tall one. Every skill and every chip
+   is still there. */
+@media (max-width: 767px) {
+	/* ONE chapter holds the title, the intro, the six chips and whichever
+	   category the chip selects - and every category has to fit that one
+	   screen (the owner: "all within the same chapter, where the next chapter
+	   is the Education chapter"). Robotics & AI (10 pills) and Simulation/CAD
+	   (11, one with a three-line label) used to run 100-150px past a 640-670px
+	   screen and the page rested part-way down them before moving on.
+
+	   So everything is sized from the screen's height: the tightest values
+	   (at 640px tall and under) get the biggest category onto one screen, and
+	   they grow smoothly to the roomy ones (at 844px and over). Each value is
+	   clamp(min, min + (100svh - 640px) * slope, max) - slope = (max - min) /
+	   204px, so it is at its maximum by 844px. Every skill, chip and heading
+	   is still there; only type size, padding and gaps change (pills 12px on
+	   the shortest phones, 14px on a tall one). A last-resort inner scroll for
+	   screens shorter still lives in skills-filter.js. */
+	.ch-page-skills .ch[data-ch="skills"] > .elementor-element-13f6ccb > .e-con-inner { padding-top: clamp(62px, calc(62px + (100svh - 640px) * 0.049), 72px) !important; padding-bottom: 0 !important; }
+	.ch-page-skills .elementor-element-ff7ef37 { gap: clamp(6px, calc(6px + (100svh - 640px) * 0.0098), 8px) !important; padding-top: 2px !important; padding-bottom: 2px !important; }
+	/* (the page title's size is the shared heading size, set once above) */
+	.ch-page-skills .elementor-element-3b9d76d p { font-size: clamp(13px, calc(13px + (100svh - 640px) * 0.00735), 14.5px) !important; line-height: clamp(16.5px, calc(16.5px + (100svh - 640px) * 0.00735), 18px) !important; margin-bottom: 0 !important; }
+	/* the chips */
+	.ch-page-skills .sf-bar { gap: clamp(5px, calc(5px + (100svh - 640px) * 0.0049), 6px) !important; padding-top: 0 !important; padding-bottom: clamp(5px, calc(5px + (100svh - 640px) * 0.0147), 8px) !important; }
+	.ch-page-skills .sf-chip { padding: clamp(3px, calc(3px + (100svh - 640px) * 0.0049), 4px) clamp(8px, calc(8px + (100svh - 640px) * 0.0098), 10px) !important; font-size: clamp(12px, calc(12px + (100svh - 640px) * 0.00245), 12.5px) !important; line-height: 1.22 !important; }
+	.ch-page-skills .ch[data-ch="skills"] > .elementor-element-9260a85 > .e-con-inner,
+	.ch-page-skills .ch[data-ch="skills"] > .elementor-element-9580c61 > .e-con-inner { padding-top: 0 !important; padding-bottom: 0 !important; }
+	/* the selected category: box, heading, pills */
+	.ch-page-skills .sf-category { padding: clamp(9px, calc(9px + (100svh - 640px) * 0.0147), 12px) clamp(9px, calc(9px + (100svh - 640px) * 0.0147), 12px) !important; gap: clamp(5px, calc(5px + (100svh - 640px) * 0.0049), 6px) !important; }
+	.ch-page-skills .sf-category > .elementor-element:first-child { margin-bottom: 0 !important; }
+	.ch-page-skills .sf-category > .elementor-element:first-child .elementor-heading-title { font-size: clamp(19px, calc(19px + (100svh - 640px) * 0.0098), 21px) !important; line-height: clamp(23px, calc(23px + (100svh - 640px) * 0.0147), 26px) !important; }
+	.ch-page-skills .sf-category .elementor-button { padding: clamp(4px, calc(4px + (100svh - 640px) * 0.0147), 7px) clamp(8px, calc(8px + (100svh - 640px) * 0.0196), 12px) !important; font-size: clamp(12px, calc(12px + (100svh - 640px) * 0.0098), 14px) !important; line-height: 1.2 !important; gap: clamp(4px, calc(4px + (100svh - 640px) * 0.0098), 6px); }
+	.ch-page-skills .sf-category .elementor-button img { width: clamp(16px, calc(16px + (100svh - 640px) * 0.0245), 21px) !important; }
+	/* the page-dots pill sits along the bottom edge */
+	.ch-on .ch-page-skills .ch[data-ch="skills"] { padding-bottom: clamp(36px, calc(36px + (100svh - 640px) * 0.0196), 40px); }
+}
+
+/* ===========================================================================
+   Chapters that used to need two stops - re-laid out, not shrunk
+
+   Same rule as the block above (formatting and spacing only, nothing removed
+   or cropped), but these four were too tall for tightening alone, so each
+   gets a different arrangement of the same content.
+   =========================================================================== */
+
+/* ---------------------------------------------------------------------------
+   Skills & Tools (tablet and wider): the six categories over TWO chapters.
+
+   chapters.js splits them three and three - Languages, Frameworks and
+   Robotics & AI under the page title, then Simulation/CAD, Hardware and
+   Operating Systems on a screen of their own - and each category becomes a
+   ROW: its name in a left column, its pills flowing in the space to the right.
+   The page authored the categories as boxes in sections of two, with each
+   category's pills in little rows of one to three; the sections dissolve
+   (display: contents) so every category is a row of its own, and the pill rows
+   are flattened so the pills can pack as one group. That last part needs the
+   extra specificity: an earlier rule for this page keeps those pill rows as
+   flex rows.
+
+   With three rows to a screen there is room to space them out, instead of
+   fitting six into one: generous row padding, a 20px gap between rows,
+   full-size pills, and the pair of chapters is each centred in its screen.
+   The chapter may be wider than the usual 1140px column (up to 1320px, with
+   48px each side clear of the page-dots rail), which keeps the biggest
+   category (Robotics & AI, 10 pills) to two lines. Phones are untouched: they
+   keep the chip filter, which shows one category at a time.
+   --------------------------------------------------------------------------- */
+@media (min-width: 768px) {
+	/* How wide the category rows run: the ordinary column on a tall screen,
+	   wider as the screen gets shorter (wider rows hold their pills in fewer
+	   lines, which is what lets three of them and the title fit under the
+	   header). Taller screens have the height to give each row more lines
+	   and more padding, so there the rows are kept narrower and roomier. */
+	.ch-page-skills { --sk-w: 1120px; --sk-pad: 28px; --sk-gap: 24px; }
+	@media (max-height: 900px) { .ch-page-skills { --sk-w: 1220px; --sk-pad: 22px; --sk-gap: 20px; } }
+	@media (max-height: 780px) { .ch-page-skills { --sk-w: 1320px; --sk-pad: 18px; --sk-gap: 16px; } }
+
+	.ch-page-skills .ch[data-ch="skills"],
+	.ch-page-skills .ch[data-ch="tools"] {
+		width: min(var(--sk-w), calc(100% - 96px)); margin-left: auto; margin-right: auto;
+		/* the bottom padding is the room the "Scroll for more ..." cue sits in */
+		box-sizing: border-box; gap: var(--sk-gap); padding-bottom: 44px;
+	}
+	/* the authored sections of two dissolve: every category is a row of its own */
+	.ch-page-skills .ch[data-ch="skills"] > .elementor-element-e726ace,
+	.ch-page-skills .ch[data-ch="skills"] > .elementor-element-e726ace > .e-con-inner,
+	.ch-page-skills .ch[data-ch="tools"] > .elementor-element-9580c61,
+	.ch-page-skills .ch[data-ch="tools"] > .elementor-element-9580c61 > .e-con-inner { display: contents !important; }
+
+	.ch-page-skills .elementor-element-e1115f5, .ch-page-skills .elementor-element-7b6cb9e,
+	.ch-page-skills .elementor-element-0b96bbd, .ch-page-skills .elementor-element-a85d83e,
+	.ch-page-skills .elementor-element-27199d5, .ch-page-skills .elementor-element-a41d736 {
+		position: relative;
+		display: flex !important; flex-direction: row !important; flex-wrap: wrap !important;
+		align-items: center; align-content: center; justify-content: center;
+		gap: 12px 10px !important;
+		width: 100% !important; max-width: none !important; margin: 0 !important;
+		padding: var(--sk-pad) 32px var(--sk-pad) 276px !important;
+		min-height: 88px; box-sizing: border-box;
+	}
+	/* category name: left column (text centred within it) */
+	.ch-page-skills .elementor-element-e1115f5 > .elementor-element:first-child, .ch-page-skills .elementor-element-7b6cb9e > .elementor-element:first-child,
+	.ch-page-skills .elementor-element-0b96bbd > .elementor-element:first-child, .ch-page-skills .elementor-element-a85d83e > .elementor-element:first-child,
+	.ch-page-skills .elementor-element-27199d5 > .elementor-element:first-child, .ch-page-skills .elementor-element-a41d736 > .elementor-element:first-child {
+		position: absolute !important; left: 32px; top: 50%; transform: translateY(-50%);
+		width: 210px !important; margin: 0 !important; text-align: center !important;
+	}
+	.ch-page-skills .elementor-element-e1115f5 > .elementor-element:first-child .elementor-heading-title, .ch-page-skills .elementor-element-7b6cb9e > .elementor-element:first-child .elementor-heading-title,
+	.ch-page-skills .elementor-element-0b96bbd > .elementor-element:first-child .elementor-heading-title, .ch-page-skills .elementor-element-a85d83e > .elementor-element:first-child .elementor-heading-title,
+	.ch-page-skills .elementor-element-27199d5 > .elementor-element:first-child .elementor-heading-title, .ch-page-skills .elementor-element-a41d736 > .elementor-element:first-child .elementor-heading-title {
+		text-align: center !important; font-size: 21px !important; line-height: 27px !important;
+	}
+	/* flatten the authored pill rows so the pills reflow as one group */
+	body.ch-page-skills .elementor-2064 .elementor-element-e1115f5 > .elementor-element:not(:first-child), body.ch-page-skills .elementor-2064 .elementor-element-7b6cb9e > .elementor-element:not(:first-child),
+	body.ch-page-skills .elementor-2064 .elementor-element-0b96bbd > .elementor-element:not(:first-child), body.ch-page-skills .elementor-2064 .elementor-element-a85d83e > .elementor-element:not(:first-child),
+	body.ch-page-skills .elementor-2064 .elementor-element-27199d5 > .elementor-element:not(:first-child), body.ch-page-skills .elementor-2064 .elementor-element-a41d736 > .elementor-element:not(:first-child) { display: contents !important; }
+	.ch-page-skills :is(.ch[data-ch="skills"], .ch[data-ch="tools"]) .elementor-widget-button { width: auto !important; margin: 0 !important; flex: 0 0 auto; }
+	/* the pills were authored at 13, 14 or 15px (and 5-10px of padding) to squeeze into their old boxes; one size here */
+	.ch-page-skills :is(.ch[data-ch="skills"], .ch[data-ch="tools"]) .elementor-widget-button .elementor-button { padding: 10px 15px !important; }
+	.ch-page-skills :is(.ch[data-ch="skills"], .ch[data-ch="tools"]) .elementor-widget-button :is(.elementor-button, .elementor-button-text) { font-size: 15px !important; }
+}
+/* narrow laptops and tablets: a slimmer name column */
+@media (min-width: 768px) and (max-width: 1279px) {
+	.ch-page-skills .elementor-element-e1115f5, .ch-page-skills .elementor-element-7b6cb9e,
+	.ch-page-skills .elementor-element-0b96bbd, .ch-page-skills .elementor-element-a85d83e,
+	.ch-page-skills .elementor-element-27199d5, .ch-page-skills .elementor-element-a41d736 { padding: 18px 24px 18px 236px !important; }
+	.ch-page-skills .elementor-element-e1115f5 > .elementor-element:first-child, .ch-page-skills .elementor-element-7b6cb9e > .elementor-element:first-child,
+	.ch-page-skills .elementor-element-0b96bbd > .elementor-element:first-child, .ch-page-skills .elementor-element-a85d83e > .elementor-element:first-child,
+	.ch-page-skills .elementor-element-27199d5 > .elementor-element:first-child, .ch-page-skills .elementor-element-a41d736 > .elementor-element:first-child { left: 24px; width: 180px !important; }
+	.ch-page-skills .elementor-element-e1115f5 > .elementor-element:first-child .elementor-heading-title, .ch-page-skills .elementor-element-7b6cb9e > .elementor-element:first-child .elementor-heading-title,
+	.ch-page-skills .elementor-element-0b96bbd > .elementor-element:first-child .elementor-heading-title, .ch-page-skills .elementor-element-a85d83e > .elementor-element:first-child .elementor-heading-title,
+	.ch-page-skills .elementor-element-27199d5 > .elementor-element:first-child .elementor-heading-title, .ch-page-skills .elementor-element-a41d736 > .elementor-element:first-child .elementor-heading-title { font-size: 19px !important; line-height: 25px !important; }
+}
+/* tablets: narrower still, and tighter rows so three fit under the header */
+@media (min-width: 768px) and (max-width: 1099px) {
+	.ch-page-skills :is(.ch[data-ch="skills"], .ch[data-ch="tools"]) { gap: 14px; }
+	.ch-page-skills .elementor-element-e1115f5, .ch-page-skills .elementor-element-7b6cb9e,
+	.ch-page-skills .elementor-element-0b96bbd, .ch-page-skills .elementor-element-a85d83e,
+	.ch-page-skills .elementor-element-27199d5, .ch-page-skills .elementor-element-a41d736 { padding: 14px 18px 14px 190px !important; gap: 8px 8px !important; min-height: 72px; }
+	.ch-page-skills :is(.ch[data-ch="skills"], .ch[data-ch="tools"]) .elementor-widget-button .elementor-button { padding: 8px 13px !important; }
+	.ch-page-skills .ch[data-ch="skills"] > .elementor-element-13f6ccb > .e-con-inner { padding-top: 16px !important; padding-bottom: 0 !important; }
+	.ch-page-skills .elementor-element-e1115f5 > .elementor-element:first-child, .ch-page-skills .elementor-element-7b6cb9e > .elementor-element:first-child,
+	.ch-page-skills .elementor-element-0b96bbd > .elementor-element:first-child, .ch-page-skills .elementor-element-a85d83e > .elementor-element:first-child,
+	.ch-page-skills .elementor-element-27199d5 > .elementor-element:first-child, .ch-page-skills .elementor-element-a41d736 > .elementor-element:first-child { left: 18px; width: 150px !important; }
+	.ch-page-skills .elementor-element-e1115f5 > .elementor-element:first-child .elementor-heading-title, .ch-page-skills .elementor-element-7b6cb9e > .elementor-element:first-child .elementor-heading-title,
+	.ch-page-skills .elementor-element-0b96bbd > .elementor-element:first-child .elementor-heading-title, .ch-page-skills .elementor-element-a85d83e > .elementor-element:first-child .elementor-heading-title,
+	.ch-page-skills .elementor-element-27199d5 > .elementor-element:first-child .elementor-heading-title, .ch-page-skills .elementor-element-a41d736 > .elementor-element:first-child .elementor-heading-title { font-size: 18px !important; line-height: 23px !important; }
+}
+/* laptops: the page title block shares the first screen with three rows, so it is trimmed */
+@media (min-width: 768px) and (max-height: 830px) {
+	.ch-page-skills .ch[data-ch="skills"] > .elementor-element-13f6ccb > .e-con-inner { padding-top: 20px !important; padding-bottom: 0 !important; }
+	.ch-page-skills .elementor-element-ff7ef37 { gap: 10px !important; padding-top: 4px !important; padding-bottom: 4px !important; }
+	.ch-page-skills .elementor-element-3b9d76d p { margin-bottom: 0 !important; }
+}
+@media (min-width: 768px) and (max-height: 720px) {
+	.ch-page-skills .elementor-element-3b9d76d p { font-size: 15px !important; line-height: 22px !important; }
+	.ch-page-skills .elementor-element-e1115f5, .ch-page-skills .elementor-element-7b6cb9e,
+	.ch-page-skills .elementor-element-0b96bbd, .ch-page-skills .elementor-element-a85d83e,
+	.ch-page-skills .elementor-element-27199d5, .ch-page-skills .elementor-element-a41d736 { padding-top: 12px !important; padding-bottom: 12px !important; min-height: 72px; }
+	.ch-page-skills :is(.ch[data-ch="skills"], .ch[data-ch="tools"]) { gap: 12px; }
+	/* tighter pills: this chapter shares its screen with the title block (and the scroll cue's room below) */
+	.ch-page-skills :is(.ch[data-ch="skills"], .ch[data-ch="tools"]) .elementor-widget-button .elementor-button { padding-top: 8px !important; padding-bottom: 8px !important; }
+}
+
+/* "Scroll for more ..." cue (chapters.js, on every chaptered page). A small
+   translucent pill at the bottom centre - the same glass as the page-dots pill
+   on phones - with an arrow that nudges down, so it reads as a cue and not as
+   a button. Fixed and out of every chapter's layout; chapters.js only shows it
+   where the chapter's content ends clear of it (and never on the last chapter,
+   whose next stop is the footer). */
+.ch-hint {
+	position: fixed;
+	left: 50%;
+	bottom: 14px;
+	transform: translateX(-50%);
+	z-index: 89;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 5px 13px 5px 15px;
+	border-radius: 999px;
+	border: 1px solid rgba(143, 163, 199, 0.28);
+	background: rgba(12, 23, 41, 0.55);
+	-webkit-backdrop-filter: blur(6px);
+	backdrop-filter: blur(6px);
+	color: #DCE4F2;
+	font-size: 12.5px;
+	line-height: 18px;
+	letter-spacing: 0.03em;
+	white-space: nowrap;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.35s ease;
+}
+.ch-hint.is-on { opacity: 1; }
+.ch-hint svg { flex: 0 0 auto; animation: chHintBob 1.9s ease-in-out infinite; }
+@keyframes chHintBob {
+	0%, 100% { transform: translateY(-2px); }
+	50%      { transform: translateY(3px); }
+}
+/* phones: above the page-dots pill */
+@media (max-width: 767px) {
+	.ch-hint { bottom: calc(46px + env(safe-area-inset-bottom, 0px)); font-size: 12px; }
+}
+@media (max-width: 400px) {
+	.ch-hint { font-size: 11px; letter-spacing: 0.01em; padding: 5px 10px 5px 12px; gap: 5px; }
+}
+@media (max-height: 480px) { .ch-hint { display: none; } }
+
+/* Education on phones: air between the swipe bar and "Full Academic History"
+   (the button sat right under the bar). */
+@media (max-width: 767px) {
+	.ch-page-skills .ch[data-ch="education"] .elementor-element-f560412 { margin-top: 22px !important; }
+}
+/* ...a little less on the smallest screens, where every pixel counts */
+@media (max-width: 767px) and (max-height: 640px) {
+	.ch-page-skills .ch[data-ch="education"] .elementor-element-f560412 { margin-top: 14px !important; }
+}
+
+/* ---------------------------------------------------------------------------
+   Certifications & Education (laptop and wider): a split header and one row.
+
+   The banner (465px tall at full width) moves to the left half with the
+   heading and the "Full Academic History" button stacked beside it, and the
+   five cards sit in a single row underneath instead of 3 + 2. Same banner
+   (scaled, not cropped), same cards, same order; about 600px instead of
+   about 1440px. Under 1100px wide the original layout remains.
+   --------------------------------------------------------------------------- */
+@media (min-width: 1100px) {
+	.ch-page-skills .ch[data-ch="education"] {
+		display: grid !important;
+		grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+		column-gap: 34px; row-gap: 20px;
+		align-content: center; align-items: start;
+		max-width: 1140px; width: 100%; margin-left: auto; margin-right: auto;
+		padding: 24px 10px !important; box-sizing: border-box;
+	}
+	.ch-page-skills .ch[data-ch="education"] > .elementor-element-543847f,
+	.ch-page-skills .ch[data-ch="education"] > .elementor-element-543847f > .e-con-inner,
+	.ch-page-skills .ch[data-ch="education"] > .elementor-element-543847f > .e-con-inner > .elementor-element-aa69d13,
+	.ch-page-skills .ch[data-ch="education"] > .elementor-element-0e445d5,
+	.ch-page-skills .ch[data-ch="education"] > .elementor-element-0e445d5 > .e-con-inner { display: contents !important; }
+	.ch-page-skills .elementor-element-bb30625 { grid-column: 2; grid-row: 1; align-self: end; margin: 0 !important; text-align: left !important; }
+	.ch-page-skills .elementor-element-bb30625 p { text-align: left !important; margin: 0 !important; }
+	.ch-page-skills .elementor-element-3cf4898 { grid-column: 1; grid-row: 1 / span 2; width: 100% !important; margin: 0 !important; }
+	.ch-page-skills .elementor-element-3cf4898 img { width: 100% !important; height: auto !important; display: block; }
+	.ch-page-skills .elementor-element-f560412 { grid-column: 2; grid-row: 2; align-self: start; justify-self: start; margin: 0 !important; width: auto !important; }
+	.ch-page-skills .ch[data-ch="education"] > .elementor-element-3d1b82f { grid-column: 1 / -1; grid-row: 3; width: 100% !important; }
+	.ch-page-skills .elementor-element-3d1b82f > .e-con-inner { display: grid !important; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; padding: 0 !important; width: 100% !important; max-width: none !important; }
+	.ch-page-skills .elementor-element-3d1b82f > .e-con-inner > .e-con { width: auto !important; max-width: none !important; margin: 0 !important; padding: 14px !important; gap: 8px !important; }
+	.ch-page-skills .elementor-element-3d1b82f h5 { font-size: 15px !important; line-height: 20px !important; }
+	.ch-page-skills .elementor-element-3d1b82f p { font-size: 13.5px !important; line-height: 19px !important; }
+}
+
+/* ---------------------------------------------------------------------------
+   About Me intro (phones): the photos become a row sized from the screen.
+
+   Heading, both paragraphs and both photos are all on one screen. The text is
+   14.5px (14px under 700px tall) and the two photos sit in the same swipe row
+   as before, each at a height taken from the room left below the text
+   (the portrait is narrower than the landscape, so on a small phone both are
+   visible side by side and the row does not need to scroll; on a taller one
+   the second photo peeks in from the right to invite the swipe).
+   --------------------------------------------------------------------------- */
+/* (Every phone height, not just those up to 900px: above that these rules used
+   to switch off, the photos went back to their natural 440px and the chapter
+   ran to 1012px on a 932px screen - two stops, the one place on the site where
+   a chapter was not one screen. Taller phones get slightly larger photos
+   instead, up to 360px, and the chapter is centred in its screen.) */
+@media (max-width: 767px) {
+	.ch-page-about .ch[data-ch="about-me"] > .elementor-element-9fded26 > .e-con-inner { padding-top: 70px !important; padding-bottom: 4px !important; }
+	.ch-page-about .elementor-element-adfd3b8 { gap: 4px !important; padding-top: 2px !important; padding-bottom: 2px !important; }
+	.ch-page-about .elementor-element-5f9ad70 .elementor-heading-title { font-size: 34px !important; line-height: 40px !important; }
+	.ch-page-about .elementor-element-939de95 p { font-size: 14.5px !important; line-height: 18px !important; margin-bottom: 8px !important; }
+	.ch-page-about .elementor-element-939de95 p a { font-size: inherit !important; line-height: inherit !important; }
+	.ch-page-about .elementor-element-leadcaro1 { --lead-h: clamp(120px, calc(100svh - 478px), 360px); }
+	.ch-page-about .elementor-element-leadcaro1 > .elementor-element { flex: 0 0 auto !important; width: auto !important; max-width: none !important; }
+	/* one photo now (the graduation portrait), so no swipe row: centred */
+	.ch-page-about .elementor-element-leadcaro1 { justify-content: center !important; }
+	.ch-page-about .elementor-element-leadcaro1 a { display: block; }
+	.ch-page-about .elementor-element-leadcaro1 img { height: var(--lead-h) !important; width: auto !important; max-width: none !important; display: block; }
+}
+@media (max-width: 767px) and (max-height: 700px) {
+	.ch-page-about .elementor-element-939de95 p { font-size: 14px !important; line-height: 17px !important; margin-bottom: 7px !important; }
+	.ch-page-about .elementor-element-leadcaro1 { --lead-h: clamp(110px, calc(100svh - 475px), 330px); }
+}
+
+/* (Skills on phones - the spacing that scales with the screen's height - is
+   now one block with the rest of its phone rules, above: "ONE chapter holds
+   the title...".) */
+/* ---------------------------------------------------------------------------
+   Still two stops (too tall to do cleanly - saved for later):
+
+   Desktop:  Feature Projects (6 cards in 2 rows, about 1320px);
+             Programming / Electrical / Mechanical merged chapter (about 1330px);
+             and below 1100px wide (tablets), Certifications & Education, which
+             keeps its original multi-row layout. (Skills & Tools is now two
+             chapters of three category rows at every width from 768px up, each
+             fitting one screen.)
+   Phones:   none on Skills now (every chip's category fits one screen; under
+             about 600px tall the box scrolls inside the chapter instead).
+   --------------------------------------------------------------------------- */
+
+/* ===========================================================================
+   Project listings: one chapter per emphasis, at every screen size
+
+   Robotics, Programming, Electrical/Embedded, Mechanical and My Projects.
+   chapters.js cuts each page's run of widgets at every emphasis heading and
+   wraps each cut in a .ch (the first also takes the page title and the jump
+   chips), so they lock, fade and carry the "Scroll for more ..." cue exactly
+   like Home, About Me and Skills. Each chapter has to be one screen - never a
+   two-stop chapter - and what gives is the cards' images: chapters.js sets
+   --cp-img on each chapter to the tallest image that leaves everything else
+   on the screen, measured, so a long description or a short window shrinks the
+   pictures and nothing else. Wording is never touched.
+
+   Desktop (1100px and up): the cards of an emphasis are ONE ROW (two to five
+   across). Tablets and phones: the same cards as a swipe row, one chapter per
+   emphasis (82% wide slides on a phone, about 40% on a tablet).
+   =========================================================================== */
+
+/* The containers a chapter now sits in dissolve: their padding and gaps would
+   otherwise put the first snap point below the top of the page. */
+.ch-on .ch-flat { display: contents !important; }
+
+:is(.ch-page-cat, .ch-page-projects) { --cp-w: 1120px; --cp-gap: 20px; }
+
+/* every width */
+:is(.ch-page-cat, .ch-page-projects) .ch {
+	box-sizing: border-box; margin-left: auto; margin-right: auto;
+	width: calc(100% - 32px); max-width: var(--cp-w);
+	/* the bottom padding of every chapter but the last is the room the "Scroll
+	   for more ..." cue (chapters.js) sits in; the last chapter has no cue */
+	padding: 10px 0 48px; gap: 8px;
+}
+:is(.ch-page-cat, .ch-page-projects) .ch--last { padding-bottom: 24px; min-height: 100svh; }
+/* (five cards used to get a wider 1320px chapter to fit one row of five; on
+   desktop they are now two rows, 3 + 2, below - so they keep the default
+   width. Tablets and phones are a swipe row and never used it.) */
+
+/* page title, chips, rules and the emphasis heading: compact */
+:is(.ch-page-cat, .ch-page-projects) .ch .elementor-widget { margin: 0 !important; }
+:is(.ch-page-cat, .ch-page-projects) .ch .elementor-widget-divider .elementor-divider { padding-top: 6px !important; padding-bottom: 6px !important; }
+
+/* grid-column / width: undo custom-fixes.css's "centre a lone last card in
+   the two-column grid", which would push the third of three cards onto a row
+   of its own; and the shared card floor */
+:is(.ch-page-cat, .ch-page-projects) .ch .elementor-posts-container > .elementor-post {
+	min-height: 0 !important; margin: 0 !important; grid-column: auto !important; width: auto !important;
+}
+
+/* image height from chapters.js (the default is only what shows before it runs) */
+:is(.ch-page-cat, .ch-page-projects) .ch .elementor-post__thumbnail {
+	padding-bottom: 0 !important;
+	height: var(--cp-img, auto) !important;
+	/* until chapters.js has measured (--cp-img), the picture is already the 3:2 it will be (a fixed 150px guess used to be replaced by ~250px, shoving the card text down) */
+	aspect-ratio: 3 / 2;
+}
+
+:is(.ch-page-cat, .ch-page-projects) .ch .elementor-post__text { padding: 14px 16px 16px !important; }
+:is(.ch-page-cat, .ch-page-projects) .ch .elementor-post__title { margin-bottom: 6px !important; }
+:is(.ch-page-cat, .ch-page-projects) .ch .elementor-post__title a { font-size: 17px !important; line-height: 22px !important; }
+:is(.ch-page-cat, .ch-page-projects) .ch .elementor-post__excerpt { margin-bottom: 8px !important; }
+:is(.ch-page-cat, .ch-page-projects) .ch .elementor-post__excerpt p { font-size: 14px !important; line-height: 20px !important; margin: 0 !important; }
+
+/* ----- desktop: one row of cards ----- */
+@media (min-width: 1100px) {
+	:is(.ch-page-cat, .ch-page-projects) .ch { width: min(var(--cp-w), calc(100% - 96px)); }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-posts-container {
+		display: grid !important;
+		grid-template-columns: repeat(var(--cp-cols, 3), minmax(0, 380px)) !important;
+		justify-content: center;
+		gap: var(--cp-gap) !important;
+	}
+}
+
+/* Five cards (Mechanical, Machine Learning) on desktop: three on the first
+   row, two centred under them, instead of five squeezed into one row. The
+   grid is six half-width tracks, so each card spans two; the second row's
+   cards start at track 2 and 4, which centres them under the gaps of the
+   first. Cards are 340px at most, and keep their natural 3:2 pictures - so
+   this chapter is taller than a screen and is two scroll stops, like
+   Feature Projects on the home page (the second row shows at the foot of the
+   first stop, which is the cue that there is more). */
+@media (min-width: 1100px) {
+	:is(.ch-page-cat, .ch-page-projects) .ch[data-cols="5"] .elementor-posts-container {
+		grid-template-columns: repeat(6, minmax(0, 170px)) !important;
+		row-gap: 24px !important;
+	}
+	:is(.ch-page-cat, .ch-page-projects) .ch[data-cols="5"] .elementor-posts-container > .elementor-post { grid-column: span 2 !important; }
+	:is(.ch-page-cat, .ch-page-projects) .ch[data-cols="5"] .elementor-posts-container > .elementor-post:nth-child(4) { grid-column: 2 / span 2 !important; }
+	:is(.ch-page-cat, .ch-page-projects) .ch[data-cols="5"] .elementor-posts-container > .elementor-post:nth-child(5) { grid-column: 4 / span 2 !important; }
+}
+
+/* ----- tablets and phones: the same cards as a swipe row ----- */
+@media (max-width: 1099px) {
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-posts-container {
+		display: flex !important;
+		grid-template-columns: none !important;
+		flex-wrap: nowrap !important;
+		align-items: stretch;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		-webkit-overflow-scrolling: touch;
+		gap: 14px !important;
+		/* room for the card's whole drop shadow (it reaches ~48px below) so the scroller does not
+		   slice it into a dark box; the negative margin keeps the layout where it was */
+		padding: 10px 4px 80px; margin: -6px 0 -68px;
+		scrollbar-width: none;
+	}
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-posts-container::-webkit-scrollbar { display: none; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-posts-container > .elementor-post {
+		flex: 0 0 clamp(260px, 40%, 380px);
+		scroll-snap-align: start;
+	}
+	/* a row that fits is centred; one that overflows starts at the left (auto
+	   margins on the first and last slide do both) */
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-posts-container > .elementor-post:first-child { margin-left: auto !important; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-posts-container > .elementor-post:last-child { margin-right: auto !important; }
+}
+@media (min-width: 768px) and (max-width: 1099px) {
+	:is(.ch-page-cat, .ch-page-projects) .ch { width: min(calc(100% - 48px), 900px); }
+}
+
+/* ----- phones ----- */
+@media (max-width: 767px) {
+	/* the cue sits above the page-dots pill; the last chapter has only the pill */
+	:is(.ch-page-cat, .ch-page-projects) .ch { width: calc(100% - 20px); padding-bottom: 88px; }
+	:is(.ch-page-cat, .ch-page-projects) .ch--last { padding-bottom: 44px; }
+	/* the header floats over the top 75px of a phone page; the title sits just under it */
+	:is(.ch-page-cat, .ch-page-projects) .ch--first { padding-top: 78px; gap: 6px; }
+	/* the first chapter carries the title, the tab row and the chips as well as a
+	   card, so the intro is made compact before the picture gives up its height:
+	   a smaller title, slimmer tabs and chips, and no caption over the chips */
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-element-8e6502f .elementor-heading-title { font-size: 34px !important; line-height: 40px !important; }
+	/* the "... emphases" caption stays on phones (a little tighter) */
+	.ch-page-projects .ch .pp-subnav__label, .ch-page-cat .ch .elementor-widget-icon-list::before { font-size: 10px !important; margin: 0 0 4px !important; }
+	.ch-page-projects .ch .pp-subnav { margin: 0; }
+	html body.ch-page-projects.ch-page-projects .ch .e-n-tab-title { padding: 7px 8px !important; }
+	html body.ch-page-projects.ch-page-projects .ch .pp-subnav__pill,
+	html body.ch-page-cat.ch-page-cat .ch .elementor-icon-list-item > a { padding: 5px 8px !important; font-size: 12.5px !important; }
+	:is(.ch-page-projects .ch .pp-subnav__row, .ch-page-cat .ch .elementor-icon-list-items) { gap: 6px !important; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-widget-divider .elementor-divider { padding-top: 3px !important; padding-bottom: 3px !important; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-posts-container > .elementor-post { flex: 0 0 82%; scroll-snap-align: center; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-post__text { padding: 12px 14px 14px !important; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-post__title a { font-size: 16px !important; line-height: 21px !important; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-post__excerpt p { font-size: 13.5px !important; line-height: 19px !important; }
+}
+
+/* Short phones (about 700px tall and under): the first chapter's intro and the
+   card text are tightened further, and its bottom margin is only the dots pill
+   - the "Scroll for more ..." cue then shows there only if the picture leaves
+   it room. Wording is untouched. */
+@media (max-width: 767px) and (max-height: 700px) {
+	:is(.ch-page-cat, .ch-page-projects) .ch--first { padding-top: 76px; gap: 4px; }
+	:is(.ch-page-cat, .ch-page-projects) .ch:not(.ch--last) { padding-bottom: 60px; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-element-8e6502f .elementor-heading-title { font-size: 28px !important; line-height: 34px !important; }
+	html body.ch-page-projects.ch-page-projects .ch .e-n-tab-title { padding: 5px 6px !important; font-size: 13px !important; }
+	html body.ch-page-projects.ch-page-projects .ch .e-n-tabs-heading { padding: 3px !important; }
+	html body.ch-page-projects.ch-page-projects .ch .pp-subnav__pill,
+	html body.ch-page-cat.ch-page-cat .ch .elementor-icon-list-item > a { padding: 4px 8px !important; font-size: 12px !important; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-widget-heading .elementor-heading-title { scroll-margin-top: 0; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-post__text { padding: 10px 12px 12px !important; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-post__title { margin-bottom: 4px !important; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-post__title a { font-size: 15px !important; line-height: 19px !important; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-post__excerpt { margin-bottom: 6px !important; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-post__excerpt p { font-size: 12.5px !important; line-height: 17px !important; }
+}
+
+@media (max-width: 767px) and (max-height: 650px) {
+	:is(.ch-page-cat, .ch-page-projects) .ch--first { padding-top: 76px; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-element-8e6502f .elementor-heading-title { font-size: 26px !important; line-height: 30px !important; }
+	:is(.ch-page-cat, .ch-page-projects) .ch:not(.ch--last) { padding-bottom: 52px; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-widget-divider .elementor-divider { padding-top: 1px !important; padding-bottom: 1px !important; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-post__text { padding: 8px 12px 10px !important; }
+}
+
+/* Shorter laptops: the first chapter carries the page title and the chips as
+   well as a row of cards, so everything gets a little tighter before the
+   images give up their height (they are the last thing to shrink, and never
+   below 56px). Wording is never touched. */
+@media (min-width: 1100px) and (max-height: 830px) {
+	:is(.ch-page-cat, .ch-page-projects) { --cp-gap: 16px; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-element-8e6502f .elementor-heading-title { font-size: 44px !important; line-height: 50px !important; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-post__text { padding: 12px 14px 14px !important; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-post__excerpt p { font-size: 13.5px !important; line-height: 19px !important; }
+}
+@media (min-width: 1100px) and (max-height: 700px) {
+	:is(.ch-page-cat, .ch-page-projects) .ch { padding: 6px 0 46px; gap: 4px; }
+	:is(.ch-page-cat, .ch-page-projects) .ch--last { padding-bottom: 20px; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-element-8e6502f .elementor-heading-title { font-size: 34px !important; line-height: 40px !important; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-widget-divider .elementor-divider { padding-top: 4px !important; padding-bottom: 4px !important; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-post__text { padding: 10px 12px 12px !important; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-post__title { margin-bottom: 4px !important; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-post__title a { font-size: 16px !important; line-height: 20px !important; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-post__excerpt { margin-bottom: 6px !important; }
+	:is(.ch-page-cat, .ch-page-projects) .ch .elementor-post__excerpt p { font-size: 13px !important; line-height: 18px !important; }
+	/* the caption over the chips is the first thing to go on My Projects */
+	.ch-page-projects .ch .pp-subnav__label { display: none !important; }
+	.ch-page-projects .ch .pp-subnav { margin: 0 0 2px; }
+	/* the same on the category pages: the caption over the chips goes (they are
+	   styled like My Projects' chips now, custom-fixes.css), and My Projects'
+	   tab row is a little slimmer */
+	.ch-page-cat .ch .elementor-widget-icon-list::before { display: none !important; }
+	html body.ch-page-projects.ch-page-projects .ch .e-n-tab-title { padding: 7px 20px !important; }
+}
+
+/* My Projects: the title, tab row and chips wait out of sight until Elementor's
+   tabs script has started (chapters.js moves them into the first chapter then). */
+.ch-on .ch-intro-wait {
+	position: absolute !important;
+	left: -9999px !important;
+	visibility: hidden !important;
+	pointer-events: none !important;
+}
+
+/* Skills & Education and About Me: no unstyled first paint.
+
+   Their layout (the grids, the narrow-column fixes) only exists once
+   chapters.js has run and put .ch-on on <html> - a few hundred ms after the
+   first paint, longer on a slow connection - so until then the page showed
+   at its Elementor default, narrow, and then jumped out to its real width.
+   The page body now waits, invisible, until the script is ready and fades in
+   already laid out. If the script never runs the page still appears after
+   2.5 seconds, as the plain Elementor layout. */
+html:not(.ch-on) body:is(.ch-page-skills, .ch-page-about) [data-elementor-type="wp-page"] {
+	opacity: 0;
+	animation: chFailsafe 0.01s linear 2.5s forwards;
+}
+html.ch-on body:is(.ch-page-skills, .ch-page-about) [data-elementor-type="wp-page"] {
+	animation: chPageIn 0.3s ease both;
+}
+@keyframes chFailsafe { to { opacity: 1; } }
+@keyframes chPageIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Category pages and My Projects: the card rows wait for their first accurate
+   fit (chapters.js adds .ch-fitted once the page and fonts have loaded), so
+   the pictures are not resized in front of the visitor. Shown anyway after
+   3.5s if the script never gets there. */
+html.ch-on:not(.ch-fitted) :is(.ch-page-cat, .ch-page-projects) .ch > * {
+	opacity: 0;
+	animation: chFailsafe 0.01s linear 3.5s forwards;
+}
+html.ch-fitted :is(.ch-page-cat, .ch-page-projects) .ch > * {
+	animation: chPageIn 0.3s ease both;
+}
+
+/* Tall chapters (more than a screen of content, so two scroll stops): the second stop has the chapter's
+   bottom edge at the screen's bottom edge. A snap point there (glide.js sets .ch-tall) keeps the browser's own
+   snapping from pulling the page away from it - Safari only rests on a tall box's start and end edges. */
+.ch-on .ch.ch-tall::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 1px;
+	pointer-events: none;
+	scroll-snap-align: end;
+}
+
+/* ---------------------------------------------------------------------------
+   Home: text spacing and size, in this order of priority - every chapter
+   still fits its screen (fit.js scales a small overshoot away), then
+   everything is comfortably readable, then the same kind of text is the same
+   size everywhere. Placed last so these win over the per-height tuning above
+   where there is room; the short-screen rules above still apply below the
+   min-height guards.
+   --------------------------------------------------------------------------- */
+
+/* Body paragraphs had a line height of only ~1.15 below 1024px (1.6 on
+   desktop): About Me's intro, the Get In Touch blurb, and the Fields of
+   Interest card text on phones. 1.4 reads as the same family as desktop. */
+@media (max-width: 1024px) and (min-height: 701px) {
+	.ch-page-home .elementor-element-48f5092e p,
+	.ch-page-home .elementor-element-51716a9 p {
+		line-height: 1.4 !important;
+	}
+}
+@media (max-width: 767px) and (min-height: 791px) {
+	.ch-page-home :is(.elementor-element-805c209, .elementor-element-7673f4f, .elementor-element-2866b9b,
+		.elementor-element-ac97d6f, .elementor-element-39108c8, .elementor-element-2528e5d,
+		.elementor-element-c78a038, .elementor-element-659a2d1, .elementor-element-a2a1b0c) p {
+		line-height: 1.4 !important;
+	}
+}
+
+/* Small labels: card category lines and "Read More »" were 12px (11px on
+   shorter phones) - one step up where the room is. */
+@media (min-width: 768px), (min-height: 791px) {
+	.ch-page-home .elementor-element-20aba35 .hp-card-cat,
+	.ch-page-home .elementor-element-20aba35 .elementor-post__read-more {
+		font-size: 13px !important;
+	}
+}
+
+/* Tablets and small laptops (768-1200px): the page-dots rail sits 16px in from
+   the right edge, and the text lines in most chapters (About Me's intro, Fields
+   of Interest, Skills, Contact) run right up to it. Squeezing the content to
+   make room pushed chapters past one screen, so the rail takes the phones'
+   place instead - a row along the bottom, the cue above it - which leaves
+   the layout untouched. */
+@media (min-width: 768px) and (max-width: 1200px) {
+	.chnav {
+		right: auto;
+		left: 50%;
+		top: auto;
+		bottom: 10px;
+		transform: translateX(-50%);
+		flex-direction: row;
+		align-items: center;
+		gap: 4px;
+		padding: 7px 10px;
+		border-radius: 999px;
+		background: rgba(12, 23, 41, 0.55);
+		-webkit-backdrop-filter: blur(8px);
+		backdrop-filter: blur(8px);
+	}
+	.chnav__dot { padding: 4px !important; }
+	.chnav__dot::after { width: 6px; height: 6px; }
+	.chnav__label { display: none; }
+	.ch-hint { bottom: 46px; }
+}
+
+/* One heading size for the section titles: "Skills & Education" and "Get In
+   Touch" were 50px on desktop where About Me, Feature Projects and Fields of
+   Interest are 40px. */
+@media (min-width: 1025px) {
+	.ch-page-home .elementor-element-fc37ce0 .elementor-heading-title,
+	.ch-page-home .elementor-element-a5ead3e .elementor-heading-title {
+		font-size: 40px !important;
+		line-height: 48px !important;
+	}
+}

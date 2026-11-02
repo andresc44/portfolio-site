@@ -814,7 +814,7 @@ class WPvivid_Send_to_site extends WPvivid_Remote
                 $dir=WPvivid_Setting::get_backupdir();
 
                 $safe_name = basename($params['name']);
-                $safe_name = preg_replace('/[^a-zA-Z0-9._-]/', '', $safe_name);
+                $safe_name = preg_replace('/[^a-zA-Z0-9._~-]/', '', $safe_name);
                 $allowed_extensions = array('zip', 'gz', 'tar', 'sql');
                 $file_ext = strtolower(pathinfo($safe_name, PATHINFO_EXTENSION));
                 if (!in_array($file_ext, $allowed_extensions, true))
@@ -1154,7 +1154,7 @@ class WPvivid_Send_to_site extends WPvivid_Remote
 
                 $dir = WPvivid_Setting::get_backupdir();
                 $safe_name = basename($params['name']);
-                $safe_name = preg_replace('/[^a-zA-Z0-9._-]/', '', $safe_name);
+                $safe_name = preg_replace('/[^a-zA-Z0-9._~-]/', '', $safe_name);
                 $allowed_extensions = array('zip', 'gz', 'tar', 'sql');
                 $file_ext = strtolower(pathinfo($safe_name, PATHINFO_EXTENSION));
                 if (!in_array($file_ext, $allowed_extensions, true))

@@ -89,10 +89,25 @@ class Megamenu_Api extends Core\Handler_Api {
 		$menu_item_id = intval($this->request['id']);
 
 		if ('publish' !== get_post_status ($menu_item_id) || post_password_required($menu_item_id)) {
-			return;
+			return '';
 		}
 
-		$output   = \ElementsKit_Lite\Utils::render_elementor_content($menu_item_id);
+		// A REST request is neither an admin-ajax call nor a preview, so Elementor
+		// would leave the panel CSS out and rely on the page that rendered the menu
+		// having enqueued it already. Ask for the CSS inline so the response styles
+		// itself wherever it is injected.
+		// Elementor can print inline post CSS before returning the rendered content.
+		// Discard that direct output so it cannot corrupt the REST JSON response.
+		$buffer_level = ob_get_level();
+		ob_start();
+
+		try {
+			$output = \ElementsKit_Lite\Utils::render_elementor_content( $menu_item_id, true );
+		} finally {
+			while ( ob_get_level() > $buffer_level ) {
+				ob_end_clean();
+			}
+		}
 
 		return $output;
 	}

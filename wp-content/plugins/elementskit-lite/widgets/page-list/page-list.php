@@ -755,7 +755,7 @@ class ElementsKit_Widget_Page_List extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .elementor-icon-list-icon' => 'width: {{SIZE}}{{UNIT}};',
 					'{{WRAPPER}} .elementor-icon-list-icon i' => 'font-size: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}} .elementor-icon-list-icon svg'	=> 'max-width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .elementor-icon-list-icon svg'	=> 'font-size: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);

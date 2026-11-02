@@ -104,6 +104,10 @@ abstract class Elements_Option_Abstract {
 	 * Get Ajax Option
 	 */
 	public function get_ajax_option() {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			wp_send_json_error( null, 403 );
+		}
+
 		$segments = $this->get_segments();
 		$options  = $this->get_options();
 		$segments = Element::instance()->shortcode->prepare_segments( $segments );

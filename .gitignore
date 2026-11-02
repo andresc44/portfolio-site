@@ -4,3 +4,11 @@ node_modules/
 *.jpg
 *.jpeg
 *.png
+# Added by code-review-graph
+.code-review-graph/
+
+# Original project videos (several exceed GitHub's 100 MB limit); shipped with site transfers, not git
+wp-content/uploads/originals/**/*.mp4
+
+# WPvivid full-site backups (huge, contain a DB dump)
+wp-content/wpvividbackups/

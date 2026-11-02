@@ -1,0 +1,419 @@
+/**
+ * Global Lightbox extension — global icon overlay and lightbox chrome.
+ */
+
+.wpcp-lightbox-icon--global {
+	opacity: 1;
+	transition: opacity 0.35s ease, color 0.35s ease, background-color 0.35s ease, border-color 0.35s ease, fill 0.35s ease;
+}
+
+.wpcp-advanced-image-lightbox-icon-always .wpcp-lightbox-icon--global {
+	opacity: 1;
+}
+
+/* Visibility "hover": the icon starts hidden; the dynamic icon CSS reveals it on hover. */
+.wpcp-advanced-image-lightbox-icon.wpcp-advanced-image-lightbox-icon-hover {
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.35s ease, color 0.35s ease, background-color 0.35s ease, border-color 0.35s ease, fill 0.35s ease;
+}
+
+.wpcp-lightbox-wrapper.fancybox__container {
+	z-index: 99990;
+}
+
+/* Bottom thumbnail strip above page content when WP gallery has 2+ slides. */
+.wpcp-lightbox-wrapper.fancybox__container .fancybox__thumbs {
+	z-index: 12;
+}
+
+/* Opened lightbox image — always centered in the popup viewport */
+.wpcp-lightbox-wrapper.fancybox__container .fancybox__slide.is-selected {
+	justify-content: center;
+}
+
+.wpcp-lightbox-wrapper.fancybox__container .f-panzoom,
+.wpcp-lightbox-wrapper.fancybox__container .f-zoomable {
+	align-self: center;
+	max-width: 100%;
+}
+
+.wpcp-lightbox-wrapper.fancybox__container .f-panzoom__wrapper {
+	margin-inline: auto;
+}
+
+.wpcp-lightbox-wrapper.fancybox__container img.f-panzoom__content,
+.wpcp-lightbox-wrapper.fancybox__container picture.f-panzoom__content img,
+.wpcp-lightbox-wrapper.fancybox__container .f-panzoom__viewport>.f-panzoom__content {
+	object-fit: contain !important;
+	object-position: center center !important;
+}
+
+.wpcp-lightbox-wrapper.fancybox__container .f-caption {
+	align-self: center;
+	text-align: center;
+	max-width: 100%;
+}
+
+/* Block video popups should fill the available browser viewport like the classic
+   shortcode Fancybox video popup, without a padded/background iframe parent. */
+.wpcp-lightbox-wrapper.fancybox__container .fancybox__slide.has-iframe {
+	padding: 44px 0;
+}
+
+.wpcp-lightbox-wrapper.fancybox__container .fancybox__slide.has-iframe .f-html {
+	padding: 0;
+	background: transparent;
+	width: 100%;
+	height: 100%;
+}
+
+.wpcp-lightbox-wrapper.fancybox__container .fancybox__slide.has-iframe .f-iframe {
+	background: transparent;
+}
+
+/* --- Lightbox open/close (showClass / hideClass) --- */
+
+.f-tubeIn {
+	animation: f-wpcp-tube-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.f-tubeOut {
+	animation: f-wpcp-tube-out 0.28s ease both;
+}
+
+@keyframes f-wpcp-tube-in {
+	from {
+		transform: translate3d(0, 0, 0) scaleX(0.72) scaleY(0.92);
+		opacity: 0;
+	}
+
+	to {
+		transform: translate3d(0, 0, 0) scaleX(1) scaleY(1);
+		opacity: 1;
+	}
+}
+
+@keyframes f-wpcp-tube-out {
+	from {
+		transform: translate3d(0, 0, 0) scaleX(1) scaleY(1);
+		opacity: 1;
+	}
+
+	to {
+		transform: translate3d(0, 0, 0) scaleX(0.82) scaleY(0.94);
+		opacity: 0;
+	}
+}
+
+.f-circularIn {
+	animation: f-wpcp-circular-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.f-circularOut {
+	animation: f-wpcp-circular-out 0.28s ease both;
+}
+
+@keyframes f-wpcp-circular-in {
+	from {
+		clip-path: circle(0% at 50% 50%);
+		transform: translate3d(0, 0, 0) scale(0.96);
+		opacity: 0;
+	}
+
+	to {
+		clip-path: circle(150% at 50% 50%);
+		transform: translate3d(0, 0, 0) scale(1);
+		opacity: 1;
+	}
+}
+
+@keyframes f-wpcp-circular-out {
+	from {
+		clip-path: circle(150% at 50% 50%);
+		transform: translate3d(0, 0, 0) scale(1);
+		opacity: 1;
+	}
+
+	to {
+		clip-path: circle(0% at 50% 50%);
+		transform: translate3d(0, 0, 0) scale(0.96);
+		opacity: 0;
+	}
+}
+
+.f-rotateIn {
+	animation: f-wpcp-rotate-in 0.4s ease both;
+}
+
+.f-rotateOut {
+	animation: f-wpcp-rotate-out 0.3s ease both;
+}
+
+@keyframes f-wpcp-rotate-in {
+	from {
+		transform: translate3d(0, 0, 0) rotate(-8deg) scale(0.9);
+		opacity: 0;
+	}
+
+	to {
+		transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+		opacity: 1;
+	}
+}
+
+@keyframes f-wpcp-rotate-out {
+	from {
+		transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+		opacity: 1;
+	}
+
+	to {
+		transform: translate3d(0, 0, 0) rotate(6deg) scale(0.92);
+		opacity: 0;
+	}
+}
+
+.f-zoomInOutIn {
+	animation: f-wpcp-zoom-in-out-in 0.45s ease both;
+}
+
+.f-zoomInOutOut {
+	animation: f-wpcp-zoom-in-out-out 0.3s ease both;
+}
+
+@keyframes f-wpcp-zoom-in-out-in {
+	0% {
+		transform: translate3d(0, 0, 0) scale(0.6);
+		opacity: 0;
+	}
+
+	60% {
+		transform: translate3d(0, 0, 0) scale(1.04);
+		opacity: 1;
+	}
+
+	100% {
+		transform: translate3d(0, 0, 0) scale(1);
+		opacity: 1;
+	}
+}
+
+@keyframes f-wpcp-zoom-in-out-out {
+	from {
+		transform: translate3d(0, 0, 0) scale(1);
+		opacity: 1;
+	}
+
+	to {
+		transform: translate3d(0, 0, 0) scale(0.7);
+		opacity: 0;
+	}
+}
+
+.f-wpcpInstantIn,
+.f-wpcpInstantOut {
+	animation: none !important;
+}
+
+/* --- Carousel slide transitions (Carousel.transition) --- */
+
+.is-horizontal .f-tubeIn.from-next,
+.is-horizontal .f-tubeIn.from-prev {
+	animation: f-wpcp-carousel-tube-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.is-horizontal .f-tubeOut.to-next,
+.is-horizontal .f-tubeOut.to-prev {
+	animation: f-wpcp-carousel-tube-out 0.35s ease both;
+}
+
+.is-horizontal .f-tubeIn.from-next {
+	--wpcp-lb-tube-offset: 48px;
+}
+
+.is-horizontal .f-tubeIn.from-prev {
+	--wpcp-lb-tube-offset: -48px;
+}
+
+.is-horizontal .f-tubeOut.to-next {
+	--wpcp-lb-tube-offset: -36px;
+}
+
+.is-horizontal .f-tubeOut.to-prev {
+	--wpcp-lb-tube-offset: 36px;
+}
+
+@keyframes f-wpcp-carousel-tube-in {
+	from {
+		clip-path: inset(0 14% 0 14% round 18px);
+		transform: translate3d(var(--wpcp-lb-tube-offset, 0), 0, 0);
+		opacity: 0;
+	}
+
+	to {
+		clip-path: inset(0 0 0 0 round 0);
+		transform: translate3d(0, 0, 0);
+		opacity: 1;
+	}
+}
+
+@keyframes f-wpcp-carousel-tube-out {
+	from {
+		clip-path: inset(0 0 0 0 round 0);
+		transform: translate3d(0, 0, 0);
+		opacity: 1;
+	}
+
+	to {
+		clip-path: inset(0 14% 0 14% round 18px);
+		transform: translate3d(var(--wpcp-lb-tube-offset, 0), 0, 0);
+		opacity: 0;
+	}
+}
+
+.is-horizontal .f-rotateIn.from-next {
+	animation: f-wpcp-carousel-rotate-fade-in 0.5s ease both;
+}
+
+.is-horizontal .f-rotateIn.from-prev {
+	animation: f-wpcp-carousel-rotate-fade-in 0.5s ease both;
+}
+
+.is-horizontal .f-rotateOut.to-next,
+.is-horizontal .f-rotateOut.to-prev {
+	animation: f-wpcp-carousel-rotate-fade-out 0.35s ease both;
+}
+
+.is-horizontal .f-rotateIn.from-next .f-panzoom__content {
+	animation: f-wpcp-carousel-rotate-content-next 0.5s ease both;
+}
+
+.is-horizontal .f-rotateIn.from-prev .f-panzoom__content {
+	animation: f-wpcp-carousel-rotate-content-prev 0.5s ease both;
+}
+
+.is-horizontal .f-rotateOut.to-next .f-panzoom__content {
+	animation: f-wpcp-carousel-rotate-content-out-next 0.35s ease both;
+}
+
+.is-horizontal .f-rotateOut.to-prev .f-panzoom__content {
+	animation: f-wpcp-carousel-rotate-content-out-prev 0.35s ease both;
+}
+
+@keyframes f-wpcp-carousel-rotate-fade-in {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes f-wpcp-carousel-rotate-fade-out {
+	from {
+		opacity: 1;
+	}
+
+	to {
+		opacity: 0;
+	}
+}
+
+@keyframes f-wpcp-carousel-rotate-content-next {
+	from {
+		transform: translate3d(18px, 0, 0) rotate(5deg);
+	}
+
+	to {
+		transform: translate3d(0, 0, 0);
+	}
+}
+
+@keyframes f-wpcp-carousel-rotate-content-prev {
+	from {
+		transform: translate3d(-18px, 0, 0) rotate(-5deg);
+	}
+
+	to {
+		transform: translate3d(0, 0, 0);
+	}
+}
+
+@keyframes f-wpcp-carousel-rotate-content-out-next {
+	from {
+		transform: translate3d(0, 0, 0);
+	}
+
+	to {
+		transform: translate3d(-14px, 0, 0) rotate(-4deg);
+	}
+}
+
+@keyframes f-wpcp-carousel-rotate-content-out-prev {
+	from {
+		transform: translate3d(0, 0, 0);
+	}
+
+	to {
+		transform: translate3d(14px, 0, 0) rotate(4deg);
+	}
+}
+
+.is-horizontal .f-zoomInOutIn.from-next,
+.is-horizontal .f-zoomInOutIn.from-prev {
+	animation: f-wpcp-carousel-zoom-in-out-in 0.5s ease both;
+}
+
+.is-horizontal .f-zoomInOutOut.to-next,
+.is-horizontal .f-zoomInOutOut.to-prev {
+	animation: f-wpcp-carousel-zoom-in-out-out 0.35s ease both;
+}
+
+@keyframes f-wpcp-carousel-zoom-in-out-in {
+	0% {
+		filter: blur(8px);
+		transform: translate3d(0, 0, 0);
+		opacity: 0;
+	}
+
+	70% {
+		filter: blur(0);
+	}
+
+	100% {
+		filter: blur(0);
+		transform: translate3d(0, 0, 0);
+		opacity: 1;
+	}
+}
+
+@keyframes f-wpcp-carousel-zoom-in-out-out {
+	from {
+		filter: blur(0);
+		transform: translate3d(0, 0, 0);
+		opacity: 1;
+	}
+
+	to {
+		filter: blur(8px);
+		transform: translate3d(0, 0, 0);
+		opacity: 0;
+	}
+}
+
+/* Keep toolbar and arrows visible during autoplay (Fancybox idle UI hides them without mouse movement). */
+.fancybox__container.has-autoplay.is-idle .f-carousel__toolbar,
+.fancybox__container.has-autoplay.is-idle.is-ready .f-carousel__toolbar {
+	opacity: 1;
+	pointer-events: auto;
+	animation: none;
+}
+
+.fancybox__container.has-autoplay.is-idle .f-button.is-arrow,
+.fancybox__container.has-autoplay.is-idle.is-ready .f-button.is-arrow {
+	opacity: 1;
+	animation: none;
+}
+

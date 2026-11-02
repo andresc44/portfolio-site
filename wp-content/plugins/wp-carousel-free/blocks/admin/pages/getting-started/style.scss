@@ -1,0 +1,325 @@
+// Dashboard page: the welcome card and the intro video modal, ported from Logo
+// Carousel's. The placements table below it has its own sheet (placements.scss).
+// The card wraps: copy and start buttons take the room, and the video poster sits
+// beside them at up to 380px, dropping underneath when the copy would fall under 520px.
+
+$hero-btn-height: 46px;
+$hero-ink: #1d2327;
+$hero-muted: #646970;
+$hero-body: #50575e;
+$hero-tint: #cdeef0;
+$hero-ai-tint: #e4f3f5;
+$hero-shadow: rgba(25, 148, 158, 0.14);
+$hero-shadow-strong: rgba(25, 148, 158, 0.28);
+$max-width: 1400px;
+
+// Breathing room at the foot of the page below the placements table.
+$page-bottom-space: 40px;
+
+.wpcpf-admin-dashboard-container {
+	.wpcpf-qs-page {
+		max-width: $max-width;
+		margin: 0 auto;
+		padding-bottom: $page-bottom-space;
+
+		* {
+			box-sizing: border-box;
+		}
+	}
+
+	/* ====================
+	   Welcome card
+	   ==================== */
+
+	.wpcpf-qs-hero {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: clamp(24px, 3vw, 40px);
+		padding: clamp(24px, 3vw, 36px) clamp(20px, 3vw, 40px);
+		background: #fff;
+		border: 1px solid #e5e5e7;
+		border-radius: 10px;
+	}
+
+	.wpcpf-qs-hero__text {
+		flex: 999 1 520px;
+		min-width: 0;
+	}
+
+	.wpcpf-qs-greeting {
+		margin: 0 0 6px;
+		font-size: 16px;
+		font-weight: 500;
+		line-height: 1.45;
+		color: $hero-muted;
+	}
+
+	.wpcpf-qs-title {
+		margin: 0 0 12px;
+		padding: 0;
+		font-size: 22px;
+		font-weight: 700;
+		line-height: 1.3;
+		color: $hero-ink;
+	}
+
+	.wpcpf-qs-lead {
+		margin: 0 0 26px;
+		font-size: 16px;
+		line-height: 1.45;
+		color: $hero-body;
+	}
+
+	.wpcpf-qs-actions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 18px;
+	}
+
+	/* The ways to start: 46px tall, brand outline; the first one shown is filled. */
+	.wpcpf-qs-start-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 9px;
+		height: $hero-btn-height;
+		padding: 0 22px;
+		background: #fff;
+		border: 1px solid var(--wpcpf-primary-color);
+		border-radius: 4px;
+		color: var(--wpcpf-primary-color);
+		font-size: 15px;
+		font-weight: 600;
+		line-height: 1;
+		text-decoration: none;
+		white-space: nowrap;
+		transition:
+			background-color 0.25s ease,
+			border-color 0.25s ease,
+			color 0.25s ease,
+			transform 0.25s ease,
+			box-shadow 0.25s ease;
+
+		.dashicons {
+			display: block;
+			width: 17px;
+			height: 17px;
+			font-size: 17px;
+			line-height: 17px;
+		}
+
+		// Build with AI's mark, sized like the dashicons beside it.
+		svg {
+			display: block;
+			flex-shrink: 0;
+			width: 17px;
+			height: 17px;
+		}
+
+		&:hover,
+		&:focus {
+			background: #f0f9fa;
+			border-color: var(--wpcpf-primary-dark);
+			color: var(--wpcpf-primary-dark);
+			box-shadow: 0 6px 16px $hero-shadow;
+			transform: translateY(-2px);
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--wpcpf-primary-color);
+			outline-offset: 2px;
+		}
+
+		&.is-primary {
+			background: var(--wpcpf-primary-color);
+			color: #fff;
+
+			&:hover,
+			&:focus {
+				background: var(--wpcpf-primary-dark);
+				border-color: var(--wpcpf-primary-dark);
+				color: #fff;
+				box-shadow: 0 8px 20px $hero-shadow-strong;
+			}
+		}
+	}
+
+	/* Build with AI keeps its soft tint even when it is the first (primary) button shown. */
+	.wpcpf-qs-start-btn--ai,
+	.wpcpf-qs-start-btn--ai.is-primary {
+		background: $hero-ai-tint;
+		border-color: var(--wpcpf-primary-color);
+		color: var(--wpcpf-primary-dark);
+
+		&:hover,
+		&:focus {
+			background: $hero-tint;
+			border-color: var(--wpcpf-primary-dark);
+			color: var(--wpcpf-primary-dark);
+			box-shadow: 0 6px 16px $hero-shadow;
+		}
+	}
+
+	/* ====================
+	   Intro video poster
+	   ==================== */
+
+	/* Only the play control reacts on hover; the picture stays still. */
+	.wpcpf-qs-video {
+		position: relative;
+		display: block;
+		flex: 1 1 300px;
+		max-width: 380px;
+		aspect-ratio: 16 / 9;
+		margin: 0;
+		padding: 0;
+		overflow: hidden;
+		background: linear-gradient(135deg, #f0f9fa, #d9f1f3);
+		border: 1px solid $hero-tint;
+		border-radius: 8px;
+		box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+		cursor: pointer;
+
+		// Light tint under the play button, so the title in the image stays readable.
+		&::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			background: rgba(16, 24, 40, 0.2);
+			pointer-events: none;
+		}
+
+		&:hover,
+		&:focus-visible {
+			.wpcpf-qs-play-btn {
+				background: var(--wpcpf-primary-color);
+
+				.dashicons {
+					color: #fff;
+				}
+			}
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--wpcpf-primary-color);
+			outline-offset: 2px;
+		}
+	}
+
+	.wpcpf-qs-video__thumb {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.wpcpf-qs-play-btn {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		z-index: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 36px;
+		height: 36px;
+		background: #fff;
+		border-radius: 50%;
+		transform: translate(-50%, -50%);
+		transition: all 0.4s ease-in-out;
+
+		.dashicons {
+			display: block;
+			width: 26px;
+			height: 26px;
+			margin-left: 3px;
+			font-size: 26px;
+			line-height: 26px;
+			color: var(--wpcpf-primary-color);
+		}
+	}
+
+	/* ====================
+	   Video modal
+	   ==================== */
+
+	.wpcpf-qs-modal {
+		position: fixed;
+		inset: 0;
+		z-index: 100000;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 20px;
+		background: rgba(0, 0, 0, 0.8);
+	}
+
+	.wpcpf-qs-modal__content {
+		position: relative;
+		width: 100%;
+		max-width: 900px;
+		background: #fff;
+		border-radius: 12px;
+		overflow: hidden;
+	}
+
+	.wpcpf-qs-modal__close {
+		position: absolute;
+		top: 12px;
+		right: 12px;
+		z-index: 2;
+		width: 36px;
+		height: 36px;
+		border: 0;
+		border-radius: 50%;
+		background: rgba(0, 0, 0, 0.6);
+		color: #fff;
+		font-size: 24px;
+		line-height: 1;
+		cursor: pointer;
+	}
+
+	.wpcpf-qs-modal__video {
+		aspect-ratio: 16 / 9;
+
+		iframe {
+			width: 100%;
+			height: 100%;
+			border: 0;
+		}
+	}
+
+	/* ====================
+	   Responsive
+	   ==================== */
+
+	@media (max-width: 782px) {
+		.wpcpf-qs-actions {
+			width: 100%;
+		}
+
+		.wpcpf-qs-start-btn {
+			flex: 1 1 100%;
+		}
+
+		.wpcpf-qs-video {
+			max-width: none;
+		}
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wpcpf-admin-dashboard-container {
+		.wpcpf-qs-start-btn,
+		.wpcpf-qs-play-btn {
+			transition: none;
+		}
+
+		.wpcpf-qs-start-btn:hover,
+		.wpcpf-qs-start-btn:focus {
+			transform: none;
+		}
+	}
+}

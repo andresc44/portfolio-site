@@ -28,7 +28,9 @@ class Nav_Menu_View extends View_Abstract {
 		$mobile_menu_icon       = $this->render_icon_element( $this->attribute['sg_mobile_menu_icon'] );
 		$mobile_close_icon      = $this->render_icon_element( $this->attribute['sg_mobile_close_icon'] );
 		$item_indicator         = $this->render_icon_element( $this->attribute['st_submenu_item_indicator'] );
-		$item_indicator         = esc_attr( preg_replace( '~[\r\n\s]+~', ' ', $item_indicator ) );
+		$item_indicator         = preg_replace( '~[\r\n\s]+~', ' ', $item_indicator );
+		$item_indicator_token   = wp_hash( $this->unique_id . '|item-indicator|' . $item_indicator );
+		$item_indicator_data    = base64_encode( $item_indicator );
 
 		add_filter( 'nav_menu_item_args', array( $this, 'add_jkit_mega_menu_args' ), 10, 3 );
 		add_filter( 'nav_menu_css_class', array( $this, 'add_jkit_mega_menu_class' ), 10, 4 );
@@ -89,7 +91,36 @@ class Nav_Menu_View extends View_Abstract {
         </div>
         <div class="jkit-overlay"></div>';
 
-		return $this->render_wrapper( 'nav-menu', $output, array( 'break-point-' . $menu_breakpoint, $submenu_click_on_title ), array( 'item-indicator' => $item_indicator ) );
+		return $this->render_wrapper(
+			'nav-menu',
+			$output,
+			array( 'break-point-' . $menu_breakpoint, $submenu_click_on_title ),
+			array(
+				'item-indicator'       => $item_indicator_data,
+				'item-indicator-token' => $item_indicator_token,
+			)
+		) . $this->render_indicator_token_script( $this->unique_id, $item_indicator_data, $item_indicator_token );
+	}
+
+	/**
+	 * Register server-rendered Nav Menu indicator instances.
+	 *
+	 * @param string $module Unique widget id.
+	 * @param string $template Encoded menu indicator markup.
+	 * @param string $token Indicator token.
+	 *
+	 * @return string
+	 */
+	private function render_indicator_token_script( $module, $template, $token ) {
+		if ( empty( $token ) || empty( $template ) ) {
+			return '';
+		}
+
+		$module   = wp_json_encode( $module );
+		$template = wp_json_encode( $template );
+		$token    = wp_json_encode( $token );
+
+		return '<script>(window.jkitNavMenuIndicators=window.jkitNavMenuIndicators||{})[' . $module . ']={template:' . $template . ',token:' . $token . '};</script>';
 	}
 
 	/**

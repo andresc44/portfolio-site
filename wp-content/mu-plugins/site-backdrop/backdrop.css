@@ -1,0 +1,144 @@
+/* Site backdrop - glows of blue that shift as you scroll. Every page.
+
+   WHAT YOU SEE. The background is a field of soft, saturated blue glows -
+   royal, cobalt, indigo, teal-blue - laid out down a tall strip and slid past
+   the screen as the page scrolls, so the colour changes smoothly from the top
+   of a page to the bottom. Two strips move at different speeds, which is what
+   makes the glows drift against each other instead of just scrolling.
+
+   HOW IT MOVES. Only `transform` is animated, driven by the page's scroll
+   position (scroll-driven animations, so it runs on the compositor with no
+   script). The glows are painted once on two tall fixed layers - the body::before /
+   body::after pair that custom-fixes.css uses for its quiet default field,
+   which this replaces - and nothing repaints while scrolling. Browsers without
+   scroll-driven animations (Firefox, for now) get the same motion from
+   backdrop.js, which writes the scroll position to --ch-sp (0..1).
+
+   WHERE IT STARTS. The strips are four and three screens tall and slide up by
+   three and two over the whole scroll, whatever the length of the page (so a
+   short page moves a little, a long one a lot). The home page starts at the
+   top of the strips: its hero panel covers the first screen, and the hero
+   fades to exactly the base colour at its bottom edge, so no glow may reach
+   into the first screenful. Every other page starts part-way down them
+   (--bd-a0 / --bd-b0), so a glow is already in view at the top of the page and
+   even a one-screen page (a 404, a search with no results) has some colour.
+
+   THE CONTRAST BUDGET. How bright the background may get is set by the text
+   that sits directly on it - text on cards, buttons and the hero panel has a
+   background of its own. Audited on every kind of page (home, About, Skills,
+   Contact, Projects, the category pages, project posts, tag and search pages,
+   404; desktop and phone) the text on the bare field is white (needs 4.5:1, so
+   tolerates a background up to luminance 0.18), green accents (0.07), the
+   muted labels (0.04-0.12), and only two kinds of blue:
+
+       the large gradient headings, whose blue end is #5B7FFF - large text
+       needs 3:1, so a background up to luminance 0.0487;
+       the small links ("see here for more details" in body copy, the tag
+       pages' "Back to ..." link), #8AA3FF at 4.5:1 - up to 0.0474. (The
+       footer menu used to be this blue too; it is white now, by request.)
+
+   (The "Scroll for more ..." cue is not on the field: it is a pill with its
+   own dark glass background.) The glows are kept under 0.040 at their
+   brightest (the base is 0.0107): headings stay above 3.3:1, links above
+   4.8:1. Blue carries little luminance (7%, against green's 72%), which is
+   why a glow can be strongly blue and still dark. Glow colours (relative
+   luminance):
+
+       royal     18, 42,140  0.0368        steel     26, 52,110  0.0380
+       cobalt     8, 46,130  0.0361        teal-blue  6, 54,112  0.0385
+       indigo    48, 32,150  0.0386
+
+   If a new blue text style is ever put straight on the background, check it
+   against this ceiling (scratchpad text-on-field-multi.js lists what is there).
+
+   GRAIN. Smooth dark gradients show contour rings (banding) on 8-bit screens.
+   The first strip carries a faint black grain that breaks them up. Black can
+   only lower luminance, and it darkens the field by about 6% on average, so
+   the strip's base is lifted by the same 6% (16, 29, 54 instead of 15, 27, 51):
+   the field averages out at exactly the base colour. */
+
+/* The strips: fixed, taller than the screen, behind everything. Viewport
+   units, so a strip is always the same number of screens tall. html body
+   (not just body): this has to win against custom-fixes.css's own
+   body::before / body::after whatever order the two stylesheets load in. */
+html body::before,
+html body::after {
+	content: "";
+	position: fixed;
+	inset: auto;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+	pointer-events: none;
+	background-repeat: no-repeat;
+	will-change: transform;
+}
+
+/* Where each strip is at the top of the page, and where it ends up at the
+   bottom. Not the home page: see "WHERE IT STARTS". */
+html body::before { --bd-a0: -110vh; --bd-a1: -300vh; }
+html body::after  { --bd-b0: -100vh; --bd-b1: -200vh; }
+html body.ch-page-home::before { --bd-a0: 0vh; }
+html body.ch-page-home::after  { --bd-b0: 0vh; }
+
+/* The resting position is the start position: a page that does not scroll at
+   all (a one-screen 404) has no scroll range, so the animation below never
+   runs, and without this it would sit at the plain top of the strips. */
+html body::before { transform: translate3d(0, var(--bd-a0), 0); }
+html body::after  { transform: translate3d(0, var(--bd-b0), 0); }
+
+/* Strip 1 - slow, wide glows, with the grain. Four screens tall. */
+html body::before {
+	height: 400vh;
+	background-color: rgb(16, 29, 54);
+	background-image:
+		/* royal, left - the first one in (from the lower left of About on the home page) */
+		radial-gradient(ellipse max(66vw, 600px) 64vh at 10% 136vh, rgba(18, 42, 140, 0.95), transparent 78%),
+		/* cobalt, right */
+		radial-gradient(ellipse max(58vw, 540px) 60vh at 90% 215vh, rgba(8, 46, 130, 0.95),  transparent 78%),
+		/* indigo, left of centre */
+		radial-gradient(ellipse max(62vw, 580px) 62vh at 24% 285vh, rgba(48, 32, 150, 0.95), transparent 78%),
+		/* teal-blue, right */
+		radial-gradient(ellipse max(58vw, 540px) 60vh at 86% 345vh, rgba(6, 54, 112, 0.95),  transparent 78%),
+		/* royal again, low and centred: the page settles */
+		radial-gradient(ellipse max(72vw, 620px) 54vh at 45% 398vh, rgba(18, 42, 140, 0.92), transparent 78%),
+		/* grain */
+		url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n' x='0' y='0' width='100%25' height='100%25'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.12 0 0 0 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");
+	background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat;
+}
+
+/* Strip 2 - faster, a little tighter, in the cooler blues. Transparent
+   between the glows, so strip 1 shows through. */
+html body::after {
+	height: 300vh;
+	background-color: transparent;
+	background-image:
+		radial-gradient(ellipse max(52vw, 500px) 54vh at 92% 165vh, rgba(26, 52, 110, 0.92), transparent 78%),
+		radial-gradient(ellipse max(54vw, 520px) 52vh at 8% 215vh,  rgba(6, 54, 112, 0.92),  transparent 78%),
+		radial-gradient(ellipse max(50vw, 480px) 50vh at 70% 262vh, rgba(8, 46, 130, 0.92),  transparent 78%),
+		radial-gradient(ellipse max(54vw, 500px) 52vh at 16% 298vh, rgba(48, 32, 150, 0.88), transparent 78%);
+}
+
+/* Scroll-driven: the strips slide from their start to their end as the page
+   goes from the top to the bottom. */
+@supports (animation-timeline: scroll()) {
+	html body::before {
+		animation: bdSlideA linear both;
+		animation-timeline: scroll(root block);
+	}
+	html body::after {
+		animation: bdSlideB linear both;
+		animation-timeline: scroll(root block);
+	}
+}
+/* --bd-k (backdrop.js, 0.25..1) shortens the travel on short pages so a little
+   scrolling does not sweep the whole field past; 1 on long pages and without script. */
+@keyframes bdSlideA { from { transform: translate3d(0, var(--bd-a0), 0); } to { transform: translate3d(0, calc(var(--bd-a0) + (var(--bd-a1) - var(--bd-a0)) * var(--bd-k, 1)), 0); } }
+@keyframes bdSlideB { from { transform: translate3d(0, var(--bd-b0), 0); } to { transform: translate3d(0, calc(var(--bd-b0) + (var(--bd-b1) - var(--bd-b0)) * var(--bd-k, 1)), 0); } }
+
+/* Everything else: backdrop.js keeps --ch-sp (0 at the top, 1 at the bottom). */
+@supports not (animation-timeline: scroll()) {
+	html body::before { transform: translate3d(0, calc(var(--bd-a0) + (var(--bd-a1) - var(--bd-a0)) * var(--bd-k, 1) * var(--ch-sp, 0)), 0); }
+	html body::after  { transform: translate3d(0, calc(var(--bd-b0) + (var(--bd-b1) - var(--bd-b0)) * var(--bd-k, 1) * var(--ch-sp, 0)), 0); }
+}

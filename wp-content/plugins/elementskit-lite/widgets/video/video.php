@@ -1639,7 +1639,7 @@ class ElementsKit_Widget_Video extends Widget_Base {
 					'size' => 44,
 				],
 				'selectors' => [
-					'.mfp-close.ekit-video-popup-close' => 'width: {{SIZE}}{{UNIT}};'
+					'.mfp-wrap .mfp-close.ekit-video-popup-close' => 'width: {{SIZE}}{{UNIT}};'
 				],
 			]
 		);
@@ -1666,7 +1666,7 @@ class ElementsKit_Widget_Video extends Widget_Base {
 					'size' => 44,
 				],
 				'selectors' => [
-					'.mfp-close.ekit-video-popup-close' => 'height: {{SIZE}}{{UNIT}};'
+					'.mfp-wrap .mfp-close.ekit-video-popup-close' => 'height: {{SIZE}}{{UNIT}};'
 				],
 			]
 		);
@@ -1697,8 +1697,8 @@ class ElementsKit_Widget_Video extends Widget_Base {
 					'size' => 10,
 				],
 				'selectors' => [
-					'.mfp-close.ekit-video-popup-close' => 'font-size: {{SIZE}}{{UNIT}};',
-					'.mfp-close.ekit-video-popup-close svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};'
+					'.mfp-wrap .mfp-close.ekit-video-popup-close' => 'font-size: {{SIZE}}{{UNIT}};',
+					'.mfp-wrap .mfp-close.ekit-video-popup-close svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};'
 				],
 			]
 		);
@@ -1717,7 +1717,7 @@ class ElementsKit_Widget_Video extends Widget_Base {
 					'groove' => esc_html_x( 'Groove', 'Border Control', 'elementskit-lite' ),
 				],
 				'selectors' => [
-					'.mfp-close.ekit-video-popup-close' => 'border-style: {{VALUE}};',
+					'.mfp-wrap .mfp-close.ekit-video-popup-close' => 'border-style: {{VALUE}};',
 				],
 			]
 		);
@@ -1727,7 +1727,7 @@ class ElementsKit_Widget_Video extends Widget_Base {
 				'label' => esc_html_x( 'Border Width', 'Border Control', 'elementskit-lite' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'selectors' => [
-					'.mfp-close.ekit-video-popup-close' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'.mfp-wrap .mfp-close.ekit-video-popup-close' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 				'condition' => [
 					'ekit_video_popup_close_icon_border_style!' => '',
@@ -1752,7 +1752,7 @@ class ElementsKit_Widget_Video extends Widget_Base {
 				],
 				'default'		 => 'right',
 				'selectors' => [
-					'.mfp-close.ekit-video-popup-close' => '{{VALUE}}: 0;',
+					'.mfp-wrap .mfp-close.ekit-video-popup-close' => '{{VALUE}}: 0;',
 				],
 			]
 		);
@@ -1773,7 +1773,7 @@ class ElementsKit_Widget_Video extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '#000000',
 				'selectors' => [
-					'.mfp-close.ekit-video-popup-close' => 'background-color: {{VALUE}};',
+					'.mfp-wrap .mfp-close.ekit-video-popup-close' => 'background-color: {{VALUE}};',
 
 				],
 			]
@@ -1786,8 +1786,8 @@ class ElementsKit_Widget_Video extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '#ffffff',
 				'selectors' => [
-					'.mfp-close.ekit-video-popup-close' => 'color: {{VALUE}};',
-					'.mfp-close.ekit-video-popup-close .ekit-popup-close-icon svg' => 'fill: {{VALUE}};'
+					'.mfp-wrap .mfp-close.ekit-video-popup-close' => 'color: {{VALUE}};',
+					'.mfp-wrap .mfp-close.ekit-video-popup-close .ekit-popup-close-icon svg' => 'fill: {{VALUE}};'
 				],
 			]
 		);
@@ -1799,7 +1799,7 @@ class ElementsKit_Widget_Video extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '#ffffff',
 				'selectors' => [
-					'.mfp-close.ekit-video-popup-close' => 'border-color: {{VALUE}};',
+					'.mfp-wrap .mfp-close.ekit-video-popup-close' => 'border-color: {{VALUE}};',
 				],
 				'condition' => [
 					'ekit_video_popup_close_icon_border_style!' => '',
@@ -1821,7 +1821,7 @@ class ElementsKit_Widget_Video extends Widget_Base {
 					'unit' => '%'
 				],
 				'selectors' => [
-					'.mfp-close.ekit-video-popup-close' =>  'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'.mfp-wrap .mfp-close.ekit-video-popup-close' =>  'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -1842,8 +1842,8 @@ class ElementsKit_Widget_Video extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '#000000',
 				'selectors' => [
-					'.mfp-close.ekit-video-popup-close:hover' => 'background-color: {{VALUE}};',
-					'.ekit_self_video_wrap .mfp-close.ekit-video-popup-close:hover' => 'background-color: {{VALUE}};',
+					'.mfp-wrap .mfp-close.ekit-video-popup-close:hover' => 'background-color: {{VALUE}};',
+					'.mfp-wrap .ekit_self_video_wrap .mfp-close.ekit-video-popup-close:hover' => 'background-color: {{VALUE}};',
 
 				],
 			]
@@ -1856,8 +1856,8 @@ class ElementsKit_Widget_Video extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '#ffffff',
 				'selectors' => [
-					'.mfp-close.ekit-video-popup-close:hover .ekit-popup-close-icon i' => 'color: {{VALUE}};',
-					'.mfp-close.ekit-video-popup-close:hover .ekit-popup-close-icon svg' => 'fill: {{VALUE}};'
+					'.mfp-wrap .mfp-close.ekit-video-popup-close:hover .ekit-popup-close-icon i' => 'color: {{VALUE}};',
+					'.mfp-wrap .mfp-close.ekit-video-popup-close:hover .ekit-popup-close-icon svg' => 'fill: {{VALUE}};'
 
 				],
 			]
@@ -1870,7 +1870,7 @@ class ElementsKit_Widget_Video extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '#ffffff',
 				'selectors' => [
-					'.mfp-close.ekit-video-popup-close:hover' => 'border-color: {{VALUE}};',
+					'.mfp-wrap .mfp-close.ekit-video-popup-close:hover' => 'border-color: {{VALUE}};',
 				],
 				'condition' => [
 					'ekit_video_popup_close_icon_border_style!' => '',
@@ -1892,7 +1892,7 @@ class ElementsKit_Widget_Video extends Widget_Base {
 					'unit' => '%'
 				],
 				'selectors' => [
-					'.mfp-close.ekit-video-popup-close:hover' =>  'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'.mfp-wrap .mfp-close.ekit-video-popup-close:hover' =>  'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);

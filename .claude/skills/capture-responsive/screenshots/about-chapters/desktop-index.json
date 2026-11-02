@@ -1,0 +1,30 @@
+[
+ {
+  "file": "desktop-01-about-me.png",
+  "key": "about-me",
+  "y": 0,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "desktop-02-backpacking.png",
+  "key": "backpacking",
+  "y": 900,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "desktop-03-hobbies.png",
+  "key": "hobbies",
+  "y": 1822,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "desktop-04-hobbies-bottom.png",
+  "key": "hobbies",
+  "y": 2179,
+  "part": 2,
+  "bottom": true
+ }
+]

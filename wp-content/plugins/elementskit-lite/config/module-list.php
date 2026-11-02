@@ -81,7 +81,7 @@ class Module_List extends \ElementsKit_Lite\Core\Config_List {
 				),
 				'copy-paste-cross-domain' => array(
 					'slug'    => 'copy-paste-cross-domain',
-					'package' => 'pro-disabled',
+					'package' => 'free',
 					'title'   => 'Cross-Domain Copy Paste',
 				),
 				'advanced-tooltip' => array(

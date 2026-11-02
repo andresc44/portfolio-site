@@ -2860,23 +2860,23 @@ class WPvivid_Backup_Task_2
 
             $resume_time=time()+60;
 
-            $b=wp_schedule_single_event($resume_time,'wpvivid_clean_backup_data_event_2',array($this->task_id));
+            $b=wp_schedule_single_event($resume_time,'wpvivid_clean_backup_2_data_event',array($this->task_id));
 
             if($b===false)
             {
-                $timestamp = wp_next_scheduled('wpvivid_clean_backup_data_event_2',array($this->task_id));
+                $timestamp = wp_next_scheduled('wpvivid_clean_backup_2_data_event',array($this->task_id));
 
                 if($timestamp!==false)
                 {
                     $resume_time=max($resume_time,$timestamp+10*60+10);
-                    wp_schedule_single_event($resume_time,'wpvivid_clean_backup_data_event_2',array($this->task_id));
+                    wp_schedule_single_event($resume_time,'wpvivid_clean_backup_2_data_event',array($this->task_id));
                 }
             }
 
-            $timestamp =wp_next_scheduled('wpvivid_task_monitor_event',array($this->task_id));
+            $timestamp =wp_next_scheduled('wpvivid_task_monitor_event_2',array($this->task_id));
             if($timestamp!==false)
             {
-                wp_unschedule_event($timestamp,'wpvivid_task_monitor_event',array($this->task_id));
+                wp_unschedule_event($timestamp,'wpvivid_task_monitor_event_2',array($this->task_id));
             }
             wp_cache_flush();
             WPvivid_taskmanager::delete_task($this->task_id);

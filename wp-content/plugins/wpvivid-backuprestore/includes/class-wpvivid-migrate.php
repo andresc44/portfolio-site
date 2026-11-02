@@ -1048,10 +1048,15 @@ class WPvivid_Migrate
         }
 
         $key_size = 2048;
-        $rsa = new Crypt_RSA();
-        $keys = $rsa->createKey($key_size);
-        $options['public_key']=base64_encode($keys['publickey']);
-        $options['private_key']=base64_encode($keys['privatekey']);
+        $private_key = \WPvividphpseclib3\Crypt\RSA::createKey($key_size);
+
+        $keys = array(
+            'privatekey' => $private_key->toString('PKCS8'),
+            'publickey'  => $private_key->getPublicKey()->toString('PKCS8'),
+        );
+
+        $options['public_key'] = base64_encode($keys['publickey']);
+        $options['private_key'] = base64_encode($keys['privatekey']);
         try
         {
             $options['auth_key'] = bin2hex(random_bytes(32));
@@ -1129,10 +1134,15 @@ class WPvivid_Migrate
         }
 
         $key_size = 2048;
-        $rsa = new Crypt_RSA();
-        $keys = $rsa->createKey($key_size);
-        $options['public_key']=base64_encode($keys['publickey']);
-        $options['private_key']=base64_encode($keys['privatekey']);
+        $private_key = \WPvividphpseclib3\Crypt\RSA::createKey($key_size);
+
+        $keys = array(
+            'privatekey' => $private_key->toString('PKCS8'),
+            'publickey'  => $private_key->getPublicKey()->toString('PKCS8'),
+        );
+
+        $options['public_key'] = base64_encode($keys['publickey']);
+        $options['private_key'] = base64_encode($keys['privatekey']);
         try
         {
             $options['auth_key'] = bin2hex(random_bytes(32));

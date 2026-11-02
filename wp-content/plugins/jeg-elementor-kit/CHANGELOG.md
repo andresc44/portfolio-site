@@ -2,6 +2,31 @@
 
 This file preserves the complete changelog history that was previously kept in `readme.txt` before shortening the WordPress.org-facing `Changelog` section to stay under the 5,000-word limit.
 
+## 3.2.23 - 21-10-2026
+
+* Improvement: Added WPML compatibility for the Icon Box widget.
+* Fix: Plugin update notice not displaying correctly.
+* Fix: PHP Deprecated warning on strpos when passing null
+
+## 3.2.22 - 17-10-2026
+
+* Improvement: Added WPML compatibility for the Team widget.
+
+## 3.2.21 - 08-10-2026
+
+* Improvement: Added WPML compatibility for the Gallery widget.
+
+## 3.2.20 - 01-10-2026
+
+* Improvement: Security issues.
+* Improvement: Added WPML compatibility for the Feature List and Tabs widgets.
+* Fix: Uncaught TypeError issues on editor support script in Elementor Editor.
+
+## 3.2.19 - 24-09-2026
+
+* Improvement: SVG Icon Style Size on Icon Box widget.
+* Improvement: Added WPML compatibility for the Client Logo widget.
+
 ## 3.2.18 - 18-09-2026
 
 * Improvement: Update bundled Jeg Framework with opt-in raw data editor support for repeater fields.

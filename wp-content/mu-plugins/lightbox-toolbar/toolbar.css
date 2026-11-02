@@ -1,0 +1,18 @@
+/* Elementor lightbox toolbar: zoom, download, close - nothing else.
+   Share (and the menu behind it) and Fullscreen are hidden; the Download
+   button is added by toolbar.js. */
+.elementor-slideshow__header .e-eicon-share-arrow,
+.elementor-slideshow__header .elementor-slideshow__share-menu,
+.elementor-slideshow__header .e-eicon-frame-expand,
+.elementor-slideshow__header .e-eicon-frame-minimize {
+	display: none !important;
+}
+
+/* Only offered on a picture: a video slide has no file to hand over. */
+.elementor-slideshow__header .pf-lb-download {
+	display: none;
+}
+
+.elementor-lightbox:has(.swiper-slide-active img.elementor-lightbox-image) .elementor-slideshow__header .pf-lb-download {
+	display: inline-block;
+}

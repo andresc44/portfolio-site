@@ -1,0 +1,182 @@
+ok    Desktop Chrome 1440                 /                   down:8 (bottom Y) up:7 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:206 errs:0
+ISSUE Desktop Chrome 1440                 /about-me/          down:4 (bottom Y) up:3 (top Y) reversals:0 unsettled:1 stuck-gestures:1 longframes:106 errs:0
+      down 0>900 900>1800 1800>1981 1981>1981
+      up   1981>1800 1800>900 900>0
+ISSUE Desktop Chrome 1440                 /skills-education/  down:4 (bottom Y) up:3 (top Y) reversals:0 unsettled:2 stuck-gestures:1 longframes:105 errs:0
+      down 0>900 900>1800 1800>1981 1981>1981
+      up   1981>1800 1800>900 900>0
+ISSUE Desktop Chrome 1440                 /robotics/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:2 stuck-gestures:1 longframes:158 errs:0
+      down 0>900 900>1800 1800>2700 2700>2881 2881>2881
+      up   2881>2700 2700>1800 1800>900 900>0
+ok    Desktop Chrome 1440                 /projects/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:135 errs:0
+ok    Laptop Chrome 1366x768              /                   down:8 (bottom Y) up:7 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:161 errs:0
+ok    Laptop Chrome 1366x768              /about-me/          down:4 (bottom Y) up:3 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:86 errs:0
+ISSUE Laptop Chrome 1366x768              /skills-education/  down:4 (bottom Y) up:3 (top Y) reversals:0 unsettled:1 stuck-gestures:1 longframes:56 errs:0
+      down 0>768 768>1536 1536>1717 1717>1717
+      up   1717>1536 1536>768 768>0
+ok    Laptop Chrome 1366x768              /robotics/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:74 errs:0
+ISSUE Laptop Chrome 1366x768              /projects/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:1 stuck-gestures:1 longframes:93 errs:0
+      down 0>768 768>1536 1536>2304 2304>2485 2485>2485
+      up   2485>2304 2304>1536 1536>768 768>0
+ok    Pixel 7 (Chrome)                    /                   down:10 (bottom Y) up:9 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:26 errs:0
+ok    Pixel 7 (Chrome)                    /about-me/          down:4 (bottom Y) up:3 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:9 errs:0
+ok    Pixel 7 (Chrome)                    /skills-education/  down:3 (bottom Y) up:3 (top Y) reversals:0 unsettled:0 stuck-gestures:2 longframes:6 errs:0
+ok    Pixel 7 (Chrome)                    /robotics/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:17 errs:0
+ISSUE Pixel 7 (Chrome)                    /projects/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:1 stuck-gestures:1 longframes:7 errs:0
+      down 0>822 822>1415 1661>2500 2500>2775 2775>2775
+      up   2775>2500 2500>1661 1661>822 822>0
+ok    Galaxy S9 (Chrome)                  /                   down:10 (bottom Y) up:9 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:9 errs:0
+ok    Galaxy S9 (Chrome)                  /about-me/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:2 errs:0
+ok    Galaxy S9 (Chrome)                  /skills-education/  down:3 (bottom Y) up:3 (top Y) reversals:0 unsettled:0 stuck-gestures:2 longframes:1 errs:0
+ok    Galaxy S9 (Chrome)                  /robotics/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:4 errs:0
+ok    Galaxy S9 (Chrome)                  /projects/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:2 errs:0
+ISSUE Galaxy Tab S4 (Chrome)              /                   down:10 (bottom Y) up:9 (top Y) reversals:0 unsettled:2 stuck-gestures:1 longframes:232 errs:0
+      down 0>1121 1121>2259 2259>3397 3397>4535 4535>5673 5673>6811 6811>7949 7949>8931 9087>9362 9362>9362
+      up   9362>9087 9087>7949 7949>6811 6811>5903 5673>4535 4535>3397 3397>2259 2259>1121 1121>0
+ok    Galaxy Tab S4 (Chrome)              /about-me/          down:4 (bottom Y) up:3 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:168 errs:0
+ok    Galaxy Tab S4 (Chrome)              /skills-education/  down:3 (bottom Y) up:3 (top Y) reversals:0 unsettled:0 stuck-gestures:2 longframes:58 errs:0
+ok    Galaxy Tab S4 (Chrome)              /robotics/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:140 errs:0
+ok    Galaxy Tab S4 (Chrome)              /projects/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:116 errs:0
+ok    Low-end Android (Moto G4, 4x CPU)   /                   down:10 (bottom Y) up:9 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:226 errs:0
+ISSUE Low-end Android (Moto G4, 4x CPU)   /about-me/          down:4 (bottom Y) up:3 (top Y) reversals:0 unsettled:1 stuck-gestures:1 longframes:26 errs:0
+      down 0>635 655>1295 1295>1606 1606>1606
+      up   1606>1295 1295>655 655>0
+ISSUE Low-end Android (Moto G4, 4x CPU)   /skills-education/  down:3 (bottom Y) up:3 (top Y) reversals:0 unsettled:1 stuck-gestures:2 longframes:5 errs:0
+      down 0>602 623>934 934>934
+      up   934>623 623>0 0>0
+ok    Low-end Android (Moto G4, 4x CPU)   /robotics/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:32 errs:0
+ok    Low-end Android (Moto G4, 4x CPU)   /projects/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:38 errs:0
+ISSUE Firefox Android-size                /                   down:10 (bottom Y) up:9 (top Y) reversals:0 unsettled:4 stuck-gestures:1 longframes:233 errs:0
+      down 0>783 783>1583 1583>2383 2383>3183 3183>3983 3983>4783 4783>5583 5583>6383 6383>6658 6658>6658
+      up   6658>6383 6383>5583 5583>4783 4783>3983 3983>3183 3183>2383 2383>1583 1583>783 783>0
+ok    Firefox Android-size                /about-me/          down:4 (bottom Y) up:3 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:64 errs:0
+ISSUE Firefox Android-size                /skills-education/  down:3 (bottom Y) up:3 (top Y) reversals:0 unsettled:1 stuck-gestures:2 longframes:52 errs:0
+      down 0>783 783>1058 1058>1058
+      up   1058>783 783>0 0>0
+ISSUE Firefox Android-size                /robotics/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:1 stuck-gestures:1 longframes:98 errs:0
+      down 0>783 783>1583 1583>2383 2383>2658 2658>2658
+      up   2658>2383 2383>1583 1583>783 783>0
+ISSUE Firefox Android-size                /projects/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:1 stuck-gestures:1 longframes:92 errs:0
+      down 0>783 783>1583 1583>2383 2383>2658 2658>2658
+      up   2658>2383 2383>1583 1583>783 783>0
+ISSUE Desktop Firefox 1440                /                   down:8 (bottom Y) up:7 (top Y) reversals:0 unsettled:8 stuck-gestures:1 longframes:202 errs:0
+      down 0>900 900>1800 1800>2292 2292>3192 3192>4092 4093>5005 5005>5905 5905>5905
+      up   5905>5005 5005>4092 4092>3192 3192>2292 2292>1800 1800>900 900>0
+ok    Desktop Firefox 1440                /about-me/          down:4 (bottom Y) up:3 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:50 errs:0
+ISSUE Desktop Firefox 1440                /skills-education/  down:4 (bottom Y) up:3 (top Y) reversals:0 unsettled:2 stuck-gestures:1 longframes:55 errs:0
+      down 0>900 900>1800 1800>1981 1981>1981
+      up   1981>1800 1800>900 900>0
+ISSUE Desktop Firefox 1440                /robotics/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:1 stuck-gestures:1 longframes:100 errs:0
+      down 0>900 900>1800 1800>2700 2700>2881 2881>2881
+      up   2881>2700 2700>1800 1800>900 900>0
+ok    Desktop Firefox 1440                /projects/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:96 errs:0
+ok    Firefox Android-size                /                   down:10 (bottom Y) up:9 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:163 errs:0
+ok    Firefox Android-size                /about-me/          down:4 (bottom Y) up:3 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:22 errs:0
+ok    Firefox Android-size                /skills-education/  down:3 (bottom Y) up:3 (top Y) reversals:0 unsettled:0 stuck-gestures:2 longframes:19 errs:0
+ok    Firefox Android-size                /robotics/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:35 errs:0
+ok    Firefox Android-size                /projects/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:0 stuck-gestures:1 longframes:46 errs:0
+ISSUE Desktop Safari 1440                 /                   down:8 (bottom Y) up:7 (top Y) reversals:0 unsettled:14 stuck-gestures:1 longframes:110 errs:0
+      down 0>900 900>1800 1800>2292 2292>3192 3192>4092 4092>4992 4992>5892 5892>5892
+      up   5892>4992 4992>4092 4092>3192 3192>2292 2292>1800 1800>900 900>0
+ISSUE Desktop Safari 1440                 /about-me/          down:4 (bottom Y) up:3 (top Y) reversals:0 unsettled:6 stuck-gestures:1 longframes:55 errs:0
+      down 0>900 900>1800 1800>1981 1981>1981
+      up   1981>1800 1800>900 900>0
+ISSUE Desktop Safari 1440                 /skills-education/  down:4 (bottom Y) up:3 (top Y) reversals:0 unsettled:6 stuck-gestures:1 longframes:55 errs:0
+      down 0>900 900>1800 1800>1981 1981>1981
+      up   1981>1800 1800>900 900>0
+ISSUE Desktop Safari 1440                 /robotics/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:8 stuck-gestures:1 longframes:67 errs:0
+      down 0>900 900>1800 1800>2700 2700>2881 2881>2881
+      up   2881>2700 2700>1800 1800>900 900>0
+ISSUE Desktop Safari 1440                 /projects/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:8 stuck-gestures:1 longframes:67 errs:0
+      down 0>900 900>1800 1800>2700 2700>2881 2881>2881
+      up   2881>2700 2700>1800 1800>900 900>0
+ISSUE iPhone 15 (Safari)                  /                   down:10 (bottom Y) up:9 (top Y) reversals:0 unsettled:18 stuck-gestures:1 longframes:75 errs:0
+      down 0>642 642>1188 1340>1999 1999>2658 2658>3317 3317>3976 3976>4635 4635>5294 5294>5569 5569>5569
+      up   5569>5294 5294>4635 4635>3976 3976>3317 3317>2658 2658>1999 1999>1367 1339>641 641>0
+ISSUE iPhone 15 (Safari)                  /about-me/          down:4 (bottom Y) up:3 (top Y) reversals:0 unsettled:6 stuck-gestures:1 longframes:29 errs:0
+      down 0>642 642>1301 1301>1576 1576>1576
+      up   1576>1301 1301>642 642>0
+ISSUE iPhone 15 (Safari)                  /skills-education/  down:3 (bottom Y) up:3 (top Y) reversals:0 unsettled:4 stuck-gestures:2 longframes:22 errs:0
+      down 0>642 642>925 925>925
+      up   925>642 642>0 0>0
+ISSUE iPhone 15 (Safari)                  /robotics/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:8 stuck-gestures:1 longframes:32 errs:0
+      down 0>642 642>1301 1301>1960 1960>2235 2235>2235
+      up   2235>1960 1960>1301 1301>642 642>0
+ISSUE iPhone 15 (Safari)                  /projects/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:8 stuck-gestures:1 longframes:30 errs:0
+      down 0>642 642>1301 1301>1960 1960>2235 2235>2235
+      up   2235>1960 1960>1300 1300>642 642>0
+ISSUE iPhone SE (old, Safari)             /                   down:10 (bottom Y) up:9 (top Y) reversals:0 unsettled:18 stuck-gestures:1 longframes:236 errs:0
+      down 0>551 551>1158 1158>1760 1760>2328 2328>2896 2896>3484 3484>4052 4052>4620 4620>4936 4936>4936
+      up   4936>4620 4620>4052 4052>3484 3484>2896 2896>2328 2328>1760 1760>1157 1157>551 551>0
+ISSUE iPhone SE (old, Safari)             /about-me/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:8 stuck-gestures:1 longframes:116 errs:0
+      down 0>83 83>651 651>1219 1219>1530 1530>1530
+      up   1530>1219 1219>651 651>83 83>0
+ISSUE iPhone SE (old, Safari)             /skills-education/  down:3 (bottom Y) up:3 (top Y) reversals:0 unsettled:4 stuck-gestures:2 longframes:78 errs:0
+      down 0>551 551>895 895>895
+      up   895>551 551>0 0>0
+ISSUE iPhone SE (old, Safari)             /robotics/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:8 stuck-gestures:1 longframes:100 errs:0
+      down 5>605 605>1173 1173>1741 1741>2052 2052>2052
+      up   2052>1741 1741>1173 1173>605 605>0
+ISSUE iPhone SE (old, Safari)             /projects/          down:6 (bottom Y) up:5 (top Y) reversals:0 unsettled:10 stuck-gestures:1 longframes:129 errs:0
+      down 0>84 84>652 652>1220 1220>1788 1788>2099 2099>2099
+      up   2099>1788 1788>1220 1220>652 652>84 84>0
+ISSUE iPad (Safari)                       /                   down:9 (bottom Y) up:9 (top Y) reversals:0 unsettled:16 stuck-gestures:2 longframes:49 errs:0
+      down 0>1080 1080>2017 2160>2971 2971>3690 4051>5153 5153>5330 5330>6410 6410>7490 7490>7490
+      up   7490>6410 6410>5611 5330>5131 5131>4527 4051>2971 2971>2160 2160>1080 1080>249 0>0
+ISSUE iPad (Safari)                       /about-me/          down:4 (bottom Y) up:4 (top Y) reversals:0 unsettled:6 stuck-gestures:2 longframes:23 errs:0
+      down 0>1020 1080>2160 2160>2397 2397>2397
+      up   2397>2160 2160>1168 1080>7 0>0
+ISSUE iPad (Safari)                       /skills-education/  down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:8 stuck-gestures:1 longframes:23 errs:0
+      down 0>1080 1080>2159 2160>2809 2809>3047 3047>3047
+      up   3047>2809 2809>2169 2160>1081 1080>0
+ISSUE iPad (Safari)                       /robotics/          down:5 (bottom Y) up:5 (top Y) reversals:0 unsettled:8 stuck-gestures:2 longframes:29 errs:0
+      down 0>747 1080>2136 2160>2998 3240>3477 3477>3477
+      up   3477>3240 3240>2160 2160>1080 1080>146 0>0
+ISSUE iPad (Safari)                       /projects/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:8 stuck-gestures:1 longframes:25 errs:0
+      down 0>910 1080>2160 2160>3030 3240>3477 3477>3477
+      up   3477>3240 3240>2164 2160>1080 1080>0
+ISSUE iPhone 15 (Safari)                  /                   down:10 (bottom Y) up:9 (top Y) reversals:0 unsettled:18 stuck-gestures:1 longframes:76 errs:0
+      down 0>642 642>1198 1340>1999 1999>2657 2658>3317 3317>3976 3976>4635 4635>5294 5294>5569 5569>5569
+      up   5569>5294 5294>4635 4635>3976 3976>3317 3317>2657 2657>1999 1999>1340 1340>642 642>0
+ISSUE iPhone 15 (Safari)                  /about-me/          down:4 (bottom Y) up:3 (top Y) reversals:0 unsettled:6 stuck-gestures:1 longframes:28 errs:0
+      down 0>642 642>1301 1301>1576 1576>1576
+      up   1576>1302 1300>642 642>0
+ISSUE iPhone 15 (Safari)                  /skills-education/  down:3 (bottom Y) up:3 (top Y) reversals:0 unsettled:4 stuck-gestures:2 longframes:20 errs:0
+      down 0>642 642>925 925>925
+      up   925>642 642>0 0>0
+ISSUE iPhone 15 (Safari)                  /robotics/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:8 stuck-gestures:1 longframes:31 errs:0
+      down 0>642 642>1300 1301>1960 1960>2235 2235>2235
+      up   2235>1960 1960>1300 1300>642 642>0
+ISSUE iPhone 15 (Safari)                  /projects/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:8 stuck-gestures:1 longframes:31 errs:0
+      down 0>642 642>1301 1301>1960 1960>2235 2235>2235
+      up   2235>1960 1960>1301 1301>642 642>0
+ISSUE iPhone SE (old, Safari)             /                   down:10 (bottom Y) up:9 (top Y) reversals:0 unsettled:18 stuck-gestures:1 longframes:233 errs:0
+      down 0>551 551>1157 1157>1760 1760>2328 2328>2896 2896>3484 3484>4052 4052>4620 4620>4936 4936>4936
+      up   4936>4620 4620>4052 4052>3484 3484>2896 2896>2328 2328>1760 1760>1157 1157>551 551>0
+ISSUE iPhone SE (old, Safari)             /about-me/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:8 stuck-gestures:1 longframes:122 errs:0
+      down 0>83 83>651 651>1219 1219>1530 1530>1530
+      up   1530>1219 1219>651 651>83 83>0
+ISSUE iPhone SE (old, Safari)             /skills-education/  down:3 (bottom Y) up:3 (top Y) reversals:0 unsettled:4 stuck-gestures:2 longframes:76 errs:0
+      down 0>551 551>895 895>895
+      up   895>551 551>0 0>0
+ISSUE iPhone SE (old, Safari)             /robotics/          down:5 (bottom Y) up:4 (top Y) reversals:0 unsettled:8 stuck-gestures:1 longframes:106 errs:0
+      down 5>605 605>1173 1173>1741 1741>2052 2052>2052
+      up   2052>1741 1741>1173 1173>605 605>0
+ISSUE iPhone SE (old, Safari)             /projects/          down:6 (bottom Y) up:5 (top Y) reversals:0 unsettled:10 stuck-gestures:1 longframes:133 errs:0
+      down 0>84 84>652 652>1220 1220>1788 1788>2099 2099>2099
+      up   2099>1788 1788>1220 1220>652 652>84 84>0
+ISSUE iPad (Safari)                       /                   down:9 (bottom Y) up:9 (top Y) reversals:0 unsettled:16 stuck-gestures:2 longframes:51 errs:0
+      down 0>1080 1080>1976 2160>2971 2971>3929 4051>5153 5153>5327 5330>6410 6410>7490 7490>7490
+      up   7490>6410 6410>5481 5330>5131 5131>4403 4051>2971 2971>2160 2160>1080 1080>11 0>0
+ISSUE iPad (Safari)                       /about-me/          down:4 (bottom Y) up:3 (top Y) reversals:0 unsettled:6 stuck-gestures:1 longframes:21 errs:0
+      down 0>1080 1080>2070 2160>2397 2397>2397
+      up   2397>2161 2160>1087 1080>0
+ISSUE iPad (Safari)                       /skills-education/  down:6 (bottom Y) up:4 (top Y) reversals:0 unsettled:8 stuck-gestures:2 longframes:25 errs:0
+      down 0>869 1080>2182 2182>2760 2809>3046 3047>3047 3047>3047
+      up   3047>2809 2809>2160 2160>1109 1080>0
+ISSUE iPad (Safari)                       /robotics/          down:6 (bottom Y) up:5 (top Y) reversals:0 unsettled:8 stuck-gestures:3 longframes:33 errs:0
+      down 0>1080 1080>1831 2160>3240 3240>3476 3477>3477 3477>3477
+      up   3477>3240 3240>2160 2160>1080 1080>118 0>0
+ISSUE iPad (Safari)                       /projects/          down:6 (bottom Y) up:5 (top Y) reversals:0 unsettled:5 stuck-gestures:3 longframes:21 errs:0
+      down 0>378 1102>1677 2160>3240 3240>3467 3477>3477 3477>3477
+      up   3477>3250 3240>2862 2138>1598 1058>680 0>0

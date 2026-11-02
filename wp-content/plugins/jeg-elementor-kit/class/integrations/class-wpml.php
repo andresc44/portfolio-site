@@ -9,8 +9,13 @@ namespace Jeg\Elementor_Kit\Integrations;
 
 use Jeg\Elementor_Kit\Integrations\WPML\Accordion_Module;
 use Jeg\Elementor_Kit\Integrations\WPML\Animated_Text_Module;
+use Jeg\Elementor_Kit\Integrations\WPML\Client_Logo_Module;
+use Jeg\Elementor_Kit\Integrations\WPML\Feature_List_Module;
+use Jeg\Elementor_Kit\Integrations\WPML\Gallery_Module;
 use Jeg\Elementor_Kit\Integrations\WPML\Portfolio_Gallery_Module;
 use Jeg\Elementor_Kit\Integrations\WPML\Social_Share_Module;
+use Jeg\Elementor_Kit\Integrations\WPML\Tabs_Module;
+use Jeg\Elementor_Kit\Integrations\WPML\Team_Module;
 use Jeg\Elementor_Kit\Integrations\WPML\Testimonials_Module;
 
 /**
@@ -62,6 +67,7 @@ class WPML {
 				$this->field( 'sg_icon_text', __( 'Jeg Kit Icon Box: Icon Box: Title', 'jeg-elementor-kit' ) ),
 				$this->field( 'sg_icon_description', __( 'Jeg Kit Icon Box: Icon Box: Description', 'jeg-elementor-kit' ), 'AREA' ),
 				$this->field( 'sg_readmore_button_label', __( 'Jeg Kit Icon Box: Read More: Button Label', 'jeg-elementor-kit' ) ),
+				'sg_readmore_globallink' => $this->field( 'url', __( 'Jeg Kit Icon Box: Read More: Link', 'jeg-elementor-kit' ), 'LINK' ),
 				$this->field( 'sg_badge_text', __( 'Jeg Kit Icon Box: Badge: Text', 'jeg-elementor-kit' ) ),
 			),
 		);
@@ -97,6 +103,39 @@ class WPML {
 			'fields'     => array(
 				$this->field( 'sg_progress_title', __( 'Jeg Kit Progress Bar: Progress Bar: Title', 'jeg-elementor-kit' ) ),
 			),
+		);
+
+		/** Jeg Kit - Client Logo Widget */
+		$widgets['jkit_client_logo'] = array(
+			'conditions'        => array( 'widgetType' => 'jkit_client_logo' ),
+			'fields'            => array(),
+			'integration-class' => Client_Logo_Module::class,
+		);
+
+		/** Jeg Kit - Feature List Widget */
+		$widgets['jkit_feature_list'] = array(
+			'conditions'        => array( 'widgetType' => 'jkit_feature_list' ),
+			'fields'            => array(),
+			'integration-class' => Feature_List_Module::class,
+		);
+
+		/** Jeg Kit - Tabs Widget */
+		$widgets['jkit_tabs'] = array(
+			'conditions'        => array( 'widgetType' => 'jkit_tabs' ),
+			'fields'            => array(),
+			'integration-class' => Tabs_Module::class,
+		);
+
+		/** Jeg Kit - Gallery Widget */
+		$widgets['jkit_gallery'] = array(
+			'conditions'        => array( 'widgetType' => 'jkit_gallery' ),
+			'fields'            => array(
+				$this->field( 'sg_filter_all_label', __( 'Jeg Kit Gallery: Filter: All Label', 'jeg-elementor-kit' ) ),
+				$this->field( 'sg_loadmore_button_text', __( 'Jeg Kit Gallery: Load More: Button Text', 'jeg-elementor-kit' ) ),
+				$this->field( 'sg_loadmore_nomore_text', __( 'Jeg Kit Gallery: Load More: No More Text', 'jeg-elementor-kit' ) ),
+				$this->field( 'st_search_form_placeholder', __( 'Jeg Kit Gallery: Search: Placeholder', 'jeg-elementor-kit' ) ),
+			),
+			'integration-class' => Gallery_Module::class,
 		);
 
 		/** Jeg Kit - Countdown Widget */
@@ -265,14 +304,15 @@ class WPML {
 
 		/** Jeg Kit - Team Widget */
 		$widgets['jkit_team'] = array(
-			'conditions' => array( 'widgetType' => 'jkit_team' ),
-			'fields'     => array(
+			'conditions'        => array( 'widgetType' => 'jkit_team' ),
+			'fields'            => array(
 				$this->field( 'sg_member_name', __( 'Jeg Kit Team: Team Member: Member Name', 'jeg-elementor-kit' ) ),
 				$this->field( 'sg_member_position', __( 'Jeg Kit Team: Team Member: Position', 'jeg-elementor-kit' ) ),
 				$this->field( 'sg_member_description', __( 'Jeg Kit Team: Team Member: Description', 'jeg-elementor-kit' ), 'AREA' ),
 				$this->field( 'sg_popup_phone', __( 'Jeg Kit Team: Team Member: Phone', 'jeg-elementor-kit' ) ),
 				$this->field( 'sg_popup_email', __( 'Jeg Kit Team: Team Member: Email', 'jeg-elementor-kit' ) ),
 			),
+			'integration-class' => Team_Module::class,
 		);
 
 		/** Jeg Kit - Post Block Widget */
@@ -368,6 +408,11 @@ class WPML {
 		require_once JEG_ELEMENTOR_KIT_DIR . 'class/integrations/wpml/class-testimonials-module.php';
 		require_once JEG_ELEMENTOR_KIT_DIR . 'class/integrations/wpml/class-animated-text-module.php';
 		require_once JEG_ELEMENTOR_KIT_DIR . 'class/integrations/wpml/class-social-share-module.php';
+		require_once JEG_ELEMENTOR_KIT_DIR . 'class/integrations/wpml/class-client-logo-module.php';
+		require_once JEG_ELEMENTOR_KIT_DIR . 'class/integrations/wpml/class-feature-list-module.php';
+		require_once JEG_ELEMENTOR_KIT_DIR . 'class/integrations/wpml/class-tabs-module.php';
+		require_once JEG_ELEMENTOR_KIT_DIR . 'class/integrations/wpml/class-gallery-module.php';
+		require_once JEG_ELEMENTOR_KIT_DIR . 'class/integrations/wpml/class-team-module.php';
 	}
 
 	/**

@@ -122,7 +122,7 @@ class WPvivid_Backup_Registration
             $file_name==='..' ||
             basename($file_name)!==$file_name ||
             validate_file($file_name)!==0 ||
-            preg_match('/\A[a-zA-Z0-9._-]+\z/', $file_name)!==1 ||
+            preg_match('/\A[a-zA-Z0-9._~-]+\z/', $file_name)!==1 ||
             strtolower(pathinfo($file_name, PATHINFO_EXTENSION))!=='zip')
         {
             return array('result'=>WPVIVID_FAILED, 'error'=>'Invalid backup file name.');

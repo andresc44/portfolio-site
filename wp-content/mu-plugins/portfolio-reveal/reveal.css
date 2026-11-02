@@ -35,10 +35,5 @@
 	}
 }
 
-@media (prefers-reduced-motion: reduce) {
-	.pr {
-		opacity: 1 !important;
-		transform: none !important;
-		transition: none !important;
-	}
-}
+/* Deliberately always animates regardless of prefers-reduced-motion - see
+   the matching note in hero.css. */

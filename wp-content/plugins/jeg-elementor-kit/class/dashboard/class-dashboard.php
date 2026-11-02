@@ -786,6 +786,7 @@ class Dashboard {
 			'pricingPlan'       => jkit_get_pricing_plan(),
 			'pricingData'       => $this->get_pricing_data( $pricing_config ),
 			'serverUrl'         => esc_url( JEG_ELEMENT_SERVER_URL ),
+			'proServerUrl'      => defined( 'JEG_ELEMENT_PRO_SERVER_URL' ) ? esc_url( JEG_ELEMENT_PRO_SERVER_URL ) : '',
 			'freemius'          => array(
 				'pricing' => $pricing_config,
 			),

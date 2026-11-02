@@ -1,0 +1,37 @@
+[
+ {
+  "file": "mobile-01-about-me.png",
+  "key": "about-me",
+  "y": 5,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "mobile-01b-about-me-part2.png",
+  "key": "about-me",
+  "y": 197,
+  "part": 2,
+  "bottom": false
+ },
+ {
+  "file": "mobile-02-backpacking.png",
+  "key": "backpacking",
+  "y": 1041,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "mobile-03-hobbies.png",
+  "key": "hobbies",
+  "y": 1885,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "mobile-04-hobbies-bottom.png",
+  "key": "hobbies",
+  "y": 2179,
+  "part": 2,
+  "bottom": true
+ }
+]

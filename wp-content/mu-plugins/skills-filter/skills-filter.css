@@ -1,0 +1,130 @@
+/* Skills & Tools, mobile: tap-to-filter chip bar (see skills-filter.js).
+   Desktop is untouched - the 2-column category grid already works fine at
+   that width, and the chip bar/single-category view is a mobile-only
+   simplification for the ~41-pill wall that doesn't fit the use case on a
+   wide screen where several categories are visible side by side anyway.
+
+   skills-filter.js builds the bar and adds sf-category--hidden regardless
+   of viewport width (it doesn't check), so without this the bar would show
+   up above the grid on desktop too, unstyled since every other rule below
+   is behind the mobile media query - picking up the Kit's default button
+   gradient instead of looking like a deliberate control, while the
+   categories it "hides" stay visible anyway (--hidden only does anything
+   inside that same media query). Hiding it here is what actually keeps
+   desktop untouched rather than just leaving its new styling off. */
+.sf-bar {
+	display: none;
+}
+
+@media (max-width: 767px) {
+	/* 2 equal columns rather than flex-wrap: every category label is long
+	   enough ("Operating Systems & Cloud Platforms") that a flex-wrap row
+	   put exactly one chip per line anyway, no narrower than the full bar -
+	   same single-column result the pill wall itself had before being
+	   turned into a grid. Fixed 2-column tracks give each chip half the
+	   width regardless of its own text length, so short and long labels
+	   alike sit two-up; a label that doesn't fit wraps to a second line
+	   inside its own chip instead of forcing the column wider. */
+	.sf-bar {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 8px;
+		padding: 4px 4px 18px;
+	}
+	/* !important throughout: the Kit's own global default
+	   (.elementor-kit-27 button {...}, see post-27.css) styles every bare
+	   <button> element site-wide at (0,0,1,1) specificity - one class plus
+	   the element type - which beats a plain .sf-chip class selector
+	   (0,0,1,0) even though neither rule is otherwise special. */
+	.sf-chip {
+		all: revert;
+		box-sizing: border-box;
+		font: inherit;
+		cursor: pointer;
+		background-image: linear-gradient(145deg, #132037 0%, #0C1729 55%, #0A1420 100%) !important;
+		background-color: #0C1729 !important;
+		border: 1px solid #42597F !important;
+		border-radius: 999px !important;
+		color: #fff !important;
+		font-size: 13px !important;
+		font-weight: 500 !important;
+		line-height: 1.3 !important;
+		padding: 8px 14px !important;
+		text-align: center !important;
+		white-space: normal !important;
+		transition: border-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+	}
+	.sf-chip:active {
+		transform: scale(0.96);
+	}
+	.sf-chip--active {
+		border-color: #34D399 !important;
+		color: #34D399 !important;
+	}
+	/* A 6th, 8th... category would divide evenly, but an odd total's last
+	   chip would otherwise fall alone into the grid's left column - span
+	   both tracks and size to its own content (justify-self overrides the
+	   stretch a spanned grid item gets by default) so a lone trailing chip
+	   reads as centred rather than left-stuck. */
+	.sf-chip:last-child:nth-child(odd) {
+		grid-column: 1 / -1;
+		justify-self: center;
+	}
+
+	/* Flatten the nested "row of 1-3 buttons" sub-containers Elementor
+	   authored this page with: display:contents removes each one from
+	   layout entirely while keeping its button children in the DOM, so
+	   every pill in the category becomes a direct grid child of the
+	   category box instead of being stuck in its own original row. That's
+	   what turns "one pill per row, 41 rows tall" into a 2-column grid.
+
+	   Grid instead of flex-wrap: each button widget carries its own
+	   Elementor-authored width:100% (the page was built with one pill per
+	   mobile row), which a flex item's grow/basis has to fight and - with a
+	   handful of very long labels in the mix ("Google Apps Script
+	   (JavaScript-based)") - can end up overflowing the row instead of
+	   wrapping. A grid's 1fr columns are a fixed fraction of the container
+	   regardless of content, so a long label just wraps to more lines
+	   inside its own cell instead of stretching the column. */
+	.sf-category > .elementor-element:not(:first-child) {
+		display: contents;
+	}
+	.sf-category {
+		display: grid !important;
+		grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+		gap: 10px !important;
+		align-items: stretch;
+	}
+	/* The heading is the category box's own first child and, like the
+	   pills, becomes a direct grid child once its row wrapper is gone -
+	   without spanning both columns it would sit beside the first pill
+	   instead of as a header above all of them. Centred to match the
+	   active chip right above it, which already centres its own label. */
+	.sf-category > .elementor-element:first-child {
+		grid-column: 1 / -1;
+		text-align: center;
+		margin-bottom: 4px;
+	}
+	.sf-category .elementor-widget-button {
+		width: 100% !important;
+		max-width: 100%;
+		margin: 0 !important;
+		min-width: 0 !important;
+	}
+	.sf-category .elementor-button {
+		width: 100%;
+		height: 100%;
+		justify-content: center;
+	}
+
+	/* Must come after .sf-category's own display:flex !important above -
+	   same selector specificity and both !important, so whichever rule is
+	   later in source order is the one that actually wins the tie. Only
+	   the selected category's block renders; everything else is a plain
+	   display:none toggle, so switching is instant with nothing to
+	   lazy-load - every pill, icon and link is already Elementor's own
+	   markup, just shown or hidden. */
+	.sf-category--hidden {
+		display: none !important;
+	}
+}

@@ -1,0 +1,111 @@
+// Inspector header: Ready Patterns + Documentation buttons.
+.wpcp-tab-panel {
+  .components-panel__body {
+    transition: box-shadow 0.6s ease;
+  }
+
+  .components-panel__body.is-opened {
+    padding: 16px;
+    scroll-margin-top: unset;
+  }
+
+  &.wpcp-flash {
+    .components-panel__body.is-opened {
+      position: relative;
+      padding: 16px;
+      scroll-margin-top: 51px;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        animation: wpcpFadeBoxShadow 1s forwards;
+        animation-delay: 1s;
+        pointer-events: none;
+      }
+    }
+  }
+
+  @keyframes wpcpFadeBoxShadow {
+    0% {
+      box-shadow: inset 0 0 0 2px #037fff;
+    }
+
+    100% {
+      box-shadow: inset 0 0 0 0 transparent;
+    }
+  }
+
+  // Ready Patterns + Documentation pills, tucked under the block card description.
+  .wpcp-tab-panel-header-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: -4px;
+    margin-bottom: 16px;
+
+    .wpcp-header-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 32px;
+      padding: 0 11px;
+      margin: 0;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1;
+      text-decoration: none;
+      white-space: nowrap;
+      cursor: pointer;
+      border: 1px solid;
+      border-radius: 4px;
+      box-shadow: none;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+
+      &:focus {
+        outline: none;
+        box-shadow: none;
+      }
+
+      &:focus-visible {
+        outline: 2px solid currentColor;
+        outline-offset: 1px;
+      }
+    }
+
+    // Matches the editor header's Build with AI launcher.
+    .wpcp-header-action-patterns {
+      color: #0f766e;
+      background: #f0fdfa;
+      border-color: #19949e;
+
+      &:hover {
+        color: #0f766e;
+        background: #ccfbf1;
+        border-color: #19949e;
+      }
+    }
+
+    .wpcp-header-action-docs {
+      color: #1e5fbf;
+      background: #edf4fe;
+      border-color: #bcd4f6;
+
+      &:hover {
+        color: #1e5fbf;
+        background: #dfeafc;
+        border-color: #9dbff0;
+      }
+    }
+  }
+}
+
+.wp-admin[class*="version-7-"] {
+  .wpcp-tab-panel-header-actions {
+    padding: 0 16px 0 16px;
+  }
+}

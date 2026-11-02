@@ -1,0 +1,47 @@
+/* Horizontal scroll-progress bars under every swipeable mobile carousel.
+   See indicators.js for which carousels and why this exists as a built div
+   rather than a styled native scrollbar.
+
+   .swbar is only ever created by JS for a container that is actually
+   overflowing right now, so this file has no effect unless that script has
+   run - same "progressive enhancement, never hidden by default" shape as
+   reveal.css and chapters.css elsewhere in this project. */
+
+.swbar {
+	height: 4px;
+	width: 100%;
+	margin: 10px 0 2px;
+	border-radius: 999px;
+	background: rgba(199, 208, 224, 0.18);
+	overflow: hidden;
+	/* sits below whatever carousel it belongs to without being pulled into
+	   that carousel's own horizontal scrolling - it is a sibling, not a
+	   child, of the track it measures */
+	flex: 0 0 auto;
+}
+
+.swbar--hidden {
+	display: none;
+}
+
+.swbar__thumb {
+	height: 100%;
+	border-radius: 999px;
+	background: linear-gradient(90deg, #5B7FFF, #4FCF9C);
+	width: 0;
+	transform: translateX(0);
+	/* matches the scroll handler's own rAF cadence rather than fighting it
+	   with a slower CSS transition that would always lag one frame behind
+	   a fast swipe */
+	transition: none;
+}
+
+/* Desktop never creates one of these (every listed carousel's own CSS only
+   sets overflow-x:auto below 768px, so isActive() in indicators.js is false
+   above that width and no bar gets built) - this is a second, independent
+   guard rather than relying on that alone. */
+@media (min-width: 768px) {
+	.swbar {
+		display: none !important;
+	}
+}

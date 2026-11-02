@@ -22,9 +22,8 @@
 	if ( ! ( 'IntersectionObserver' in window ) ) {
 		return;
 	}
-	if ( window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches ) {
-		return;
-	}
+	// Deliberately does NOT check prefers-reduced-motion - site owner's
+	// explicit choice to always animate. See the matching note in hero.css.
 
 	function ready( fn ) {
 		if ( document.readyState !== 'loading' ) fn();
@@ -32,13 +31,44 @@
 	}
 
 	function isContainerEl( el ) {
-		return el.classList.contains( 'e-con' ) || el.classList.contains( 'e-grid' );
+		return el.classList.contains( 'e-con' ) ||
+			el.classList.contains( 'e-grid' ) ||
+			// Posts widgets render their cards as <article class="elementor-post">
+			// rather than as containers, so without this the whole Highlighted
+			// Projects grid reveals as one block instead of card by card.
+			el.classList.contains( 'elementor-post' );
 	}
 
 	function collectTargets( wrapper ) {
-		var topSections = Array.prototype.filter.call( wrapper.children, function ( el ) {
-			return el.classList.contains( 'e-parent' ) && ! el.querySelector( '.hx' ) && ! el.classList.contains( 'hx' );
-		} );
+		// The project listings (Robotics etc., My Projects) are chaptered by
+		// moving their widgets into new wrappers rather than from sections, so
+		// there is nothing section-shaped to group: the cards of every posts
+		// widget reveal one after another, exactly like the home page's cards
+		// (the chapter itself fades in on its own, chapters.css). Cards in the
+		// tabs that are not showing are watched too and reveal when their tab
+		// is opened.
+		if ( document.body.classList.contains( 'ch-page-cat' ) || document.body.classList.contains( 'ch-page-projects' ) ) {
+			var cards = [];
+			Array.prototype.forEach.call( wrapper.querySelectorAll( '.elementor-posts-container' ), function ( box ) {
+				var n = 0;
+				Array.prototype.forEach.call( box.children, function ( card ) {
+					if ( card.classList.contains( 'elementor-post' ) ) { cards.push( { el: card, delay: Math.min( n, 5 ) } ); n++; }
+				} );
+			} );
+			return cards;
+		}
+
+		// Top-level sections are direct children of the page wrapper, except
+		// on the home page where portfolio-chapters has grouped them one
+		// level deeper inside .ch elements. Matching both keeps this
+		// independent of whether chaptering ran, and of which of the two
+		// scripts happened to run first.
+		var topSections = Array.prototype.filter.call(
+			wrapper.querySelectorAll( ':scope > .e-parent, :scope > .ch > .e-parent' ),
+			function ( el ) {
+				return ! el.querySelector( '.hx' ) && ! el.classList.contains( 'hx' );
+			}
+		);
 
 		var targets = []; // { el, delay }
 		var claimed = [];
@@ -51,7 +81,7 @@
 			// class="e-con", so it has to be searched explicitly or sibling
 			// groups directly under a boxed section (e.g. an image column
 			// next to a text column) would never be found as parents.
-			var all = root.querySelectorAll( '.e-con, .e-grid, .e-con-inner' );
+			var all = root.querySelectorAll( '.e-con, .e-grid, .e-con-inner, .elementor-posts-container' );
 			for ( var i = 0; i < all.length; i++ ) {
 				var el = all[ i ];
 				if ( claimed.indexOf( el ) !== -1 ) continue;

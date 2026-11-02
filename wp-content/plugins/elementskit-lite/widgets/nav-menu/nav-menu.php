@@ -108,44 +108,13 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
             ]
         );
 
-		if(\ElementsKit_Lite::license_status() === 'valid') {
-			$this->add_control(
-				'elementskit_submenu_indicator_icon',
-				[
-					'label' => esc_html__( 'Dropdown Indicator Icon', 'elementskit-lite' ),
-					'type' => Controls_Manager::ICONS,
-					'skin' => 'inline',
-					'exclude_inline_options' => ['svg'],
-					'skin_settings' => [
-						'inline' => [
-							'none' => [
-								'label' => esc_html__( 'Default', 'elementskit-lite' ),
-								'icon' => 'icon icon-down-arrow1',
-							],
-							'icon' => [
-								'label' => esc_html__( 'Icon Library', 'elementskit-lite' ),
-								'icon' => 'fas fa-external-link-alt',
-							],
-						],
-					],
-					'recommended' => [
-						'ekiticons' => [
-							'down-arrow1',
-							'arrow-point-to-down',
-							'plus',
-							'link',
-						],
-						'fa-solid' => [
-							'plus',
-							'external-link-alt',
-							'link',
-							'angle-down',
-						],
-					],
-					'label_block' => false,
-				]
-			);
-		} else {
+		/**
+		 * Allow the companion plugin to add its indicator control at the original
+		 * position without shipping the Pro implementation in Lite.
+		 */
+		do_action( 'elementskit/nav_menu/after_dropdown_behavior_control', $this );
+
+		if ( apply_filters( 'elementskit/nav_menu/show_lite_indicator_control', true ) ) {
 			$this->add_control(
 				'elementskit_style_tab_submenu_item_arrow',
 				[
@@ -1687,8 +1656,13 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
             $responsive_menu_breakpoint = "767";
         }
 
+		// Accessible name for the landmark; nav-menu.js copies it onto the menubar.
+		$menu_object = wp_get_nav_menu_object($settings['elementskit_nav_menu']);
+		$menu_label = $menu_object ? $menu_object->name : esc_html__('Menu', 'elementskit-lite');
+
 		?>
 		<nav class="ekit-wid-con <?php echo esc_attr($settings['elementskit_responsive_breakpoint']); ?>"
+			aria-label="<?php echo esc_attr($menu_label); ?>"
 			data-hamburger-icon="<?php echo esc_attr($hamburger_icon_value); ?>"
 			data-hamburger-icon-type="<?php echo esc_attr($hamburger_icon_type); ?>"
 			data-responsive-breakpoint="<?php echo esc_attr($responsive_menu_breakpoint); ?>"
@@ -1745,13 +1719,12 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
 			if (!empty($ekit_nav_menu_logo['id']) && !empty($ekit_nav_menu_logo['url'])) :
 				// $nav_logo_html = \Elementskit_Lite\Utils::get_attachment_image_html($settings, 'elementskit_nav_menu_logo', 'full');
 
-				$nav_logo_html = sprintf(
-					'<img src="%s" title="%s" alt="%s" decoding="async" />',
-					esc_url($ekit_nav_menu_logo['url']),
-					Control_Media::get_image_title($ekit_nav_menu_logo),
-					Control_Media::get_image_alt($ekit_nav_menu_logo)
-				);
-
+                $nav_logo_html = sprintf(
+                    '<img src="%s" title="%s" alt="%s" decoding="async" />',
+                    esc_url($ekit_nav_menu_logo['url']),
+                    esc_attr(Control_Media::get_image_title($ekit_nav_menu_logo)),
+                    esc_attr(Control_Media::get_image_alt($ekit_nav_menu_logo))
+                );
 				$markup .= sprintf(
 					'<a class="elementskit-nav-logo" href="%1$s" target="%2$s" rel="%3$s">%4$s</a>',
 					esc_url($link),
@@ -1824,11 +1797,9 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
 		$icon_html = '';
 		$indicator_class = 'elementskit-submenu-indicator';
 
-		// if ElementsKit Pro activate and licenced is activated
-		if (\ElementsKit_Lite::license_status() === 'valid') {
-			if(!empty($elementskit_submenu_indicator_icon['value'])) {
-				return Icons_Manager::try_get_icon_html($settings['elementskit_submenu_indicator_icon'], ['class' => $indicator_class, 'aria-hidden' => 'true']);
-			}
+		$pro_indicator = apply_filters( 'elementskit/nav_menu/submenu_indicator_html', '', $settings, $indicator_class );
+		if ( '' !== $pro_indicator ) {
+			return $pro_indicator;
 		} elseif(!empty($elementskit_style_tab_submenu_item_arrow)) {
 			$icon_class_map = [
 				'elementskit_line_arrow' => 'icon-down-arrow1',

@@ -1,0 +1,5 @@
+{
+	"blocks": ["carousel", "carousel-3d", "slider", "thumbnails-slider", "tiles", "grid"],
+	"proTeasers": ["masonry", "justified"],
+	"proPreviews": ["marquee", "carousel-panorama"]
+}

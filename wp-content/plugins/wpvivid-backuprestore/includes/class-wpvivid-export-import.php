@@ -1500,7 +1500,7 @@ class WPvivid_Export_Import
 
                             $file_name = wp_unslash($file['file_name']);
 
-                            if ($file_name === '' || basename($file_name) !== $file_name || preg_match('/\A[a-zA-Z0-9._-]+\z/', $file_name) !== 1)
+                            if ($file_name === '' || basename($file_name) !== $file_name || preg_match('/\A[a-zA-Z0-9._~-]+\z/', $file_name) !== 1)
                             {
                                 continue;
                             }
@@ -2414,7 +2414,7 @@ class WPvivid_Export_Import
                 strpos($file_name, ':') !== false ||
                 basename($file_name) !== $file_name ||
                 validate_file($file_name) !== 0 ||
-                preg_match('/\A[a-zA-Z0-9._-]+\.zip\z/i', $file_name) !== 1)
+                preg_match('/\A[a-zA-Z0-9._~-]+\.zip\z/i', $file_name) !== 1)
             {
                 $ret['result'] = WPVIVID_FAILED;
                 $ret['error'] = 'Invalid import file name.';

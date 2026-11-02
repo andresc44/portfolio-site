@@ -1,0 +1,30 @@
+[
+ {
+  "file": "desktop-01-skills.png",
+  "key": "skills",
+  "y": 0,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "desktop-02-skills-part2.png",
+  "key": "skills",
+  "y": 392,
+  "part": 2,
+  "bottom": false
+ },
+ {
+  "file": "desktop-03-education.png",
+  "key": "education",
+  "y": 1314,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "desktop-04-education-bottom.png",
+  "key": "education",
+  "y": 2014,
+  "part": 2,
+  "bottom": true
+ }
+]

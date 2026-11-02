@@ -304,8 +304,8 @@ class Asset {
 	 */
 	protected function get_pricing_modal_option() {
 		$pricing_config = Freemius::instance()->get_pricing_config();
-
 		return array(
+			'proActive'       => defined( 'JEG_KIT_PRO' ),
 			'freemius'       => array(
 				'pricing' => $pricing_config,
 			),
@@ -314,6 +314,7 @@ class Asset {
 			'imgDir'         => JEG_ELEMENTOR_KIT_URL . '/assets/img/',
 			'pricingData'    => $this->get_localized_pricing_data( $pricing_config ),
 			'wpRestNonce'    => wp_create_nonce( 'wp_rest' ),
+			'proServerUrl'   => defined( 'JEG_ELEMENT_PRO_SERVER_URL' ) ? esc_url( JEG_ELEMENT_PRO_SERVER_URL ) : '',
 		);
 	}
 
@@ -361,19 +362,22 @@ class Asset {
 	 * @return string
 	 */
 	protected function build_pricing_modal_assignment_js( $option ) {
-		$mirror_js = $this->build_window_assignment_js( 'jkit.options.freemius', $option['freemius'], false )
+		$mirror_js = $this->build_window_assignment_js( 'jkit.proActive', $option['proActive'], false )
+			. $this->build_window_assignment_js( 'jkit.options.freemius', $option['freemius'], false )
 			. $this->build_window_assignment_js( 'jkit.pricingPlan', $option['pricingPlan'], false )
 			. $this->build_window_assignment_js( 'jkit.bannerDataPricing', $option['bannerDataPricing'], false )
 			. $this->build_window_assignment_js( 'jkit.imgDir', $option['imgDir'], false )
 			. $this->build_window_assignment_js( 'jkit.pricingData', $option['pricingData'], false )
 			. $this->build_window_assignment_js( 'jkit.wpRestNonce', $option['wpRestNonce'], false )
+			. $this->build_window_assignment_js( 'jkit.proServerUrl', $option['proServerUrl'], false )
 			. $this->build_window_assignment_js( 'JkitDashboardOption.freemius', $option['freemius'], false )
 			. $this->build_window_assignment_js( 'JkitDashboardOption.pricingPlan', $option['pricingPlan'], false )
 			. $this->build_window_assignment_js( 'JkitDashboardOption.bannerDataPricing', $option['bannerDataPricing'], false )
 			. $this->build_window_assignment_js( 'JkitDashboardOption.imgDir', $option['imgDir'], false )
 			. $this->build_window_assignment_js( 'JkitDashboardOption.pricingData', $option['pricingData'], false )
 			. $this->build_window_assignment_js( 'JkitPricingCache.data', $option['pricingData'], false )
-			. $this->build_window_assignment_js( 'JkitDashboardOption.wpRestNonce', $option['wpRestNonce'], false );
+			. $this->build_window_assignment_js( 'JkitDashboardOption.wpRestNonce', $option['wpRestNonce'], false )
+			. $this->build_window_assignment_js( 'JkitDashboardOption.proServerUrl', $option['proServerUrl'], false );
 
 		return $mirror_js;
 	}

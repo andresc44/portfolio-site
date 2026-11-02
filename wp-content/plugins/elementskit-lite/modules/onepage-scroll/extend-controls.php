@@ -2,7 +2,6 @@
 
 namespace Elementor;
 
-use \ElementsKit_Lite\Modules\Onepage_Scroll\Init;
 use ElementsKit_Lite\Utils;
 
 class ElementsKit_Extend_Onepage_Scroll {
@@ -23,43 +22,35 @@ class ElementsKit_Extend_Onepage_Scroll {
 		 */
 		add_action( 'elementor/element/container/section_layout/after_section_end', array( $this, 'register_section_controls' ) );
 
-		/**
-		 * Navigation Markup
-		 */
-		add_action( 'wp_footer', array( $this, 'generate_navigation_markup' ) );
-		add_action( 'wp_ajax_generate_navigation_markup', array( $this, 'generate_navigation_markup' ) );
-
-		/**
-		 * Pro Notice
-		 */
-		if ( \ElementsKit_Lite::package_type() === 'free' ) {
+		if ( 'free' === \ElementsKit_Lite::package_type() ) {
 			add_action( 'elementor/element/wp-page/ekit_page_settings/before_section_end', array( $this, 'pro_panel_notice' ), 99 );
 			add_action( 'elementor/element/section/ekit_onepagescroll_section/before_section_end', array( $this, 'pro_panel_notice' ), 99 );
+			add_action( 'elementor/element/container/ekit_onepagescroll_section/before_section_end', array( $this, 'pro_panel_notice' ), 99 );
 		}
 	}
 
-
 	/**
-	 * Pro Panel Notice
+	 * Promote navigation functionality implemented by the Pro plugin.
+	 *
+	 * @param Controls_Stack $element Elementor control stack.
 	 */
-	public function pro_panel_notice( $element ) {
+	public function pro_panel_notice( Controls_Stack $element ) {
 		$element->add_control(
 			'ekit_control_get_pro',
 			array(
 				'label'       => esc_html__( 'Unlock more possibilities', 'elementskit-lite' ),
-				'type'        => \Elementor\Controls_Manager::CHOOSE,
+				'type'        => Controls_Manager::CHOOSE,
 				'options'     => array(
-					'1' => array(
-						'icon' => 'eicon-lock',
-					),
+					'1' => array( 'icon' => 'eicon-lock' ),
 				),
 				'default'     => '1',
 				'toggle'      => false,
 				'separator'   => 'before',
-				'description' => sprintf('<span class="ekit-widget-pro-feature"> %1$s <a href="https://wpmet.com/elementskit-pricing" target="_blank"> %2$s </a> %3$s </span>',
-					esc_html__('Get the', 'elementskit-lite'),
-					esc_html__('Pro version', 'elementskit-lite'),
-					esc_html__('for more awesome elements and powerful modules.', 'elementskit-lite'),
+				'description' => sprintf(
+					'<span class="ekit-widget-pro-feature">%1$s <a href="%2$s" target="_blank" rel="noopener noreferrer">%3$s</a></span>',
+					esc_html__( 'One Page Scroll navigation is available in', 'elementskit-lite' ),
+					esc_url( 'https://wpmet.com/elementskit-pricing' ),
+					esc_html__( 'ElementsKit Pro.', 'elementskit-lite' )
 				),
 			)
 		);
@@ -73,7 +64,7 @@ class ElementsKit_Extend_Onepage_Scroll {
 		$element->start_controls_section(
 			'ekit_page_settings',
 			array(
-				'label' => Utils::get_promo_icon() . esc_html__('Settings', 'elementskit-lite'),
+				'label' => esc_html__('ElementsKit Settings', 'elementskit-lite'),
 				'tab'   => Controls_Manager::TAB_SETTINGS,
 			)
 		);
@@ -122,91 +113,4 @@ class ElementsKit_Extend_Onepage_Scroll {
 		$element->end_controls_section();
 	}
 
-
-	/**
-	 * Navigation Markup
-	 */
-	public function generate_navigation_markup() {
-		$is_active = Init::get_page_setting( 'ekit_onepagescroll' );
-		$is_nav    = $nav_style = Init::get_page_setting( 'ekit_onepagescroll_nav' );
-		$is_pro    = \ElementsKit_Lite::package_type() === 'pro';
-		$is_editor = \Elementor\Plugin::$instance->preview->is_preview_mode();
-		$nav_pos   = Init::get_page_setting( 'ekit_onepagescroll_nav_pos' );
-		$nav_icon  = Init::get_page_setting( 'ekit_onepagescroll_nav_icon' );
-
-		if ( ! ( $is_pro && $is_active && $is_nav ) ) {
-			return;
-		} elseif ( $is_editor ) {
-			echo '<div id="onepage_scroll_nav_wrap">';
-		}
-
-		$classlist = array(
-			'wrapper' => 'nav-style-' . $nav_style . ' met_d--none met_pos--fixed ',
-			'ul'      => 'met_list--none met_m--0 met_p--0 met_lh--0 ',
-			'li'      => 'met_not_last_mb--20 ',
-			'link'    => '',
-			'tooltip' => '',
-			'arrow'   => '',
-			'span'    => '',
-		);
-
-		switch ( $nav_pos ) {
-			case 'top':
-				$classlist['wrapper'] .= 'met-' . $nav_pos . ' met_top--0 met_left--50p met_translateLeft--m50p met_my--20 ';
-				$classlist['ul']      .= 'met_d--flex ';
-				$classlist['li']       = 'met_not_last_mr--20 ';
-
-				$classlist['tooltip'] .= 'met_top--100p ';
-				$classlist['arrow']   .= 'met_bdb_color--current met_top--100p ';
-				break;
-			
-			case 'bottom':
-				$classlist['wrapper'] .= 'met-' . $nav_pos . ' met_bottom--0 met_left--50p met_translateLeft--m50p met_my--20 ';
-				$classlist['ul']      .= 'met_d--flex ';
-				$classlist['li']       = 'met_not_last_mr--20 ';
-
-				$classlist['tooltip'] .= 'met_bottom--100p ';
-				$classlist['arrow']   .= 'met_bdt_color--current met_bottom--100p ';
-				break;
-
-			case 'left':
-				$classlist['wrapper'] .= 'met-' . $nav_pos . ' met_top--50p met_left--0 met_translateTop--m50p met_mx--20 ';
-
-				$classlist['tooltip'] .= 'met_left--100p ';
-				$classlist['arrow']   .= 'met_bdr_color--current met_left--100p ';
-				break;
-			
-			case 'right':
-				$classlist['wrapper'] .= 'met-' . $nav_pos . ' met_top--50p met_right--0 met_translateTop--m50p met_mx--20 ';
-
-				$classlist['tooltip'] .= 'met_right--100p ';
-				$classlist['arrow']   .= 'met_bdl_color--current met_right--100p ';
-				break;
-		}
-
-		$nav_styles = array(
-			'circle-scale-up',
-			'circle-fill-in',
-			'circle-fill-out',
-			'circle-stroke',
-			'circle-stroke-dot',
-			'circle-stroke-simple',
-			'circle-dot-move',
-			'circle-timeline',
-			'square-scale-up',
-			'line-grow',
-			'line-shrink',
-			'line-fill',
-			'line-move',
-			'icon',
-		);
-
-		if( in_array($nav_style, $nav_styles) ) {
-			include_once 'nav-styles/' . $nav_style . '.php';
-		}
-
-		if ( $is_editor ) :
-			echo '</div>';
-		endif;
-	}
 }

@@ -16,11 +16,34 @@ class Activator {
 	protected $post_type = 'elementskit_template';
 
 	public function __construct() {
-		add_action( 'wp', array( $this, 'hooks' ) );
+		// ShopEngine resolves replacement templates at priority 999. Only defer our
+		// hooks when it is active; otherwise retain the original default priority.
+		$priority = $this->is_shopengine_active() ? 1000 : 10;
+		add_action( 'wp', array( $this, 'hooks' ), $priority );
+	}
+
+	/**
+	 * Check whether ShopEngine is active on the current site or network.
+	 *
+	 * @return bool
+	 */
+	private function is_shopengine_active() {
+		return \ElementsKit_Lite\Utils::ekit_is_plugin_active( 'shopengine/shopengine.php' );
 	}
 
 	public function hooks() {
-		$this->current_template = basename( get_page_template_slug() );
+		// Header/footer replacement is only for full HTML responses. Running it for
+		// WooCommerce endpoints such as update_order_review can contaminate the JSON
+		// response and leave checkout sections permanently blocked.
+		if (
+			wp_doing_ajax()
+			|| ( defined( 'WC_DOING_AJAX' ) && WC_DOING_AJAX )
+			|| ( defined( 'REST_REQUEST' ) && REST_REQUEST )
+		) {
+			return;
+		}
+
+		$this->current_template = basename( (string) $this->get_effective_page_template_slug() );
 		if ( $this->current_template == 'elementor_canvas' ) {
 			return;
 		}
@@ -69,6 +92,28 @@ class Activator {
 				new Theme_Hooks\Theme_Support( self::template_ids() );
 				break;
 		}
+	}
+
+	/**
+	 * Get the page template that actually owns the current response.
+	 *
+	 * WooCommerce conditionals continue to point at the product or assigned WC page
+	 * when ShopEngine replaces its content. In that case, respect the selected
+	 * ShopEngine template's layout instead of the queried object's layout.
+	 *
+	 * @return string|false
+	 */
+	private function get_effective_page_template_slug() {
+		if ( class_exists( '\\ShopEngine\\Core\\Page_Templates\\Hooks\\Base_Content' ) ) {
+			$shopengine_content = \ShopEngine\Core\Page_Templates\Hooks\Base_Content::instance();
+			$template_id        = isset( $shopengine_content->prod_tpl_id ) ? absint( $shopengine_content->prod_tpl_id ) : 0;
+
+			if ( $template_id ) {
+				return get_page_template_slug( $template_id );
+			}
+		}
+
+		return get_page_template_slug();
 	}
 
 	public static function template_ids() {

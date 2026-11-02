@@ -6,6 +6,8 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'WPvividphpseclib3\\' => array($vendorDir . '/phpseclib/phpseclib/phpseclib'),
+    'ParagonIE\\ConstantTime\\' => array($vendorDir . '/paragonie/constant_time_encoding/src'),
     'Symfony\\Component\\EventDispatcher\\' => array($vendorDir . '/symfony/event-dispatcher'),
     'WPvividPsr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'WPvividPsr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/src'),

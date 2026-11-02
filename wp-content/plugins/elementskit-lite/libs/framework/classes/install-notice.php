@@ -49,7 +49,7 @@ class Install_Notice {
 			return false;
 		}
 
-		if ( Utils::instance()->get_settings( 'ekit_user_consent_for_banner', 'yes' ) !== 'yes' ) {
+		if ( Utils::instance()->get_settings( 'ekit_user_consent_for_banner', 'no' ) !== 'yes' ) {
 			return false;
 		}
 
@@ -118,7 +118,8 @@ class Install_Notice {
 					<?php esc_html_e( 'Get more from your new plugins 🚀', 'elementskit-lite' ); ?>
 				</h3>
 				<p>
-					<?php esc_html_e( 'Allow us to use non-sensitive data from your site to improve our products and get personalized performance tips.', 'elementskit-lite' ); ?>
+					<?php esc_html_e( 'Allow us to use non-sensitive data and basic info from your site to improve our products and send you personalized performance tips.
+', 'elementskit-lite' ); ?> <a href="https://wpmet.com/privacy-policy/" target="_blank" rel="noopener noreferrer"><?php echo esc_html__( 'Read Privacy Policy.', 'elementskit-lite' ); ?></a>
 				</p>
 			</div>
 			<div class="wpmet-elementskit-notice-actions">

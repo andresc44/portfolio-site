@@ -1,3 +1,6 @@
+== 1.1.4 ==
+- Improvement: Security issues
+
 == 1.1.3 ==
 - Improvement: Remove Deprecated Function due to Elementor v3.5 Planned Deprecations
 

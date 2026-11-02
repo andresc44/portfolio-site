@@ -289,7 +289,7 @@ class Banner {
 	 * @return bool
 	 */
 	public function can_render_global_event_banner() {
-		if ( ! current_user_can( 'edit_theme_options' ) || $this->is_jegkit_dashboard() ) {
+		if ( ! current_user_can( 'edit_theme_options' ) || defined( 'JEG_KIT_PRO' ) || $this->is_jegkit_dashboard() ) {
 			return false;
 		}
 

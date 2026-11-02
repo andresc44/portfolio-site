@@ -99,6 +99,10 @@ class Ajax {
 	 * Find Author
 	 */
 	public function find_ajax_author() {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			wp_send_json_error( null, 403 );
+		}
+
 		if ( isset( $_REQUEST['nonce'], $_REQUEST['query'] ) && wp_verify_nonce( sanitize_key( $_REQUEST['nonce'] ), 'jeg_find_author' ) ) {
 			$query = sanitize_text_field( wp_unslash( $_REQUEST['query'] ) );
 

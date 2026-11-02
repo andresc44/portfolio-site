@@ -86,6 +86,10 @@ class Init {
 	 * Replace default plugin update row.
 	 */
 	public function replace_plugin_update_row() {
+		if ( defined( 'JEG_KIT_PRO' ) ) {
+			return;
+		}
+
 		remove_action( 'after_plugin_row_' . JEG_ELEMENTOR_KIT_BASE, 'wp_plugin_update_row' );
 		remove_action( 'after_plugin_row_' . JEG_ELEMENTOR_KIT_BASE, 'jkit_plugin_update_row', 10 );
 		add_action( 'after_plugin_row_' . JEG_ELEMENTOR_KIT_BASE, 'jkit_plugin_update_row', 10, 2 );

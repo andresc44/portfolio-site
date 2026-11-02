@@ -860,12 +860,23 @@ if ( ! function_exists( 'jkit_allowed_style_attr' ) ) {
 
 if ( ! function_exists( 'jkit_allowed_html' ) ) {
 
-	add_filter( 'wp_kses_allowed_html', 'jkit_allowed_html', 99 );
+	add_filter( 'wp_kses_allowed_html', 'jkit_allowed_html', 99, 2 );
 
 	/**
 	 * Allowed HTML List by Jeg Kit
+	 *
+	 * @param array  $allowedtags Allowed tags.
+	 * @param string $context     KSES context.
+	 *
+	 * @return array
 	 */
-	function jkit_allowed_html( $allowedtags = array() ) {
+	function jkit_allowed_html( $allowedtags = array(), $context = '' ) {
+		if ( ! empty( $context ) && in_array( $context, array( 'comment', 'pre_comment_content', 'post_comment', 'post' ), true ) ) {
+			if ( 'comment' === $context || 'pre_comment_content' === $context || 'post_comment' === $context ) {
+				return $allowedtags;
+			}
+		}
+
 		$allowedtags['img'] = array_merge(
 			isset( $allowedtags['img'] ) ? $allowedtags['img'] : array(),
 			array(
@@ -1744,7 +1755,7 @@ if ( ! function_exists( 'jkit_get_pricing_plan' ) ) {
 		}
 
 		$response = wp_remote_request(
-			JEG_ELEMENT_SERVER_URL . 'wp-json/jeg-kit/v1/client/pricing-plan',
+			JEG_ELEMENT_SERVER_URL . 'wp-json/jeg-kit/v3/client/pricing-plan',
 			array(
 				'method'  => 'GET',
 				'timeout' => 5,
@@ -1970,7 +1981,7 @@ function jkit_plugin_update_row( $file, $plugin_data ) {
 			if ( $compatible_php ) {
 				printf(
 					/* translators: 1: Plugin name, 2: Upgrade URL, 3: Additional upgrade link attributes, 4: Pricing URL, 5: Free update URL, 6: Free update label. */
-					__( 'A new version of %1$s is available. <strong><a href="%2$s" target="_blank" rel="noopener noreferrer" %3$s>Upgrade to Pro</a></strong> to unlock automatic updates premium features, widgets, templates, and priority support, or <strong><a href="%4$s" target="_blank" rel="noopener noreferrer" class="jkit-update-now-pricing" data-continue-url="%5$s" data-continue-label="%6$s">update now</a></strong>.', 'jeg-elementor-kit' ),
+					__( 'A new version of %1$s is available. <strong><a href="%2$s" target="_blank" rel="noopener noreferrer" %3$s>Upgrade to Pro</a></strong> to unlock automatic updates, premium features, widgets, templates, and priority support, or <strong><a href="%4$s" target="_blank" rel="noopener noreferrer" class="jkit-update-now-pricing" data-continue-url="%5$s" data-continue-label="%6$s">update now</a></strong>.', 'jeg-elementor-kit' ),
 					esc_html( $plugin_name ),
 					esc_url(
 						add_query_arg(

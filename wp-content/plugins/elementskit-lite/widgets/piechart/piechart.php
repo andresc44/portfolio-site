@@ -651,10 +651,6 @@ class ElementsKit_Widget_Piechart extends Widget_Base {
 
 		$colors = $this->get_globals_colors($settings);
 
-        if($settings['ekit_piechart_bg_hover_animation'] != '') {
-            $this->add_render_attribute( 'pieechart', 'class', $settings['hover_animation'] );
-        }
-
         $this->add_render_attribute( 'pieechart', 'class', 'ekit-single-piechart' );
         if($settings['ekit_piechart_style'] == 'simple'){
             $this->add_render_attribute( 'pieechart', 'class', 'text-center' );

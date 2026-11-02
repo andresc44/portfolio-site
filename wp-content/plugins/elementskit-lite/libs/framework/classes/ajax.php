@@ -132,8 +132,8 @@ class Ajax {
 			'gutenkit-blocks-addon/gutenkit-blocks-addon.php' => esc_html__('Page Builder Blocks Activated', 'elementskit-lite'),
 			'popup-builder-block/popup-builder-block.php' => esc_html__('Popup Builder Activated', 'elementskit-lite'),
 			// 'table-builder-block/table-builder-block.php' => esc_html__('Table Builder Activated', 'elementskit-lite'),
-			// 'rox-dynamic-cpt-fields-engine/rox-dynamic-cpt-fields-engine.php' => esc_html__('Dynamic CPT Fields Activated', 'elementskit-lite'),
-			// 'rox-appointment-booking/rox-appointment-booking.php' => esc_html__('Appointment Booking Activated', 'elementskit-lite'),
+			'rox-dynamic-cpt-fields-engine/rox-dynamic-cpt-fields-engine.php' => esc_html__('Dynamic Field Engine Activated', 'elementskit-lite'),
+			'rox-appointment-booking/rox-appointment-booking.php' => esc_html__('Appointment Booking Activated', 'elementskit-lite'),
 		];
 
 		if ( array_key_exists( $plugin_slug, $plugins_message ) ) {

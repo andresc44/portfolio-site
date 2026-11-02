@@ -13,7 +13,7 @@ if ( defined( 'JEG_ELEMENT_VERSION' ) ) {
 
 // Need to define JEG_ELEMENT_URL on plugin / Themes.
 defined( 'JEG_ELEMENT_URL' ) || define( 'JEG_ELEMENT_URL', JEG_ELEMENT_THEME_URL );
-defined( 'JEG_ELEMENT_VERSION' ) || define( 'JEG_ELEMENT_VERSION', '1.1.3' );
+defined( 'JEG_ELEMENT_VERSION' ) || define( 'JEG_ELEMENT_VERSION', '1.1.4' );
 defined( 'JEG_ELEMENT_DIR' ) || define( 'JEG_ELEMENT_DIR', dirname( __FILE__ ) );
 
 require_once 'autoload.php';

@@ -1,104 +1,133 @@
-=== Carousel, Slider, Photo Gallery with Lightbox, Video Slider, by WP Carousel ===
+=== AI-Powered Carousel, Slider, Video & Photo Gallery Blocks by WP Carousel  ===
 Contributors: shapedplugin, khalilu, shamimmiashuhagh, rubel_miah
 Tags: slider, carousel, slideshow, gallery, video slider
 Requires at least: 5.0
-Tested up to: 7.0
-Requires PHP: 7.0.0
-Stable tag: 2.7.12
+Tested up to: 7.1
+Requires PHP: 7.4
+Stable tag: 5.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Carousel, Slider, and Photo Gallery with Lightbox plugin. Create Image Carousel, Video Slider, Post Carousel, Post Grid, Product Carousel, and more.
+Image carousel, slider, and slideshow blocks with AI and ready patterns. Photo gallery, video slider, post and WooCommerce product carousels.
 
 == Description ==
 
-[__WP Carousel__](https://wpcarousel.io/) is a responsive plugin for creating **Carousel, Slider, Photo Gallery, and Video Slider** in WordPress. It supports images, posts, WooCommerce products, and YouTube videos. Images can be selected directly from the WordPress media library and arranged with drag-and-drop. The plugin is lightweight, responsive, and works across all major devices and browsers.
+[__WP Carousel__](https://wpcarousel.io/) builds carousels, 3D carousels, sliders, slideshows, grids and photo galleries right in the WordPress block editor, from your images, posts, WooCommerce products and YouTube or Vimeo videos. Start from a ready-made pattern, describe what you want to the AI builder, or design your own, and style it without code. It's fast by default: images lazy-load, and no WP Carousel script or style loads on a page without a carousel.
 
-[youtube https://www.youtube.com/embed/videoseries?list=PLoUb-7uG-5jO_zo3exhqUNlZ7h0FQVJTt]
+[youtube https://www.youtube.com/watch?v=a2ggJ4U5oi0]
 
-[__Live Demo__](https://wpcarousel.io/wp-carousel-free-demo/) | [__Video Tutorials__](https://www.youtube.com/shapedplugin/) | [__Documentation__](https://docs.shapedplugin.com/docs/wordpress-carousel/introduction/) | [__Support__](https://shapedplugin.com/create-new-ticket/)
+[__200+ Gutenberg Patterns__](https://wpcarousel.io/carousel/) | [__Video Tutorials__](https://www.youtube.com/watch?v=a2ggJ4U5oi0&list=PLoUb-7uG-5jNgTTcnUflIiytxgTWaBEzm) | [__Documentation__](https://docs.wpcarousel.io/guide/introduction) | [__Support__](https://wordpress.org/support/plugin/wp-carousel-free/)
 
+### 10 Gutenberg Blocks
 
-## You'll be ble to display ##
-
-**Image Carousel & Slider:** Create Carousels and Sliders by uploading images from the WordPress media library.
-
-**Photo Gallery:** Build image galleries with lightbox support and customizable layouts.
-
-**Post Carousel:** Display recent posts in a carousel with title, image, excerpt, date, and author.
-
-**Post Grid:** Show posts in a grid format with title, image, excerpt, date, and author.
-
-**WooCommerce Product Carousel:** Display WooCommerce products in a carousel with options to show or hide product name, image, price, rating, and add-to-cart button.
-
-**Product Grid Gallery:** Show WooCommerce products in a grid gallery with product details such as name, image, price, reviews, and add-to-cart button.
-
-**Video Slider & Gallery:** Create sliders and galleries with multiple YouTube videos.
+* **[Carousel](https://wpcarousel.io/ready-patterns/?wpc_block=carousel)**: several items in a row, with center mode and Slide, Flip, or Cube effects.
+* **[3D Carousel](https://wpcarousel.io/ready-patterns/?wpc_block=carousel-3d)**: a Coverflow carousel in 3D, with the center slide in front, and the side slides turned away. Set how many side slides show on each device.
+* **[Slider](https://wpcarousel.io/ready-patterns/?wpc_block=slider)**: one full-width slide at a time, in Slide, Flip, Cube, or Coverflow style, for hero slideshows and featured content.
+* **[Thumbnails Slider](https://wpcarousel.io/ready-patterns/?wpc_block=thumbnails-slider)**: a main slider with a synced strip of thumbnails to browse.
+* **[Tiles](https://wpcarousel.io/ready-patterns/?wpc_block=tiles)**: a bento-style grid of mixed-size tiles, in three free layouts, with numbered pages for big galleries.
+* **[Grid](https://wpcarousel.io/ready-patterns/?wpc_block=grid)**: an even grid of columns, set per device, with numbered pages for big galleries.
+* **[Marquee](https://wpcarousel.io/ready-patterns/?wpc_block=marquee) (Pro)**: a continuously scrolling, ticker-style row of items.
+* **[Panorama Carousel](https://wpcarousel.io/ready-patterns/?wpc_block=panorama-carousel) (Pro)**: a curved, panoramic carousel with a wide, immersive view.
+* **[Masonry](https://wpcarousel.io/ready-patterns/?wpc_block=masonry) (Pro)**: a Pinterest-style grid of varying item heights.
+* **[Justified](https://wpcarousel.io/ready-patterns/?wpc_block=justified) (Pro)**: an image gallery with even row heights, filled edge to edge.
 
 
-## Features you'll love ##
+### Start in seconds
 
-**Drag & Drop Responsive Builder:** Easily upload and reorder slides with the responsive drag-and-drop builder. Supports images and videos, letting you organize carousels and galleries in any order.
+* **Ready Patterns**: insert a pre-designed carousel or gallery in one click, then make it yours.
+* **Build with AI**: describe the carousel you want, and the AI builder picks a matching pattern or sets the block up for you. Use your own OpenAI, Anthropic, Gemini or Groq key, or WordPress Connectors.
+* **Saved Templates**: save a design once and reuse it on any page, in widgets or in page builders, with its own shortcode.
+* **Convert a Gallery block**: turn a core Image or Gallery block into a WP Carousel block, and switch between WP Carousel blocks without losing your content or settings.
+* **Classic builder**: prefer shortcodes? The classic carousel builder with live preview is still here, with its Grid layout. A few options that are free in the blocks are Pro in the classic builder.
 
-**Multiple Carousels and Galleries:** Add and display multiple carousels or galleries on the same page without conflict.
+### Show any content
 
-**Carousel Controls:** Enable or disable autoplay, set speed, stop on hover, and loop infinitely. Show or hide navigation and pagination dots with custom colors. Touch swipe and mouse drag are also supported.
+* **Images** from the Media Library, in any order. Edit titles, captions, descriptions and alt text without leaving the carousel, one by one or in bulk, and set a focal point so cropped images keep what matters.
+* **Posts, pages and custom post types**, including several post types in one carousel. Order them by date, title, menu order, comment count or at random, skip the first few, and set how many to show.
+* **WooCommerce products** with image, name, price, star rating and Add to Cart. In the classic builder, add a Quick View button with the free Quick View for WooCommerce plugin.
+* **YouTube and Vimeo videos**, each with your own thumbnail if you like, playing in a popup.
 
-**Responsive and Mobile Ready:** WP Carousel sliders and galleries are fully responsive. You can set the number of columns and spacing individually for small, medium, and large devices.
+### Navigation and motion
 
-**Lightbox** Open images or videos in a popup overlay for viewing larger versions without leaving the page. Works across devices and is easy to navigate.
+* Autoplay with its speed, pause on hover, infinite loop, and left-to-right or right-to-left direction.
+* Navigation arrows in 12 styles, and pagination in Dots, Dynamic, or Stepper style.
+* Touch swipe, mouse drag, mouse wheel, free scroll, and keyboard navigation.
+* How many slides move per click, set per device.
 
-**Color & Styling Options:** The plugin lets you customize colors and styles for carousels and galleries to match your site’s design.
+### Lightbox
 
-**Multisite Support:** The plugin can be used across WordPress multisite networks, allowing you to create and manage carousels on multiple sites from a single installation.
+Open images and videos in a popup gallery, with a light, dark or custom theme, open and slide animations, an item counter, and a thumbnails strip. One set of settings covers every lightbox on your site.
 
-**Theme & Plugin Compatibility:** The plugin is compatible with most WordPress themes and plugins, ensuring smooth integration without conflicts.
+### Design without code
 
-## Page Builders Ready ##
-* Gutenberg Editor
-* WPBakery
-* Elementor
-* BeaverBuilder
-* SiteOrgin
-* DiviBuilder
-* LayersWP
-* MotoPress
-* CornerStone
-* Themify Builder etc.
+* 6 Skins: Classic, Overlay and Diagonal, or show the text only on hover.
+* Choose what each card shows: title, description, meta (date, author, comments, category, tags), category badges, a read-more button, price, rating, and share buttons for 14 networks.
+* Hover animations, image overlays, typography with Google Fonts, and colors, borders, radius, and shadows for every part.
+* Custom CSS for one block, or site-wide custom CSS and JavaScript.
 
+### Fast, accessible and search-friendly
 
-## Multilingual Ready ##
+* Lazy-loaded images, a choice of image size for each carousel, and aspect-ratio presets (1:1, 4:3, 16:9, 21:9 and more).
+* Query caching for post and product carousels, cleared automatically when your content changes.
+* No WP Carousel script or style on pages without a carousel, and switches to turn off Swiper or Font Awesome when your theme already loads them.
+* Alt text on every image, a heading tag (H1 to H6) for card titles, and keyboard navigation.
 
-* [WPML](https://wpml.org/)
-* [Polylang](https://wordpress.org/plugins/polylang/)
-* [Loco Translate](https://wordpress.org/plugins/loco-translate/)
-* [qTranslate-x](https://wordpress.org/plugins/qtranslate-x/)
-* [GTranslate](https://wordpress.org/plugins/gtranslate/)
-* [Google Language Translator](https://wordpress.org/plugins/google-language-translator/)
-* [WPGlobus](https://wordpress.org/plugins/wpglobus/)
+### Responsive
 
+Set columns and spacing for desktop, tablet, and mobile, hide a carousel on any device size, and set your own breakpoints for classic carousels.
 
-## For fast support, features request, and bug reporting ##
->Ask us at [__Support.__](https://shapedplugin.com/create-new-ticket/)
+### Works with your site
 
+* **Page builders**: native widgets and modules for Elementor, Divi 4 and Divi 5, WPBakery, Oxygen, Beaver Builder and Bricks. The shortcode works in any other builder.
+* **Multilingual**: ready for WPML and Polylang, with translated image titles and alt text.
+* **Multisite**: works across a WordPress multisite network.
+* **Manage it all**: a placements table shows every page, widget, and template where each carousel is used; import and export classic carousels; turn any block or module off.
 
-## WP Carousel Pro ##
-[__WP Carousel__](https://wpcarousel.io/?ref=1) is the free version of [__WP Carousel Pro__](https://wpcarousel.io/pricing?ref=1). The Pro version includes additional features such as support for posts, WooCommerce products, custom content (text, HTML, shortcodes), and extended video options. It also supports WordPress pages, custom post types, taxonomies, and custom taxonomies. Video sources include YouTube, Vimeo, TikTok, Twitch, Wistia, Dailymotion, MP4, WebM, and self-hosted videos with lightbox support. See [__Documentation__](https://docs.shapedplugin.com/docs/wordpress-carousel-pro/introduction/).
+### WP Carousel Pro
 
+Everything above stays free. [__WP Carousel Pro__](https://wpcarousel.io/pricing?ref=1) adds more features including:
 
-[youtube https://www.youtube.com/embed/videoseries?list=PLoUb-7uG-5jNgTTcnUflIiytxgTWaBEzm]
+* **More layouts**: Masonry and Justified blocks, three more 3D Carousel styles (Cylinder, Card Stack and Orbit) with full 3D settings, Panorama, and a continuous Ticker or Marquee for logo bars; multi-row, vertical, variable-width and partial-view carousels; six more Tiles layouts and a custom layout editor.
+* **More content**: audio from SoundCloud, Spotify, Apple Podcasts, Mixcloud, Bandcamp or your own files; automatic feeds from RSS, a YouTube channel or a Facebook page; custom HTML and shortcode slides, and mixed-content carousels in the classic builder; post and product filters by category, tag, author, date, sale, best-selling or top-rated, and excluding the posts you choose.
+* **More video**: TikTok, Twitch, TED, Dailymotion, Rumble, Wistia, SproutVideo, any embed code, and self-hosted or MP4 videos, playing inline with muted autoplay, play on hover, and loop.
+* **Engage visitors**: category filter buttons, live Ajax search, Load More and infinite scroll, a link on any image, and a lightbox with slideshow, zoom, full screen, download, sharing and captions.
+* **Protect and schedule**: watermark your images, block right-click saving, password-protect a carousel, or show it only between two dates.
+* **More motion and style**: fade and Ken Burns, premium slider styles with WebGL shader effects, content animations, entrance and scroll effects, image filters, flip image on hover, more content styles, and drag-and-drop ordering of what each card shows.
 
-[__Watch all Tutorials &raquo;__](https://www.youtube.com/watch?v=m2XP6GNW0mE&index=2&list=PLoUb-7uG-5jNgTTcnUflIiytxgTWaBEzm)
+### Author
 
-## Author ##
-Designed and Developed by [__ShapedPlugin__](https://shapedplugin.com/)
+Designed and developed by [__ShapedPlugin__](https://shapedplugin.com/). For fast support, feature requests and bug reports, ask us at [__Support__](https://wordpress.org/support/plugin/wp-carousel-free/).
 
+== External services ==
+
+WP Carousel connects to the outside services below. Each one is used only by the feature named, and only after you use that feature.
+
+= AI builder (OpenAI, Anthropic, Google Gemini, Groq), only with your own key =
+
+The AI builder does nothing until you add an API key for one of these providers in Settings → AI Configuration, or connect one through WordPress Connectors. When you save a key, the plugin checks it with that provider. When you use Build with AI or Refine with AI, it sends the provider you picked your request text, the block type and the block's current values for the options the AI can change, with the plugin's own instructions. Your carousel's images, posts and products are not sent.
+
+* OpenAI (api.openai.com): [Terms](https://openai.com/policies/terms-of-use/), [Privacy Policy](https://openai.com/policies/privacy-policy/)
+* Anthropic (api.anthropic.com): [Terms](https://www.anthropic.com/legal/commercial-terms), [Privacy Policy](https://www.anthropic.com/legal/privacy)
+* Google Gemini (generativelanguage.googleapis.com): [Terms](https://ai.google.dev/gemini-api/terms), [Privacy Policy](https://policies.google.com/privacy)
+* Groq (api.groq.com): [Terms](https://groq.com/terms-of-use/), [Privacy Policy](https://groq.com/privacy-policy/)
+
+When the AI builder fills an empty carousel with placeholder photos, they load from Unsplash (images.unsplash.com) until you replace them with your own: [Terms](https://unsplash.com/terms), [Privacy Policy](https://unsplash.com/privacy).
+
+= Ready Patterns (WP Carousel pattern server) =
+
+The pattern library loads its list, previews and each pattern you insert from demo.wpcarousel.io, and caches the list for a day. No personal data is sent; like every WordPress request, it carries your WordPress version and site address. An inserted pattern's sample images load from the same server until you replace them with your own.
+[Privacy Policy](https://shapedplugin.com/privacy-policy/), [Terms](https://shapedplugin.com/terms-and-license/).
+
+= Google Fonts =
+
+If you pick a Google font in a block's or template's typography settings, that page loads the font from fonts.googleapis.com, which receives the visitor's IP address. Pages without a Google font load nothing from Google.
+[Terms](https://developers.google.com/fonts/terms), [Privacy Policy](https://policies.google.com/privacy).
 
 == Installation ==
 
 = MINIMUM REQUIREMENTS =
 
-* PHP 7.0.0 or later
+* PHP 7.4 or later
 * MySQL 5.6 or later
 * WordPress 5.0 or later
 
@@ -134,65 +163,158 @@ The WordPress codex contains <a href="https://wordpress.org/documentation/articl
 
 == Frequently Asked Questions ==
 
-= Who should use WP Carousel? =
+= Does WP Carousel work with the block editor? =
+Yes. It adds six blocks to the editor (Carousel, 3D Carousel, Slider, Thumbnails Slider, Tiles and Grid), a library of ready patterns and an AI builder. If you prefer shortcodes, the classic carousel builder is still included.
 
-**WP Carousel** is perfect for photographers, designers, bloggers, different organizations, and small to large businesses. Basically, if you want to create beautiful carousels like, Image Carousel, Post Carousel, and Product Carousel, then you need to use WP Carousel.
+= Can I turn my existing Gallery block into a carousel? =
+Yes. Select the core Image or Gallery block, open Transform in its toolbar, and pick a WP Carousel block. Your images come across.
 
+= Will WP Carousel slow down my site? =
+It's built not to. Images lazy-load, no WP Carousel script or style loads on a page without a carousel, post and product queries are cached, and you can switch off Swiper or Font Awesome if your theme already loads them.
 
-= Do I need to have coding skills to use WP Carousel? =
-No. You don’t need any coding skill. No more pain writing any shortcode attributes to display carousel in your site. With just a few clicks, you can amazingly create unlimited Image, Post, and Product Carousels.
+= Is WP Carousel accessible? =
+Every image takes alt text, card titles take the heading level that fits your page (H1 to H6), and visitors can move through slides with the keyboard.
+
+= What's the difference between the free version and Pro? =
+The free version includes posts, pages, custom post types, WooCommerce products, YouTube and Vimeo, six blocks, the AI builder and the patterns. Pro adds more layouts (Masonry, Justified, more 3D styles, Panorama, Ticker), audio and feed sources, more video platforms including self-hosted video, filters, Load More, watermark and scheduling. See the [full comparison](https://wpcarousel.io/free-vs-pro/).
+
+= Does the AI builder send my content anywhere? =
+Only if you add an API key or connect a provider, and only when you use Build with AI or Refine with AI. It sends your request and the block's settings, not your images, posts or products. See External services above.
+
+= Does WP Carousel collect any data? =
+Not unless you opt in. If you choose to share usage data, it sends your site URL, admin email and environment details once a week, and you can turn it off at any time in Settings → Advanced Controls. See External services above.
+
+= Do I need coding skills to use WP Carousel? =
+No. Build and style every carousel, slider and gallery with clicks, from a pattern, the AI builder or a blank block.
 
 = Is WP Carousel responsive? =
-Yes, WP Carousel is fully responsive, mobile and touch-friendly.
+Yes. Every carousel is responsive and touch-friendly, with columns and spacing set for desktop, tablet and mobile.
 
-= Can I add WP Carousel anywhere on my website?=
-Yes, you can add WP Carousel inside your blog posts, pages, widgets, and anywhere else on your WordPress website with a shortcode or PHP function.
+= Can I add WP Carousel anywhere on my website? =
+Yes. Add a block in the editor, or use the shortcode or PHP function in posts, pages, widgets, templates and page builders.
 
-= Can I have multiple carousels with the separate setting?
-Yes. You can have an unlimited carousel with each separate setting in the page, post, template, widget or anywhere you like.
+= Can I have several carousels with different settings on one page? =
+Yes. Each carousel keeps its own settings, and you can add as many as you like to a page, post, template or widget area.
 
 = Will WP Carousel work with my theme? =
-WP Carousel works with any WordPress theme if themes are developed according to WordPress standard.
+WP Carousel works with any WordPress theme built to WordPress standards.
 
 = How can I get support if the plugin is not working? =
-If you face any problem with our plugin or something is not working as it should, first follow the preliminary steps:
-Test the plugin with a WordPress default theme, to be sure that the error is not caused by the theme you are currently using.
+First, try these steps:
 
-Deactivate all plugins you are using and check if the problem is still occurring.
+1. Switch to a default WordPress theme, to check that your theme isn't causing the problem.
+2. Deactivate your other plugins and check whether the problem remains.
 
-If none of the previously listed actions helps you solve the problem, then, submit a ticket in the forum and describe your problem accurately, specify WordPress and plugin versions you are using and any other information that might help us solve your problem as quickly as possible.
-
-Pro version users [__Support__](https://shapedplugin.com/create-new-ticket/) and Free or Lite Version [__Support__](https://shapedplugin.com/support/?user=lite).
+If it still happens, open a ticket on our [support site](https://shapedplugin.com/support/?user=lite) and describe the problem, with your WordPress and plugin versions and anything else that might help us solve it quickly. Pro users can reach us at [Pro support](https://shapedplugin.com/create-new-ticket/).
 
 = Where can I report bugs? =
-If you find a bug, please report it in our active [support](https://shapedplugin.com/support/?user=lite). You will be replied once the issue is resolved.
+Report it on our [support site](https://shapedplugin.com/support/?user=lite). We'll reply when the issue is resolved.
 
-= I’d like access to more features. How can I get them? =
-You can get access to more features when you purchase a license of the plugin. Purchasing a license of [__WP Carousel Pro__](https://wpcarousel.io/pricing/?ref=1) gets you to access the full version of WP Carousel, automatic lifetime updates, and support.
-
-=Is WP Carousel Multilingual Ready?=
-Yes, WP Carousel is 100% translation ready and tested with [WPML](https://wpml.org/), [Polylang](https://wordpress.org/plugins/polylang/), [qTranslate-x](https://wordpress.org/plugins/qtranslate-x/), [GTranslate](https://wordpress.org/plugins/gtranslate/), [Google Language Translator](https://wordpress.org/plugins/google-language-translator/), [WPGlobus](https://wordpress.org/plugins/wpglobus/) etc.
+= Is WP Carousel multilingual ready? =
+Yes. WP Carousel is translation ready and works with [WPML](https://wpml.org/) and [Polylang](https://wordpress.org/plugins/polylang/), including translated image titles and alt text.
 
 = Is WP Carousel compatible with WordPress multisite? =
-Yes, WP Carousel works perfectly with WordPress multi-site network.
+Yes, WP Carousel works across a WordPress multisite network.
 
 
 == Screenshots ==
 
-1. Live Demo.
-2. Carousel Settings.
-3. General Settings (Image Carousel).
-4. Style Settings.
-5. Post Carousel.
-6. Product Carousel.
-7. All Carousels.
-8. Advanced Settings.
-9. Custom CSS.
-10. Drag & Drop Image Re-order.
+1. Carousel block with responsive columns, autoplay, and navigation controls
+2. Slider block for full-width image and content slides
+3. Thumbnails slider with synced navigation for easy browsing
+4. Tiles block with a flexible, magazine-style grid layout
+5. All available blocks in the Gutenberg inserter
+6. Build with AI: generate carousels and sliders from a simple prompt
+7. Four content sources: images, posts, products, and video
+8. Ready-made patterns library, insert in one click
+9. Saved templates to reuse your favorite designs on any page
+10. Classic Shortcode General settings
+11. Display settings: item styles, image styles, title and description, typography
+12. Classic shortcode generator with support for multi post types
 
 
 
 == Changelog ==
+
+= Version 5.0.0 – Oct 26, 2026 =
+- New: The 3D Carousel block with the Coverflow style, featuring images, videos, posts, or products.
+- New: The Grid block to display images, videos, posts, or products in a responsive column grid.
+- New: All twelve navigation arrow icon styles are now available in the carousel blocks.
+- New: The Classic Shortcode block can be turned on or off from the Blocks page.
+- Improved: The Saved Templates list now shows which carousel block each template uses.
+- Improved: The Clear Cached option now also clears the generated block stylesheets.
+- Improved: The Ready Patterns library is now available to Editors and Administrators only.
+- Fixed: Blocks no longer add lightbox links while the Lightbox module is turned off.
+- Fixed: A PHP warning in the gallery field for images with missing metadata.
+- Fixed: Image details can now be edited only for media files the user is allowed to edit.
+- Fixed: Plugin settings can now be saved only by users with the required permission.
+- Fixed: Carousel blocks no longer show details of private or password-protected media and posts.
+- Updated: The Swiper library in shortcode carousels to version 12.1.2.
+
+= Version 4.0.1 – Oct 13, 2026 =
+* New: Added the "Contribute to WP Carousel" option in Settings → Advanced Controls to let you opt in to sharing anonymous usage data and help improve the plugin.
+* Fixed: The lightbox icon position and offset now apply correctly to all icon placements.
+* Fixed: The lightbox no longer modifies WordPress core Image and Gallery blocks.
+* Tested: Compatibility with WooCommerce 11.2.1.
+
+= Version 4.0.0 – Oct 08, 2026 =
+* New: AI Carousel Builder module – describe the carousel or gallery you want and let AI build it for you.
+* New: "Build with AI" button in the editor header.
+* New: "Refine with AI" option in the block toolbar to adjust an existing carousel.
+* New: AI Configuration tab on the Settings page.
+* New: Connect OpenAI, Anthropic, Google, or Groq as your AI provider, with API keys stored encrypted.
+* New: Primary provider selector to choose which provider the builder opens with.
+* New: Carousel Placements card on the dashboard, listing every page, post, template, and widget area that uses a carousel block, shortcode, or saved template.
+* New: Sync button, type filters, and search on the Carousel Placements card.
+* Improved: Simplified the plugin dashboard and navigation menu for a cleaner, more minimal look.
+* Improved: Refreshed the Lightbox module option styling.
+* Improved: Moved the Ready Patterns button beside the documentation link in the block inspector header.
+* Fixed: Admin sidebar menu staying pinned while scrolling long plugin dashboard pages.
+* Fixed: Block list not displaying on the WordPress.org plugin description page.
+* Removed: External live preview link from the Ready Patterns live preview iframe.
+* Tested: WordPress 7.1.3 compatibility.
+* Tested: WooCommerce 11.2.0 compatibility.
+
+= Version 3.0.1 – Sep 28, 2026 =
+* Improved: WP Carousel block is renamed to WP Carousel Shortcode with a new icon.
+* Improved: Each page builder's Docs button on the Integrations page opens its own step-by-step guide.
+* Improved: The diagnostics notice and setup wizard Learn More links.
+* Improved: The dashboard and setup wizard intro video posters have been sharpened.
+* Improved: The Classic Shortcode Settings and Tools page links added to block settings page.
+* Fix: The Fancybox lightbox no longer overwrites global variables other plugins rely on.
+* Fix: The typography popover stayed closed after choosing a font family.
+* Fix: The dashboard module toggle announced success before the server confirmed the save.
+* Fix: Linked taxonomy terms stretched full width and showed underlines on the frontend.
+* Fix: The pagination Top position option placed the dots at the offset's bottom side.
+* Fix: The pagination Margin control moved the dots on some blocks but not others.
+* Tested: WooCommerce 11.1.2 compatibility.
+
+= Version 3.0.0 – Sep 22, 2026 =
+* New: The Carousel block with 4 source types (Images, Video, Posts, Products) and 2 carousel styles.
+* New: The Slider block with 4 amazing slider styles.
+* New: The Thumbnails Slider block with 2 content styles.
+* New: The Tiles block with 9 different layout styles.
+* New: AJAX pagination for the Tiles block.
+* New: The Ready Patterns Library module with pre-designed layouts, categories, favorites, and a live preview drawer.
+* New: The Saved Templates module to reuse carousels anywhere by converting blocks into shortcodes.
+* New: Lightbox support for the core Image and Gallery blocks.
+* New: Divi, Divi 5, WPBakery, Beaver Builder, Oxygen and Bricks integrations on the settings page.
+* New: The WP Carousel dashboard with Getting Started, Modules, Integrations, and Settings pages.
+* New: The Setup Wizard and optional diagnostic data sharing, sent only after your explicit consent.
+* New: Taxonomy filter options for post and product carousels.
+* New: The lazy-loading option for images of blocks.
+* Improved: The review notice now appears only after you have published your first carousel.
+* Improved: The Tools page moved into Classic Shortcode Settings.
+* Improved: The minimum PHP requirement is now 7.4.
+* Tested: WordPress 7.1.2 compatibility.
+* Tested: WooCommerce 11.1.1 compatibility.
+
+= Version 2.7.13 – Aug 18, 2026 =
+* Fixed: Block editor compatibility with WordPress 7.1's iframed canvas.
+* Fixed: Carousel not initializing correctly inside the block editor preview.
+* Improved: Faster, more reliable asset loading in the block editor.
+* Tested: WooCommerce 11.0.1 compatibility.
+* Tested: WordPress 7.1 compatibility.
 
 = Version 2.7.12 – Jul 03, 2026 =
 * Improved: The recommended plugins section now uses the plugins_api function for more reliable data.

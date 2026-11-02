@@ -287,7 +287,7 @@ class ElementsKit_Widget_Post_List extends Widget_Base {
 				'fa4compatibility' => 'icon',
 				'default'	=> [
 					'value'	=> 'fas fa-circle',
-					'library'	=> 'regular'
+					'library' => 'fa-solid',
 				],
 				'condition'	=> [
 					'show_post_icon'		=> 'yes',

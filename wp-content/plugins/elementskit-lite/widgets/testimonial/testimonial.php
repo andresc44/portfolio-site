@@ -1436,7 +1436,8 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 				'type' => Controls_Manager::DIVIDER,
 				'style' => 'thick',
 				'condition' => [
-					'ekit_testimonial_wartermark_mask_show_badge' => 'yes'
+					'ekit_testimonial_wartermark_mask_show_badge' => 'yes',
+					'ekit_testimonial_style' => 'style6'
 				]
 			]
 		);
@@ -1462,7 +1463,8 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 					'{{WRAPPER}} .elementskit-testimonial-slider-block-style-three .elementskit-icon-content.commentor-badge::before' => 'border-radius: {{SIZE}}{{UNIT}};',
 				],
 				'condition' => [
-					'ekit_testimonial_wartermark_mask_show_badge' => 'yes'
+					'ekit_testimonial_wartermark_mask_show_badge' => 'yes',
+					'ekit_testimonial_style' => 'style6'
 				]
 			]
 		);
@@ -1475,7 +1477,8 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 				'types' => [ 'classic', 'gradient' ],
 				'selector' => '{{WRAPPER}} .elementskit-testimonial-slider-block-style-three .elementskit-icon-content.commentor-badge::before',
 				'condition' => [
-					'ekit_testimonial_wartermark_mask_show_badge' => 'yes'
+					'ekit_testimonial_wartermark_mask_show_badge' => 'yes',
+					'ekit_testimonial_style' => 'style6'
 				]
 			]
 		);

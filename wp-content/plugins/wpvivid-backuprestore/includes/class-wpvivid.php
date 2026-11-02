@@ -3990,7 +3990,7 @@ class WPvivid
             $raw_file_name = sanitize_text_field(wp_unslash($_POST['file_name']));
             $file_name = basename($raw_file_name);
 
-            if ($raw_file_name === '' || $raw_file_name !== $file_name || !preg_match('/\A[a-zA-Z0-9._-]+\z/', $file_name))
+            if ($raw_file_name === '' || $raw_file_name !== $file_name || !preg_match('/\A[a-zA-Z0-9._~-]+\z/', $file_name))
             {
                 echo wp_json_encode(array(
                     'result' => WPVIVID_FAILED,

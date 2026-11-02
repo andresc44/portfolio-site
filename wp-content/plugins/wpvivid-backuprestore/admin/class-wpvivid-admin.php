@@ -93,6 +93,7 @@ class WPvivid_Admin
         add_filter('wpvivid_add_log_tab_page', array($this, 'add_log_tab_page'), 10);
 
         add_action('admin_notices', array($this, 'check_wpvivid_pro_version'));
+        add_filter('wpvivid_v2_collect_warnings', array($this, 'check_wpvivid_pro_version_ex'));
         add_action('admin_notices', array($this, 'check_wpvivid_free_htaccess_rule'));
 
         add_filter('wpvivid_current_user_show_toolbar', array($this, 'current_user_show_toolbar'), 10, 2);
@@ -958,9 +959,60 @@ class WPvivid_Admin
                         </div>
                         <?php
                     }
+                    if (version_compare($plugins[$pro_wpvivid_slug]['Version'], WPVIVID_PHPSECLIB3_MIN_PRO_VERSION, '<'))
+                    {
+                        ?>
+                        <div class="notice notice-error">
+                            <p>
+                                WPvivid Backup Plugin has updated its bundled phpseclib library. Your current WPvivid Backup Pro version may not work correctly with this update, affecting SFTP, Auto Migration, and encrypted database backups and restores. Please update WPvivid Backup Pro to version <?php echo esc_html(WPVIVID_PHPSECLIB3_MIN_PRO_VERSION); ?> or later.
+                            </p>
+                        </div>
+                        <?php
+                    }
                 }
             }
         }
+    }
+
+    public function check_wpvivid_pro_version_ex($warnings)
+    {
+        if (!is_array($warnings))
+        {
+            $warnings = array();
+        }
+
+        if (is_multisite() && !is_network_admin())
+        {
+            return $warnings;
+        }
+
+        if (!defined('WPVIVID_BACKUP_PRO_VERSION'))
+        {
+            return $warnings;
+        }
+
+        if (!defined('WPVIVID_PHPSECLIB3_MIN_PRO_VERSION') || !version_compare(WPVIVID_BACKUP_PRO_VERSION, WPVIVID_PHPSECLIB3_MIN_PRO_VERSION, '<'))
+        {
+            return $warnings;
+        }
+
+        $message = sprintf(
+            __(
+                'WPvivid Backup Plugin has updated its bundled phpseclib library. Your current WPvivid Backup Pro version may not work correctly with this update, affecting SFTP, Auto Migration, and encrypted database backups and restores. Please update WPvivid Backup Pro to version %s or later.',
+                'wpvivid-backuprestore'
+            ),
+            WPVIVID_PHPSECLIB3_MIN_PRO_VERSION
+        );
+
+        $warnings[] = array(
+            'type'        => 'error',
+            'code'        => 'wpvivid_phpseclib3_pro_version',
+            'message'     => $message,
+            'allow_html'  => false,
+            'dismissible' => false,
+        );
+
+        return $warnings;
     }
 
     public function check_wpvivid_free_htaccess_rule()

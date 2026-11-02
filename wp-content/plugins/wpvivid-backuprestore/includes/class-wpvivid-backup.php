@@ -2471,7 +2471,7 @@ class WPvivid_Backup_Item
         if (!is_string($file_name) ||
             $file_name === '' ||
             basename($file_name) !== $file_name ||
-            preg_match('/\A[a-zA-Z0-9._-]+\z/', $file_name) !== 1)
+            preg_match('/\A[a-zA-Z0-9._~-]+\z/', $file_name) !== 1)
         {
             return false;
         }

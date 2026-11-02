@@ -42,6 +42,27 @@
 	transform: none !important;
 }
 
+/* Near-miss shapes fill the frame instead of letterboxing.
+
+   media-fill.js adds .mf-cover when an image's aspect ratio is within a few
+   percent of its frame's. Contain there leaves a hairline of the dark
+   backdrop down both sides (a 1.499 photo in a 1.515 card frame is ~3px a
+   side), which read as a grey line along the card edge rather than as
+   deliberate padding; cover crops a sliver nobody can see and runs the
+   picture edge to edge. The blurred fill has nothing left to fill, so it is
+   dropped too (saves the blur's compositing cost). Frames that are really
+   a different shape never get the class and keep the full-image letterbox.
+
+   The extra class makes these outrank the !important contain rules above. */
+.elementor-post__thumbnail.mf-cover img,
+.project-archive__card-media.mf-cover img,
+.project-gallery__item.mf-cover > img {
+	object-fit: cover !important;
+}
+.mf-cover > .mf-bg {
+	display: none;
+}
+
 /* The blurred fill. Inset is negative so the blur kernel never samples past
    the edge of the element (which would leave a translucent fringe). */
 .mf-bg {
@@ -81,4 +102,19 @@
 	.mf-bg {
 		filter: blur(16px) saturate(1.25) brightness(0.6);
 	}
+}
+
+/* The lazy-load placeholder (a pale grey rectangle that LiteSpeed puts in
+   every picture until it loads) is hidden, so a picture that has not arrived
+   yet shows the frame's own dark panel instead of a grey box, and fades in
+   when it does. */
+.project-gallery__item img,
+.project-archive__card-media img,
+.elementor-post__thumbnail img {
+	transition: opacity 0.3s ease;
+}
+.project-gallery__item img[src^="data:image/svg"],
+.project-archive__card-media img[src^="data:image/svg"],
+.elementor-post__thumbnail img[src^="data:image/svg"] {
+	opacity: 0;
 }

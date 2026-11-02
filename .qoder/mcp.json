@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "code-review-graph": {
+      "command": "uvx",
+      "args": [
+        "code-review-graph",
+        "serve"
+      ],
+      "cwd": "C:\\Users\\Andre\\Local Sites\\andres-portfolio-local\\app\\public",
+      "type": "stdio"
+    }
+  }
+}

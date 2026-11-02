@@ -25,6 +25,9 @@ class WPvivid_Snapshot_Ex
 
             $this->options=new WPvivid_Snapshot_Option_Ex();
 
+            add_filter('wpvivid_export_setting_addon', array($this, 'export_snapshot_setting'));
+            add_filter('wpvivid_trim_import_info', array($this, 'import_snapshot_setting'));
+
             /*
             if (is_multisite())
             {
@@ -1704,5 +1707,59 @@ class WPvivid_Snapshot_Ex
             </div>
             <?php
         }
+    }
+
+    public function export_snapshot_setting($json)
+    {
+        if (!isset($json['data']) || !is_array($json['data']))
+        {
+            $json['data']=array();
+        }
+
+        $snapshot_setting=$this->options->get_option('wpvivid_snapshot_setting');
+
+        if (is_array($snapshot_setting))
+        {
+            $json['data']['wpvivid_snapshot_setting']=$snapshot_setting;
+        }
+
+        return $json;
+    }
+
+    public function import_snapshot_setting($json)
+    {
+        if (!isset($json['data']) || !is_array($json['data']) || !array_key_exists('wpvivid_snapshot_setting', $json['data']))
+        {
+            return $json;
+        }
+
+        $snapshot_setting=$json['data']['wpvivid_snapshot_setting'];
+
+        if (is_array($snapshot_setting))
+        {
+            $setting=array();
+
+            if (isset($snapshot_setting['snapshot_retention']))
+            {
+                $retention=intval($snapshot_setting['snapshot_retention']);
+                $setting['snapshot_retention']=max(3, min(12, $retention));
+            }
+
+            if (isset($snapshot_setting['quick_snapshot']))
+            {
+                $setting['quick_snapshot']=empty($snapshot_setting['quick_snapshot']) ? 0 : 1;
+            }
+
+            if (!empty($setting))
+            {
+                $this->options->check_tables();
+
+                $this->options->update_option('wpvivid_snapshot_setting', $setting);
+            }
+        }
+
+        unset($json['data']['wpvivid_snapshot_setting']);
+
+        return $json;
     }
 }

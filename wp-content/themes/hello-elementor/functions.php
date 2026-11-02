@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-define( 'HELLO_ELEMENTOR_VERSION', '3.4.9' );
+define( 'HELLO_ELEMENTOR_VERSION', '3.5.1' );
 define( 'EHP_THEME_SLUG', 'hello-elementor' );
 
 define( 'HELLO_THEME_PATH', get_template_directory() );
@@ -158,13 +158,6 @@ if ( ! function_exists( 'hello_elementor_scripts_styles' ) ) {
 				HELLO_ELEMENTOR_VERSION
 			);
 		}
-
-		wp_enqueue_style(
-			'hello-elementor-custom-fixes',
-			get_theme_file_uri( '/../../custom-fixes.css' ),
-			[],
-			HELLO_ELEMENTOR_VERSION
-		);
 	}
 }
 add_action( 'wp_enqueue_scripts', 'hello_elementor_scripts_styles' );

@@ -12,7 +12,7 @@ $term = get_queried_object();
 get_header();
 ?>
 <main class="project-archive">
-	<a class="project-archive__back" href="<?php echo esc_url( home_url( '/skills-tools/' ) ); ?>">&larr; Back to Skills &amp; Tools</a>
+	<a class="project-archive__back" href="<?php echo esc_url( home_url( '/skills-education/' ) ); ?>">&larr; Back to Skills &amp; Education</a>
 	<div class="project-archive__header">
 		<h1 class="project-archive__title"><?php echo esc_html( html_entity_decode( $term->name, ENT_QUOTES ) ); ?></h1>
 		<p class="project-archive__count">

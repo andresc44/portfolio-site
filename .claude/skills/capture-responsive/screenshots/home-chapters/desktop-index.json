@@ -1,0 +1,65 @@
+[
+ {
+  "file": "desktop-01-hero.png",
+  "key": "hero",
+  "y": 0,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "desktop-02-about.png",
+  "key": "about",
+  "y": 900,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "desktop-03-projects.png",
+  "key": "projects",
+  "y": 1822,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "desktop-04-projects-part2.png",
+  "key": "projects",
+  "y": 2221,
+  "part": 2,
+  "bottom": false
+ },
+ {
+  "file": "desktop-05-robotics.png",
+  "key": "robotics",
+  "y": 3121,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "desktop-06-programming.png",
+  "key": "programming",
+  "y": 4043,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "desktop-07-programming-part2.png",
+  "key": "programming",
+  "y": 4448,
+  "part": 2,
+  "bottom": false
+ },
+ {
+  "file": "desktop-08-skills.png",
+  "key": "skills",
+  "y": 5348,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "desktop-09-contact.png",
+  "key": "contact",
+  "y": 6248,
+  "part": 1,
+  "bottom": false
+ }
+]

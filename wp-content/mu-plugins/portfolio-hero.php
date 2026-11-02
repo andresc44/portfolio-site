@@ -10,7 +10,8 @@
  *  - every other moving part animates only transform/opacity, which the
  *    compositor handles off the main thread
  *  - the role rotator is a pure CSS keyframe loop
- *  - everything stops under prefers-reduced-motion
+ *  - deliberately always animates, prefers-reduced-motion included - the
+ *    site owner's explicit choice; see hero.css for the fuller note
  *
  * The headline stats are read from the database so they can't drift out of
  * date, and cached in a transient so the homepage doesn't pay for the query.
@@ -123,7 +124,7 @@ add_shortcode( 'portfolio_hero', function () {
 						<path id="hx-<?php echo esc_attr( $id ); ?>" d="<?php echo esc_attr( $d ); ?>"/>
 					<?php endforeach; ?>
 					<radialGradient id="hxSparkA"><stop offset="0%" stop-color="#34D399" stop-opacity=".95"/><stop offset="100%" stop-color="#34D399" stop-opacity="0"/></radialGradient>
-					<radialGradient id="hxSparkB"><stop offset="0%" stop-color="#AB83FE" stop-opacity=".95"/><stop offset="100%" stop-color="#AB83FE" stop-opacity="0"/></radialGradient>
+					<radialGradient id="hxSparkB"><stop offset="0%" stop-color="#5B7FFF" stop-opacity=".95"/><stop offset="100%" stop-color="#5B7FFF" stop-opacity="0"/></radialGradient>
 					<radialGradient id="hxSparkC"><stop offset="0%" stop-color="#4CC6F5" stop-opacity=".95"/><stop offset="100%" stop-color="#4CC6F5" stop-opacity="0"/></radialGradient>
 				</defs>
 
@@ -160,7 +161,7 @@ add_shortcode( 'portfolio_hero', function () {
 						<path id="hxm-<?php echo esc_attr( $pid ); ?>" d="<?php echo esc_attr( $traces[ $pid ] ); ?>"/>
 					<?php endforeach; ?>
 					<radialGradient id="hxSparkA"><stop offset="0%" stop-color="#34D399" stop-opacity=".95"/><stop offset="100%" stop-color="#34D399" stop-opacity="0"/></radialGradient>
-					<radialGradient id="hxSparkB"><stop offset="0%" stop-color="#AB83FE" stop-opacity=".95"/><stop offset="100%" stop-color="#AB83FE" stop-opacity="0"/></radialGradient>
+					<radialGradient id="hxSparkB"><stop offset="0%" stop-color="#5B7FFF" stop-opacity=".95"/><stop offset="100%" stop-color="#5B7FFF" stop-opacity="0"/></radialGradient>
 					<radialGradient id="hxSparkC"><stop offset="0%" stop-color="#4CC6F5" stop-opacity=".95"/><stop offset="100%" stop-color="#4CC6F5" stop-opacity="0"/></radialGradient>
 				</defs>
 				<g class="hx__sparks">
@@ -184,13 +185,11 @@ add_shortcode( 'portfolio_hero', function () {
 		<div class="hx__frame" aria-hidden="true"></div>
 
 		<div class="hx__inner">
-			<p class="hx__chip hx__fx" style="--s:0"><span class="hx__dot"></span>Based in Perth, Western Australia</p>
+			<p class="hx__eyebrow hx__fx" style="--s:0">Hi, I&rsquo;m</p>
 
-			<p class="hx__eyebrow hx__fx" style="--s:1">Hi, I&rsquo;m</p>
+			<h1 class="hx__name hx__fx" style="--s:1">Andrés Cervera Rozo</h1>
 
-			<h1 class="hx__name hx__fx" style="--s:2">Andres Cervera Rozo</h1>
-
-			<p class="hx__roles hx__fx" style="--s:3">
+			<p class="hx__roles hx__fx" style="--s:2">
 				<span class="hx__bracket">[</span><span class="hx__rotator"><span class="hx__roll">
 					<?php foreach ( $roles as $role ) : ?>
 						<span><?php echo esc_html( $role ); ?></span>
@@ -199,9 +198,9 @@ add_shortcode( 'portfolio_hero', function () {
 				</span></span><span class="hx__bracket">]</span>
 			</p>
 
-			<p class="hx__tagline hx__fx" style="--s:4">Designing autonomous systems where intelligent software meets real&#8209;world hardware.</p>
+			<p class="hx__tagline hx__fx" style="--s:3">Designing autonomous systems where intelligent software meets real&#8209;world hardware.</p>
 
-			<div class="hx__actions hx__fx" style="--s:5">
+			<div class="hx__actions hx__fx" style="--s:4">
 				<a class="hx__btn hx__btn--primary" href="<?php echo esc_url( $resume_url ); ?>" target="_blank" rel="noopener">
 					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
 					Download Resume
@@ -212,7 +211,7 @@ add_shortcode( 'portfolio_hero', function () {
 				</a>
 			</div>
 
-			<ul class="hx__stats hx__fx" style="--s:6">
+			<ul class="hx__stats hx__fx" style="--s:5">
 				<li><b><?php echo (int) $stats['projects']; ?></b><span>Projects</span></li>
 				<li><b><?php echo (int) $stats['disciplines']; ?></b><span>Disciplines</span></li>
 				<li><b><?php echo (int) $stats['skills']; ?></b><span>Tools &amp; Skills</span></li>

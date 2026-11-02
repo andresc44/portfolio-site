@@ -91,7 +91,7 @@ class Plugin {
 			} );
 		}
 
-		if ( is_admin() && Libs\Framework\Classes\Utils::instance()->get_settings( 'ekit_user_consent_for_banner', 'yes' ) == 'yes' ) {
+		if ( is_admin() && Libs\Framework\Classes\Utils::instance()->get_settings( 'ekit_user_consent_for_banner', 'no' ) == 'yes' ) {
 			$filter_string = \ElementsKit_Lite::active_plugins();
 			/**
 			 * Show WPMET stories widget in dashboard
@@ -240,7 +240,7 @@ class Plugin {
 					'name' => esc_html__('Rox Appointment Booking', 'elementskit-lite'),
 					'url'  => 'https://wordpress.org/plugins/rox-appointment-booking/',
 					'icon' => 'https://ps.w.org/rox-appointment-booking/assets/icon-128x128.png?rev=3575641',
-					'desc' => esc_html__(' Manage bookings, agents, payments, and calendars from one dashboard! A complete appointment and scheduling solution for WordPress.', 'elementskit-lite'),
+					'desc' => esc_html__('Manage appointments, agents, payments, and calendars from one dashboard.', 'elementskit-lite'),
 					'docs' => 'https://wpmet.com/doc/rox-appointment-booking/',
 				],
 				'metform/metform.php' => [
@@ -267,7 +267,7 @@ class Plugin {
 				'table-builder-block/table-builder-block.php' => [
 					'name' => esc_html__('TableKit', 'elementskit-lite'),
 					'url'  => 'https://wordpress.org/plugins/table-builder-block/',
-					'icon' => 'https://ps.w.org/table-builder-block/assets/icon-256x256.jpg?rev=3168211',
+					'icon' => 'https://ps.w.org/table-builder-block/assets/icon-128x128.png?rev=3509972',
 					'desc' => esc_html__('Fully Customizable. Multi-Media Integration. Synch Any Data Files. All Within Block Editor.', 'elementskit-lite'),
 					'docs' => 'https://wpmet.com/docs/tablekit/',
 				],
@@ -303,7 +303,7 @@ class Plugin {
 		) # @plugins
 		->call();
 
-		$user_consent = Libs\Framework\Classes\Utils::instance()->get_settings('ekit_user_consent_for_banner', 'yes') == 'yes';
+		$user_consent = Libs\Framework\Classes\Utils::instance()->get_settings( 'ekit_user_consent_for_banner', 'no' ) == 'yes';
 
 		/**
 		 * EmailKit Global Class initialization

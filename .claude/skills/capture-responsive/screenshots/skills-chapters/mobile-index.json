@@ -1,0 +1,23 @@
+[
+ {
+  "file": "mobile-01-skills.png",
+  "key": "skills",
+  "y": 0,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "mobile-02-education.png",
+  "key": "education",
+  "y": 827,
+  "part": 1,
+  "bottom": false
+ },
+ {
+  "file": "mobile-03-education-bottom.png",
+  "key": "education",
+  "y": 1121,
+  "part": 2,
+  "bottom": true
+ }
+]
